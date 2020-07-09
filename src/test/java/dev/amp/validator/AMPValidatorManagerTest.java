@@ -68,7 +68,7 @@ public class AMPValidatorManagerTest {
 
         tagSpec = ampValidatorManager.getTagSpec(ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, "STYLE");
         Assert.assertNotNull(tagSpec, "AMP4EMAIL html format should contain STYLE tag");
-        Assert.assertEquals(tagSpec.size(), 3, "AMP4EMAIL htmlformat contains STYLE tag with size 2");
+        Assert.assertEquals(tagSpec.size(), 4, "AMP4EMAIL htmlformat contains STYLE tag with size 2");
     }
 
     /** AMPValidatorManager object. */

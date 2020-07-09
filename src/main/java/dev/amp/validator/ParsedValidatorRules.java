@@ -637,13 +637,13 @@ public class ParsedValidatorRules {
     }
 
     /**
-     * Returns a combined black listed regex.
+     * Returns a combined disallowed regex.
      *
      * @param tagSpecId tag spec id.
-     * @return returns a combined black listed regex.
+     * @return returns a combined disallowed regex.
      */
-    public String getCombinedBlacklistedCdataRegex(final int tagSpecId) {
-        return ampValidatorManager.getCombinedBlacklistedCdataRegex(tagSpecId);
+    public String getCombinedDisallowedCdataRegex(final int tagSpecId) {
+        return ampValidatorManager.getCombinedDisallowedCdataRegex(tagSpecId);
     }
 
     /**
