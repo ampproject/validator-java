@@ -81,4 +81,6 @@ public enum TokenType {
     STRING,
     /** ERROR */
     ERROR,
+    /** TYPE_SELECTOR */
+    TYPE_SELECTOR,
 }
