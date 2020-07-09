@@ -283,9 +283,9 @@ public final class AttributeSpecUtils {
             }
 
             final List<String> params;
-            if (attrSpec.hasBlacklistedValueRegex()) {
+            if (attrSpec.hasDisallowedValueRegex()) {
                 final Pattern regex = context.getRules().getPartialMatchCaseiRegex(
-                        attrSpec.getBlacklistedValueRegex());
+                        attrSpec.getDisallowedValueRegex());
                 if (regex.matcher(value).find()) {
                     params = new ArrayList<>();
                     params.add(name);

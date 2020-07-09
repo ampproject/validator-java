@@ -587,13 +587,13 @@ public class ParsedValidatorRulesTest {
     }
 
     @Test
-    public void testCombinedBlacklistedCdataRegex() {
+    public void testCombinedDisallowedCdataRegex() {
         final ParsedValidatorRules rules = new ParsedValidatorRules(htmlFormatCode, mockValidationManager);
 
-        Mockito.when(mockValidationManager.getCombinedBlacklistedCdataRegex(Mockito.anyInt()))
+        Mockito.when(mockValidationManager.getCombinedDisallowedCdataRegex(Mockito.anyInt()))
                 .thenReturn("\\d");
 
-        Assert.assertEquals(rules.getCombinedBlacklistedCdataRegex(1), "\\d");
+        Assert.assertEquals(rules.getCombinedDisallowedCdataRegex(1), "\\d");
     }
 
     @Test
