@@ -1,0 +1,7 @@
+branches:
+  only:
+  - master
+  - stable
+language: java
+jdk:
+- openjdk11
