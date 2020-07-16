@@ -86,6 +86,11 @@
             <name>bintray</name>
             <url>https://jcenter.bintray.com/</url>
         </repository>
+        <repository>
+            <id>Yahoo repository bintray</id>
+            <name>bintray</name>
+            <url>https://dl.bintray.com/yahoo/maven/</url>
+        </repository>
     </repositories>
 
     <build>
