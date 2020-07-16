@@ -4,7 +4,7 @@ branches:
   - stable
 language: java
 jdk:
-- openjdk11
+  - openjdk11
 install: "/bin/true"
 script:
   - "./cd/test.sh"
@@ -15,12 +15,12 @@ env:
   - secure: IuBBLR96cVmjat/l0LYC0Ktg6v0C05ieOltUFoTQE05seM9IZjxlPHLvXeUnwxQ7Z0CFhd5ZW4nhDWmCaT4eQxjy5XRduTQHg9tzpnI+URLUL2+XvFJErT1S0ZlsDUcQG45CW5kgl5SzHZG3uOnn7SH/HBryRvIHIHjTsDO6figaqendpaZbDWBtOxPUkVW5Qi0JveGJeOCBRyxtTqA9gbTTnCtn0TFEgZg4S3zQ5vFG7A9KnTWvSqYn5CkB6qUrOVjhYT4nmxF99rIXLiEuIYEPYC9k+UnZuBX+Orzb8SIOhfHGmC8B086kbyJ01WqAZmwUpa1N/4A1BlNSifk+Muq4vIOpdgUszFdv7Lj0a5wA3YoUbSKQ+dmNeZ7gKj8XEB7fzGBXNWGMonGrAuZt8Z3dJQE/MSQKdJ9o1WfHoD9AtQIhQH0nGZOWAoZq7Tm0xmGGpa3SQ3KuCM4uvT7PmlSHsILDVWmTcq3Mk5GIU/qyx+8IeANaWrb0Ea/XLFkHs+xnBbg+NN2yqxrBmi7w8P+Tm2aQ3VMIM+8+NZD8CDD4SowZAAvVvUud4r4aJcsutZ8O9QD2pUz0sbwFbvXYnSPvUKLstP7sGS6a52ZlvZ2SSBGeCjki9cAWzILL3mj0CKT0bXk2zXPDcc9DLz7I/zEtyKrHrzpjgzWCaWPOdhc=
   - secure: rLSA5ChJv0Quv+myP8bGEckwXnBRlpQpiqJJaKPJjjmz6YhSUE1Kb7gCnLNnq8g9gSKKH86fx+zli4CO7QXzI7vJ4tlurrI0D51z2HE+aHYauwWR+EA43AWpPMss7pR1nk3A1uY2O3Z/vpTSvEb5gOAkCZVq35K8DiQKW5ZVan61f07gWe9Xv9ZMP0NI20nQDcvqxObjB2j2mj1Kj8clObAC0U9Xj+62pOD6jwqvNNgkEkVVQ5O5E5anQi6R4f1XC3USIzOdvecVR23KGFTCLgZByQeMpkAdryZ75zeSbHgtXRnA/t113BqL8v4bNd+qX/vXLlax9oLR4hWOGcqBcr2fHGwvJsJYN+9hHFu31E+yfZwGYe0Cme150i1fjWrdnibkrgcvcZwX3E70iuFn37U58mu04ii/JSgLNWadHDW2g+3wlRkISprjVUJGLVl+Aqsj7CtiqcRnJ+sKsKE+TYCTso4cXfvmDp4akvKoNk0rJrA6aZXlEIGLTJRUzic+EeluTxwy8V9r8QjlGpvSi5VG28gZbgbsFt0sIDVnhyFc0LplDg7LMbUDpbIN7BJ92QeKZz5AHOhD+Lq5BhMvczc0+ZGZNXfn8rZ+yCGZxzqfNxePxB8OQqEThQHEEh5kTA2haJubNHVJ1K75Qw+8IS5G/kGCebnlktpKOsdVQ00=
 before_deploy:
-  - openssl aes-256-cbc -K $encrypted_0afd7fc30ee4_key -iv $encrypted_0afd7fc30ee4_iv
+  - openssl aes-256-cbc -K $encrypted_c7d28ed8a9a3_key -iv $encrypted_c7d28ed8a9a3_iv
     -in cd/codesigning.asc.enc -out cd/codesigning.asc -d
 deploy:
   -
     skip_cleanup: true
     provider: script
-    script: ./cd/deploy.sh
+    script: "./cd/deploy.sh"
     on:
       branch: master
