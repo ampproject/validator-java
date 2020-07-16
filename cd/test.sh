@@ -2,4 +2,4 @@
 
 echo "Running custom test script"
 
-mvn clean install
+mvn clean install -q -B
