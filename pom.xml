@@ -7,20 +7,16 @@
     <groupId>dev.amp</groupId>
     <artifactId>validator-java</artifactId>
     <name>AMP validator Java API</name>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1</version>
     <description>A Java validator for the AMP Html format.</description>
     <packaging>jar</packaging>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>bintray-amp-validator-java-repo</id>
-            <url>http://dl.bintray.com/amp/maven</url>
-        </snapshotRepository>
-        <repository>
-            <id>bintray-amp-validator-java-repo</id>
-            <url>https://api.bintray.com/maven/amp/maven/validatorjava;publish=1</url>
-        </repository>
-    </distributionManagement>
+    <scm>
+        <developerConnection>scm:https://github.com/ampproject/validator-java.git</developerConnection>
+        <connection>scm:https://github.com/ampproject/validator-java.git</connection>
+        <url>https://github.com/ampproject/validator-java.git</url>
+        <tag>validator-java-1.0</tag>
+    </scm>
 
     <developers>
         <developer>
@@ -85,6 +81,11 @@
             <id>central</id>
             <name>bintray</name>
             <url>https://jcenter.bintray.com/</url>
+        </repository>
+        <repository>
+            <id>Yahoo repository bintray</id>
+            <name>bintray</name>
+            <url>https://dl.bintray.com/yahoo/maven/</url>
         </repository>
     </repositories>
 
@@ -542,6 +543,78 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>publish</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+
     <dependencies>
         <!-- Jackson dependencies -->
         <dependency>
@@ -583,7 +656,7 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.2.0</version>
+            <version>7.1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
