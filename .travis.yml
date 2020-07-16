@@ -16,7 +16,7 @@ env:
   - secure: rLSA5ChJv0Quv+myP8bGEckwXnBRlpQpiqJJaKPJjjmz6YhSUE1Kb7gCnLNnq8g9gSKKH86fx+zli4CO7QXzI7vJ4tlurrI0D51z2HE+aHYauwWR+EA43AWpPMss7pR1nk3A1uY2O3Z/vpTSvEb5gOAkCZVq35K8DiQKW5ZVan61f07gWe9Xv9ZMP0NI20nQDcvqxObjB2j2mj1Kj8clObAC0U9Xj+62pOD6jwqvNNgkEkVVQ5O5E5anQi6R4f1XC3USIzOdvecVR23KGFTCLgZByQeMpkAdryZ75zeSbHgtXRnA/t113BqL8v4bNd+qX/vXLlax9oLR4hWOGcqBcr2fHGwvJsJYN+9hHFu31E+yfZwGYe0Cme150i1fjWrdnibkrgcvcZwX3E70iuFn37U58mu04ii/JSgLNWadHDW2g+3wlRkISprjVUJGLVl+Aqsj7CtiqcRnJ+sKsKE+TYCTso4cXfvmDp4akvKoNk0rJrA6aZXlEIGLTJRUzic+EeluTxwy8V9r8QjlGpvSi5VG28gZbgbsFt0sIDVnhyFc0LplDg7LMbUDpbIN7BJ92QeKZz5AHOhD+Lq5BhMvczc0+ZGZNXfn8rZ+yCGZxzqfNxePxB8OQqEThQHEEh5kTA2haJubNHVJ1K75Qw+8IS5G/kGCebnlktpKOsdVQ00=
 before_deploy:
   - openssl aes-256-cbc -K $encrypted_c7d28ed8a9a3_key -iv $encrypted_c7d28ed8a9a3_iv
-    -in cd/codesigning.asc.enc -out cd/codesigning.asc -d
+    -in cd/codesigning.gpg.enc -out cd/codesigning.gpg -d
 deploy:
   -
     skip_cleanup: true
