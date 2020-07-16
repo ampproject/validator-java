@@ -24,6 +24,7 @@ package dev.amp.validator.css;
 
 import dev.amp.validator.visitor.SelectorVisitor;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -34,25 +35,30 @@ import java.util.List;
  * @author GeorgeLuo
  */
 
-public class SelectorGroup extends Selector {
+public class SelectorsGroup extends Selector {
     /**
      * @param {!Array<!SimpleSelectorSequence|
      *         !Combinator>} elements
      */
-    public SelectorGroup(final List<Selector> elements) {
+    public SelectorsGroup(@Nonnull final List<Selector> elements) {
         super();
         /**
          @type {!Array<!SimpleSelectorSequence|
          !Combinator>}
          */
         this.elements = elements;
-        /** @type {!tokenize_css.TokenType} */
-        this.tokenType = tokenize_css.TokenType.SELECTORS_GROUP;
     }
 
     /** @param {function(!Selector)} lambda */
-    void forEachChild(SelectorGroup selector) {}
+    void forEachChild(SelectorsGroup selector) {}
 
     /** @param visitor a SelectorVisitor instance */
     void accept(SelectorVisitor visitor) {}
+
+    @Override
+    public TokenType getTokenType() {
+        return TokenType.SELECTORS_GROUP;
+    }
+
+    private final List<Selector> elements;
 }

@@ -83,4 +83,8 @@ public enum TokenType {
     ERROR,
     /** TYPE_SELECTOR */
     TYPE_SELECTOR,
+    /** SELECTORS_GROUP */
+    SELECTORS_GROUP,
+    /** HASH */
+    HASH
 }
