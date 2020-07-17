@@ -25,7 +25,7 @@ if [ "$TRAVIS_BRANCH" == 'master' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; th
 
     # Prepare the local keyring (requires travis to have decrypted the file
     # beforehand)
-    gpg --fast-import cd/codesigning.gpg.enc
+    gpg --fast-import cd/codesigning.gpg
 
     # Run the maven deploy steps
     mvn deploy -P publish -DskipTests=true --settings cd/mvnsettings.xml
