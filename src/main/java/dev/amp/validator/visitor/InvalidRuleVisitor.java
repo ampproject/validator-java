@@ -89,7 +89,6 @@ public class InvalidRuleVisitor implements RuleVisitor {
      * @param cssSpec    to validate against
      * @param atRuleName the rule to validate
      * @return true iff rule is valid
-     * @throws CssValidationException Css Validation Exception
      */
     public boolean isAtRuleValid(@Nonnull final ValidatorProtos.CssSpec cssSpec,
                                  @Nonnull final String atRuleName) {

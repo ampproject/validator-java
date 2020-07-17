@@ -142,6 +142,7 @@ public final class CssSpecUtils {
      *
      * @param stylesheet to walk through
      * @param important  list to populate
+     * @throws CssValidationException css validation exception
      */
     public static void extractImportantDeclarations(@Nonnull final Stylesheet stylesheet,
                                                     @Nonnull final List<Declaration> important) throws CssValidationException {
@@ -371,13 +372,14 @@ public final class CssSpecUtils {
     /**
      * Helper method for ValidateAttributes.
      *
-     * @param parsedAttrSpec
-     * @param context
-     * @param tagSpec
-     * @param attrName
-     * @param attrValue
-     * @param result
+     * @param parsedAttrSpec parsed attribute spec
+     * @param context the context
+     * @param tagSpec tag spec
+     * @param attrName attribute name
+     * @param attrValue attribute value
+     * @param result validate tag result
      * @throws IOException for css tokenize
+     * @throws CssValidationException css validation exception
      */
     public static void validateAttrCss(
             @Nonnull final ParsedAttrSpec parsedAttrSpec,
