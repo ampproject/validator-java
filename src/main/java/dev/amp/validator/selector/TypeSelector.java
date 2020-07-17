@@ -20,8 +20,10 @@
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.css;
+package dev.amp.validator.selector;
 
+import dev.amp.validator.css.TokenType;
+import dev.amp.validator.selector.Selector;
 import dev.amp.validator.visitor.SelectorVisitor;
 
 

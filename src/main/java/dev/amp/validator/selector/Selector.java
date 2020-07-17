@@ -20,11 +20,12 @@
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.css;
+package dev.amp.validator.selector;
 
+import dev.amp.validator.css.Token;
 import dev.amp.validator.visitor.SelectorVisitor;
 
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 /**
  * Abstract super class for CSS Selectors. The Token class, which this
@@ -36,8 +37,8 @@ import java.util.function.Function;
 
 public abstract class Selector extends Token {
     /** @param {function(!Selector)} lambda */
-    void forEachChild(Selector selector) {}
+    public abstract void forEachChild(Consumer<Selector> selector);
 
     /** @param visitor a SelectorVisitor instance */
-    void accept(SelectorVisitor visitor) {}
+    public abstract void accept(SelectorVisitor visitor);
 }

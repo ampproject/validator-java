@@ -86,5 +86,15 @@ public enum TokenType {
     /** SELECTORS_GROUP */
     SELECTORS_GROUP,
     /** HASH */
-    HASH
+    HASH,
+    /** ATTR_SELECTOR */
+    ATTR_SELECTOR,
+    /** ID_SELECTOR */
+    ID_SELECTOR,
+    /** CLASS_SELECTOR */
+    CLASS_SELECTOR,
+    /** PSEUDO_SELECTOR */
+    PSEUDO_SELECTOR,
+    /** COMBINATOR */
+    COMBINATOR;
 }

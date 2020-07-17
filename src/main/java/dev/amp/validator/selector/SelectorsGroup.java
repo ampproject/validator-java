@@ -20,12 +20,14 @@
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.css;
+package dev.amp.validator.selector;
 
+import dev.amp.validator.css.TokenType;
 import dev.amp.validator.visitor.SelectorVisitor;
 
 import javax.annotation.Nonnull;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.function.Consumer;
 
 /**
  * Abstract super class for CSS Selectors. The Token class, which this
@@ -40,25 +42,41 @@ public class SelectorsGroup extends Selector {
      * @param {!Array<!SimpleSelectorSequence|
      *         !Combinator>} elements
      */
-    public SelectorsGroup(@Nonnull final List<Selector> elements) {
+    public SelectorsGroup(@Nonnull final ArrayDeque<Selector> elements) {
         super();
-        /**
-         @type {!Array<!SimpleSelectorSequence|
-         !Combinator>}
-         */
         this.elements = elements;
     }
 
-    /** @param {function(!Selector)} lambda */
-    void forEachChild(SelectorsGroup selector) {}
+    /**
+     *  method to run lambda on all elements
+     * @param lambda function to executed
+     */
+    public void forEachChild(Consumer<Selector> lambda) {
+        for(final Selector selector : this.elements) {
+            lambda.accept(selector);
+        }
+    }
 
-    /** @param visitor a SelectorVisitor instance */
-    void accept(SelectorVisitor visitor) {}
+    /**
+     *
+     * @param visitor a SelectorVisitor instance
+     * */
+    void accept(@Nonnull final SelectorVisitor visitor) {
+        visitor.visitSelectorsGroup(this);
+    }
 
     @Override
     public TokenType getTokenType() {
         return TokenType.SELECTORS_GROUP;
     }
 
-    private final List<Selector> elements;
+    /**
+     * getter for elements
+     * @return this' elements
+     */
+    public ArrayDeque<Selector> getElements() {
+        return elements;
+    }
+
+    private final ArrayDeque<Selector> elements;
 }

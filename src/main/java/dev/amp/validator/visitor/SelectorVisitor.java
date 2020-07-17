@@ -21,19 +21,29 @@
 
 package dev.amp.validator.visitor;
 
+import com.steadystate.css.parser.Token;
+import dev.amp.validator.selector.Combinator;
 import dev.amp.validator.css.CssTokenUtil;
 import dev.amp.validator.css.CssValidationException;
 import dev.amp.validator.css.ErrorToken;
 import dev.amp.validator.css.QualifiedRule;
-import dev.amp.validator.css.SelectorsGroup;
 import dev.amp.validator.css.TokenStream;
-import dev.amp.validator.css.TokenType;
+import dev.amp.validator.selector.AttrSelector;
+import dev.amp.validator.selector.ClassSelector;
+import dev.amp.validator.selector.IdSelector;
+import dev.amp.validator.selector.PseudoSelector;
+import dev.amp.validator.selector.Selector;
+import dev.amp.validator.selector.SelectorsGroup;
+import dev.amp.validator.selector.SimpleSelectorSequence;
+import dev.amp.validator.selector.TypeSelector;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.amp.validator.css.CssTokenUtil.getTokenType;
+import static dev.amp.validator.utils.SelectorUtils.isSimpleSelectorSequenceStart;
+import static dev.amp.validator.utils.SelectorUtils.parseASelector;
 
 /**
  * A super class for making visitors (by overriding the types of interest). The
@@ -46,7 +56,7 @@ import static dev.amp.validator.css.CssTokenUtil.getTokenType;
  * @author GeorgeLuo
  */
 
-public class SelectorVisitor implements RuleVisitor {
+public abstract class SelectorVisitor implements RuleVisitor {
     /**
      * @param errors an array of ErrorTokens
      */
@@ -60,24 +70,27 @@ public class SelectorVisitor implements RuleVisitor {
      * @throws CssValidationException a css validation exception
      */
     public void visitQualifiedRule(final QualifiedRule qualifiedRule) throws CssValidationException {
-//        final TokenStream tokenStream = new TokenStream(qualifiedRule.getPrelude());
-//        tokenStream.consume();
-//
-//        final maybeSelector = parseASelectorsGroup(tokenStream);
-//        if (maybeSelector instanceof tokenize_css.ErrorToken)
-//            this.errors_.push(maybeSelector);
-//
-//        /** @type {!Array<!Selector>} */
-//    const toVisit = [maybeSelector];
-//        while (toVisit.length > 0) {
-//            /** @type {!Selector} */
-//      const node = toVisit.shift();
-//            node.accept(this);
-//            node.forEachChild(child => {
-//                    toVisit.push(child);
-//      });
-//        }
+        final TokenStream tokenStream = new TokenStream(qualifiedRule.getPrelude());
+        tokenStream.consume();
+
+        int errorsCount = errors.size();
+
+        final SelectorsGroup maybeSelector = parseASelectorsGroup(tokenStream, errors);
+
+        if (errorsCount != errors.size()) {
+            return;
+        }
+
+        final ArrayDeque<Selector> toVisit = maybeSelector.getElements();
+
+        while (!toVisit.isEmpty()) {
+
+            final Selector node = toVisit.pop();
+            node.accept(this);
+            node.forEachChild(child -> toVisit.add(child));
+        }
     }
+
 
     private final List<ErrorToken> errors;
 
@@ -101,11 +114,21 @@ public class SelectorVisitor implements RuleVisitor {
             errors.add(errorToken);
             return null;
         }
-//  const start = tokenStream.current();
-//  const elements = [parseASelector(tokenStream)];
-//        if (elements[0].tokenType === tokenize_css.TokenType.ERROR) {
-//            return elements[0];
-//        }
+
+        final Token start = tokenStream.current();
+
+        int errorsCount = errors.size();
+        final Selector selector = parseASelector(tokenStream, errors);
+
+        if (errors.size() != errorsCount) {
+            return null;
+        }
+
+        const elements = [parseASelector(tokenStream)];
+        if (elements[0].tokenType === tokenize_css.TokenType.ERROR) {
+            return elements[0];
+        }
+
 //        while (true) {
 //            if (tokenStream.current().tokenType === tokenize_css.TokenType.WHITESPACE) {
 //                tokenStream.consume();
@@ -139,48 +162,50 @@ public class SelectorVisitor implements RuleVisitor {
     }
 
     /**
-     * Whether or not the provided token could be the start of a simple
-     * selector sequence. See the simple_selector_sequence production in
-     * http://www.w3.org/TR/css3-selectors/#grammar.
-     * @param token to analyze
-     * @return is SimpleSelector Sequence Start
+     *
+     * @param typeSelector
      */
-    public static boolean isSimpleSelectorSequenceStart(@Nonnull final com.steadystate.css.parser.Token token) {
-
-        // Type selector start.
-        if (isDelim(token, "*") || isDelim(token, "|") ||
-                (getTokenType(token) == TokenType.IDENT)) {
-            return true;
-        }
-        // Id selector start.
-        if (getTokenType(token) == TokenType.HASH) {
-            return true;
-        }
-        // Class selector start.
-        if (isDelim(token, ".")) {
-            return true;
-        }
-        // Attr selector start.
-        if (getTokenType(token) == TokenType.OPEN_SQUARE) {
-            return true;
-        }
-        // A pseudo selector.
-        if (getTokenType(token) == TokenType.COLON) {
-            return true;
-        }
-        // TODO(johannes): add the others.
-        return false;
-    }
+    public abstract void visitTypeSelector(@Nonnull final TypeSelector typeSelector);
 
     /**
-     * Helper function for determining whether the provided token is a specific
-     * delimiter.
      *
-     * @param token to analyze
-     * @param delimChar to check
-     * @return if this is a delim char
+     * @param idSelector
      */
-    public static boolean isDelim(@Nonnull final com.steadystate.css.parser.Token token, @Nonnull final String delimChar) {
-        return getTokenType(token) == TokenType.DELIM && (token.getValue()).equals(delimChar);
-    }
+    public abstract void visitIdSelector(@Nonnull final IdSelector idSelector);
+
+    /**
+     *
+     * @param attrSelector
+     */
+    public abstract void visitAttrSelector(@Nonnull final AttrSelector attrSelector);
+
+    /**
+     *
+     * @param pseudoSelector
+     */
+    public abstract void visitPseudoSelector(@Nonnull final PseudoSelector pseudoSelector);
+
+    /**
+     *
+     * @param classSelector
+     */
+    public abstract void visitClassSelector(@Nonnull final ClassSelector classSelector);
+
+    /**
+     *
+     * @param sequence
+     */
+    public abstract void visitSimpleSelectorSequence(@Nonnull final SimpleSelectorSequence sequence);
+
+    /**
+     *
+     * @param combinator
+     */
+    public abstract void visitCombinator(@Nonnull final Combinator combinator);
+
+    /**
+     *
+     * @param selector
+     */
+    public abstract void visitSelectorsGroup(@Nonnull final Selector selector);
 }

@@ -20,11 +20,13 @@
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.css;
+package dev.amp.validator.selector;
 
+import dev.amp.validator.css.TokenType;
 import dev.amp.validator.visitor.SelectorVisitor;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  /**
@@ -49,9 +51,21 @@ public class SimpleSelectorSequence extends Selector {
         this.tokenType = tokenize_css.TokenType.SIMPLE_SELECTOR_SEQUENCE;
     }
 
-    /** @param {function(!Selector)} lambda */
-    void forEachChild(SimpleSelectorSequence selector) {}
+    @Override
+    public void forEachChild(Consumer<Selector> selector) {
+//        lambda(this.typeSelector);
+//        for (const other of this.otherSelectors) {
+//            lambda(other);
+//        }
+    }
 
-    /** @param visitor a SelectorVisitor instance */
-    void accept(SelectorVisitor visitor) {}
+    @Override
+    public void accept(SelectorVisitor visitor) {
+
+    }
+
+    @Override
+    public TokenType getTokenType() {
+        return null;
+    }
 }
