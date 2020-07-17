@@ -564,6 +564,11 @@
                     <plugin>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>${maven-javadoc-plugin.version}</version>
+                        <configuration>
+                            <sourceFileExcludes>
+                                <sourceFileExclude>dev/amp/validator/ValidatorProtos.java</sourceFileExclude>
+                            </sourceFileExcludes>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
