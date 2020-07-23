@@ -25,11 +25,12 @@ package dev.amp.validator.selector;
 import dev.amp.validator.css.TokenType;
 import dev.amp.validator.visitor.SelectorVisitor;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.function.Consumer;
 
 /**
- /**
+ * /**
  * Models a simple selector sequence, e.g. '*|foo#id'.
  *
  * @author nhant01
@@ -38,17 +39,15 @@ import java.util.function.Consumer;
 
 public class SimpleSelectorSequence extends Selector {
     /**
-     * @param {!TypeSelector} typeSelector
+     * @param {!TypeSelector}     typeSelector
      * @param {!Array<!Selector>} otherSelectors
      */
-    public SimpleSelectorSequence(TypeSelector typeSelector, List<Selector> otherSelectors) {
+    public SimpleSelectorSequence(@Nonnull final TypeSelector typeSelector, @Nonnull final List<Selector> otherSelectors) {
         super();
         /** @type {!TypeSelector} */
         this.typeSelector = typeSelector;
         /** @type {!Array<!Selector>} */
         this.otherSelectors = otherSelectors;
-        /** @type {!tokenize_css.TokenType} */
-        this.tokenType = tokenize_css.TokenType.SIMPLE_SELECTOR_SEQUENCE;
     }
 
     @Override
@@ -66,6 +65,16 @@ public class SimpleSelectorSequence extends Selector {
 
     @Override
     public TokenType getTokenType() {
-        return null;
+        return TokenType.SIMPLE_SELECTOR_SEQUENCE;
     }
+
+    /**
+     *
+     */
+    private TypeSelector typeSelector;
+
+    /**
+     *
+     */
+    private List<Selector> otherSelectors;
 }

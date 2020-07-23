@@ -22,7 +22,7 @@
 
 package dev.amp.validator.selector;
 
-import dev.amp.validator.css.Token;
+import com.steadystate.css.parser.Token;
 import dev.amp.validator.css.TokenType;
 import dev.amp.validator.visitor.SelectorVisitor;
 
@@ -55,7 +55,7 @@ public class PseudoSelector extends Selector {
      * @param {string} name
      * @param {!Array<!tokenize_css.Token>} func
      */
-    public PseudoSelector(boolean isClass, @Nonnull String name, @Nonnull final List<Token> func) {
+    public PseudoSelector(boolean isClass, @Nonnull String name, @Nonnull final List<com.steadystate.css.parser.Token> func) {
         super();
         /** @type {boolean} */
         this.isClass = isClass;

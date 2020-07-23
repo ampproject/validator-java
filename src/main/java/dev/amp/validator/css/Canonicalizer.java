@@ -377,7 +377,7 @@ public class Canonicalizer {
      * @return true iff depth not exceeded
      * @throws CssValidationException Css Validation Exception
      */
-    private static boolean consumeAFunction(@Nonnull final TokenStream tokenStream,
+    public static boolean consumeAFunction(@Nonnull final TokenStream tokenStream,
                                             @Nonnull final List<Token> tokenList,
                                             final int depth) throws CssValidationException {
         if (depth > K_MAXIMUM_CSS_RECURSION) {

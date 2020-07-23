@@ -43,9 +43,7 @@ public class ClassSelector extends Selector {
      * @param {string} value the class to match.
      */
     public ClassSelector(@Nonnull final String value) {
-
         super();
-
         this.value = value;
     }
 
