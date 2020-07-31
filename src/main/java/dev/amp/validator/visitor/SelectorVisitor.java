@@ -22,6 +22,8 @@
 package dev.amp.validator.visitor;
 
 import com.steadystate.css.parser.Token;
+import dev.amp.validator.ValidatorProtos;
+import dev.amp.validator.css.TokenType;
 import dev.amp.validator.selector.Combinator;
 import dev.amp.validator.css.CssTokenUtil;
 import dev.amp.validator.css.CssValidationException;
@@ -33,6 +35,7 @@ import dev.amp.validator.selector.ClassSelector;
 import dev.amp.validator.selector.IdSelector;
 import dev.amp.validator.selector.PseudoSelector;
 import dev.amp.validator.selector.Selector;
+import dev.amp.validator.selector.SelectorException;
 import dev.amp.validator.selector.SelectorsGroup;
 import dev.amp.validator.selector.SimpleSelectorSequence;
 import dev.amp.validator.selector.TypeSelector;
@@ -42,6 +45,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dev.amp.validator.css.CssTokenUtil.copyPosTo;
+import static dev.amp.validator.css.CssTokenUtil.getTokenType;
 import static dev.amp.validator.utils.SelectorUtils.isSimpleSelectorSequenceStart;
 import static dev.amp.validator.utils.SelectorUtils.parseASelector;
 
@@ -73,11 +78,11 @@ public abstract class SelectorVisitor implements RuleVisitor {
         final TokenStream tokenStream = new TokenStream(qualifiedRule.getPrelude());
         tokenStream.consume();
 
-        int errorsCount = errors.size();
-
-        final SelectorsGroup maybeSelector = parseASelectorsGroup(tokenStream, errors);
-
-        if (errorsCount != errors.size()) {
+        SelectorsGroup maybeSelector;
+        try {
+            maybeSelector = parseASelectorsGroup(tokenStream);
+        } catch (final SelectorException selectorException) {
+            errors.add(selectorException.getErrorToken());
             return;
         }
 
@@ -91,7 +96,6 @@ public abstract class SelectorVisitor implements RuleVisitor {
         }
     }
 
-
     private final List<ErrorToken> errors;
 
     /**
@@ -103,62 +107,54 @@ public abstract class SelectorVisitor implements RuleVisitor {
      * @param tokenStream to work with
      * @return selectors group from top of stream
      */
-    public static SelectorsGroup parseASelectorsGroup(@Nonnull final TokenStream tokenStream, @Nonnull final List<ErrorToken> errors) {
+    public static SelectorsGroup parseASelectorsGroup(@Nonnull final TokenStream tokenStream) throws CssValidationException, SelectorException {
         if (!isSimpleSelectorSequenceStart(tokenStream.current())) {
             final List<String> params = new ArrayList<>();
             params.add("style");
             final ErrorToken errorToken = new ErrorToken(
                     ValidatorProtos.ValidationError.Code.CSS_SYNTAX_DISALLOWED_MEDIA_TYPE,
                     params);
-            CssTokenUtil.copyPosTo(tokenStream.current(), errorToken);
-            errors.add(errorToken);
-            return null;
+            throw new SelectorException((ErrorToken) CssTokenUtil.copyPosTo(tokenStream.current(), errorToken));
         }
 
         final Token start = tokenStream.current();
+        Selector selector;
 
-        int errorsCount = errors.size();
-        final Selector selector = parseASelector(tokenStream, errors);
+        selector = parseASelector(tokenStream);
 
-        if (errors.size() != errorsCount) {
-            return null;
+        ArrayDeque<Selector> elements = new ArrayDeque<>();
+        elements.add(selector);
+
+        while (true) {
+            if (getTokenType(tokenStream.current()) == TokenType.WHITESPACE) {
+                tokenStream.consume();
+            }
+            if (getTokenType(tokenStream.current()) == TokenType.COMMA) {
+                tokenStream.consume();
+                if (getTokenType(tokenStream.current()) == TokenType.WHITESPACE) {
+                    tokenStream.consume();
+                }
+                elements.push(parseASelector(tokenStream));
+                continue;
+            }
+            // We're about to claim success and return a selector,
+            // but before we do, we check that no unparsed input remains.
+            if (!(getTokenType(tokenStream.current()) == TokenType.EOF_TOKEN)) {
+                final List<String> params = new ArrayList<>();
+                params.add("style");
+                final ErrorToken errorToken = new ErrorToken(
+                        ValidatorProtos.ValidationError.Code.CSS_SYNTAX_UNPARSED_INPUT_REMAINS_IN_SELECTOR,
+                        params);
+                throw new SelectorException(errorToken);
+            }
+            if (elements.size() == 1) {
+                if (elements.getFirst() instanceof SelectorsGroup) {
+                    return (SelectorsGroup) elements.getFirst();
+                }
+                throw new CssValidationException("Expected SelectorsGroup as first element of Selectors collection.");
+            }
+            return (SelectorsGroup) copyPosTo(start, new SelectorsGroup(elements));
         }
-
-        const elements = [parseASelector(tokenStream)];
-        if (elements[0].tokenType === tokenize_css.TokenType.ERROR) {
-            return elements[0];
-        }
-
-//        while (true) {
-//            if (tokenStream.current().tokenType === tokenize_css.TokenType.WHITESPACE) {
-//                tokenStream.consume();
-//            }
-//            if (tokenStream.current().tokenType === tokenize_css.TokenType.COMMA) {
-//                tokenStream.consume();
-//                if (tokenStream.current().tokenType ===
-//                        tokenize_css.TokenType.WHITESPACE) {
-//                    tokenStream.consume();
-//                }
-//                elements.push(parseASelector(tokenStream));
-//                if (elements[elements.length - 1].tokenType ===
-//                        tokenize_css.TokenType.ERROR) {
-//                    return elements[elements.length - 1];
-//                }
-//                continue;
-//            }
-//            // We're about to claim success and return a selector,
-//            // but before we do, we check that no unparsed input remains.
-//            if (!(tokenStream.current().tokenType ===
-//                    tokenize_css.TokenType.EOF_TOKEN)) {
-//                return tokenStream.current().copyPosTo(new tokenize_css.ErrorToken(
-//                        ValidationError.Code.CSS_SYNTAX_UNPARSED_INPUT_REMAINS_IN_SELECTOR,
-//                        ['style']));
-//            }
-//            if (elements.length == 1) {
-//                return elements[0];
-//            }
-//            return start.copyPosTo(new SelectorsGroup(elements));
-//        }
     }
 
     /**

@@ -61,7 +61,7 @@ public class SelectorsGroup extends Selector {
      *
      * @param visitor a SelectorVisitor instance
      * */
-    void accept(@Nonnull final SelectorVisitor visitor) {
+    public void accept(@Nonnull final SelectorVisitor visitor) {
         visitor.visitSelectorsGroup(this);
     }
 

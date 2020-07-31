@@ -22,6 +22,7 @@
 package dev.amp.validator.utils;
 
 import com.steadystate.css.parser.Token;
+import dev.amp.validator.ValidatorProtos;
 import dev.amp.validator.css.CssTokenUtil;
 import dev.amp.validator.css.CssValidationException;
 import dev.amp.validator.css.EOFToken;
@@ -30,6 +31,7 @@ import dev.amp.validator.css.TokenStream;
 import dev.amp.validator.css.TokenType;
 import dev.amp.validator.selector.AttrSelector;
 import dev.amp.validator.selector.ClassSelector;
+import dev.amp.validator.selector.Combinator;
 import dev.amp.validator.selector.IdSelector;
 import dev.amp.validator.selector.PseudoSelector;
 import dev.amp.validator.selector.Selector;
@@ -102,7 +104,7 @@ public class SelectorUtils {
      * @return {!SimpleSelectorSequence|!tokenize_css.ErrorToken}
      * @throws dev.amp.validator.selector.SelectorException
      */
-    public static SimpleSelectorSequence parseASimpleSelectorSequence(@Nonnull final TokenStream tokenStream) throws SelectorException {
+    public static SimpleSelectorSequence parseASimpleSelectorSequence(@Nonnull final TokenStream tokenStream) throws SelectorException, CssValidationException {
         final Token start = tokenStream.current();
         TypeSelector typeSelector = null;
         if (isDelim(tokenStream.current(), "*") ||
@@ -110,7 +112,6 @@ public class SelectorUtils {
                 getTokenType(tokenStream.current()) == TokenType.IDENT) {
             typeSelector = parseATypeSelector(tokenStream);
         }
-//        /** @type {!Array<!Selector>} */
         final List<Selector> otherSelectors = new ArrayList<>();
         while (true) {
             if (getTokenType(tokenStream.current()) == TokenType.HASH) {
@@ -122,26 +123,32 @@ public class SelectorUtils {
                 AttrSelector maybeAttrSelector = parseAnAttrSelector(tokenStream);
                 otherSelectors.add(maybeAttrSelector);
             } else if (getTokenType(tokenStream.current()) == TokenType.COLON) {
-                    final PseudoSelector maybePseudo = parseAPseudoSelector(tokenStream);
-//                if (maybePseudo.tokenType === tokenize_css.TokenType.ERROR) {
-//                    return /** @type {!tokenize_css.ErrorToken} */ (maybePseudo);
-//                }
-//                otherSelectors.push(/** @type {!Selector} */ (maybePseudo));
-//                // NOTE: If adding more 'else if' clauses here, be sure to udpate
-//                // isSimpleSelectorSequenceStart accordingly.
+                PseudoSelector maybePseudo;
+                try {
+                    maybePseudo = parseAPseudoSelector(tokenStream);
+                } catch (SelectorException selectorException) {
+                    throw selectorException;
+                }
+
+                otherSelectors.add(maybePseudo);
+                // NOTE: If adding more 'else if' clauses here, be sure to udpate
+                // isSimpleSelectorSequenceStart accordingly.
             } else {
-//                if (typeSelector === null) {
-//                    if (otherSelectors.length == 0) {
-//                        return tokenStream.current().copyPosTo(new tokenize_css.ErrorToken(
-//                                ValidationError.Code.CSS_SYNTAX_MISSING_SELECTOR, ['style']));
-//                    }
-//                    // If no type selector is given then the universal selector is
-//                    // implied.
-//                    typeSelector = start.copyPosTo(new TypeSelector(
-//                            /*namespacePrefix=*/ null, /*elementName=*/ '*'));
-//                }
-//                return start.copyPosTo(
-//                        new SimpleSelectorSequence(typeSelector, otherSelectors));
+                if (typeSelector == null) {
+                    if (otherSelectors.size() == 0) {
+                        final List<String> params = new ArrayList<>();
+                        params.add("style");
+                        final ErrorToken errorToken = new ErrorToken(
+                                ValidatorProtos.ValidationError.Code.CSS_SYNTAX_MISSING_SELECTOR,
+                                params);
+                        throw new SelectorException((ErrorToken) copyPosTo(tokenStream.current(), errorToken));
+                    }
+                    // If no type selector is given then the universal selector is
+                    // implied.
+                    typeSelector = (TypeSelector) copyPosTo(start, new TypeSelector(
+                            /*namespacePrefix=*/ null, /*elementName=*/ "*"));
+                }
+                return (SimpleSelectorSequence) copyPosTo(start, new SimpleSelectorSequence(typeSelector, otherSelectors));
             }
         }
     }
@@ -180,11 +187,14 @@ public class SelectorUtils {
             tokenStream.consume();
             return (PseudoSelector) copyPosTo(firstColon, new PseudoSelector(isClass, funcToken.image, func));
         } else {
-            return firstColon.copyPosTo(new tokenize_css.ErrorToken(
-                    ValidationError.Code.CSS_SYNTAX_ERROR_IN_PSEUDO_SELECTOR,['style']));
+            final List<String> params = new ArrayList<>();
+            params.add("style");
+            final ErrorToken errorToken = new ErrorToken(
+                    ValidatorProtos.ValidationError.Code.CSS_SYNTAX_ERROR_IN_PSEUDO_SELECTOR,
+                    params);
+            throw new SelectorException((ErrorToken) copyPosTo(tokenStream.current(), errorToken));
         }
     }
-}
 
     /**
      * The selector production from
@@ -195,59 +205,74 @@ public class SelectorUtils {
      * @return {!SimpleSelectorSequence|
      * !Combinator|!tokenize_css.ErrorToken}
      */
-    public static Selector parseASelector(@Nonnull final TokenStream tokenStream, @Nonnull final List<ErrorToken> errors) {
+    public static Selector parseASelector(@Nonnull final TokenStream tokenStream) throws CssValidationException, SelectorException {
         if (!isSimpleSelectorSequenceStart(tokenStream.current())) {
             final List<String> params = new ArrayList<>();
             params.add("style");
             final ErrorToken errorToken = new ErrorToken(
                     ValidatorProtos.ValidationError.Code.CSS_SYNTAX_NOT_A_SELECTOR_START,
                     params);
-            CssTokenUtil.copyPosTo(tokenStream.current(), errorToken);
-            errors.add(errorToken);
-            return null;
+            throw new SelectorException((ErrorToken) copyPosTo(tokenStream.current(), errorToken));
         }
+
+        SimpleSelectorSequence parsed;
 
         try {
-            final SimpleSelectorSequence parsed = parseASimpleSelectorSequence(tokenStream);
-        } catch (SelectorException e) {
-            errors.add(e.getErrorToken());
+            parsed = parseASimpleSelectorSequence(tokenStream);
+        } catch (final SelectorException selectorException) {
+            throw selectorException;
+        } catch (final CssValidationException cssValidationException) {
+            throw cssValidationException;
         }
 
-        if (parsed.tokenType == tokenize_css.TokenType.ERROR) {
-            return parsed;
+        Selector left = parsed;
+        while (true) {
+            // Consume whitespace in front of combinators, while being careful
+            // to not eat away the infamous "whitespace operator" (sigh, haha).
+            if ((getTokenType(tokenStream.current()) == TokenType.WHITESPACE && !isSimpleSelectorSequenceStart(tokenStream.next()))) {
+                tokenStream.consume();
+            }
+            // If present, grab the combinator token which we'll use for line
+            // / column info.
+            if (!(((getTokenType(tokenStream.current()) == TokenType.WHITESPACE && isSimpleSelectorSequenceStart(tokenStream.next())) ||
+                    isDelim(tokenStream.current(), "+") ||
+                    isDelim(tokenStream.current(), ">") ||
+                    isDelim(tokenStream.current(), "~")))) {
+                return left;
+            }
+            final Token combinatorToken = tokenStream.current();
+            tokenStream.consume();
+            if (getTokenType(tokenStream.current()) == TokenType.WHITESPACE) {
+                tokenStream.consume();
+            }
+
+            final SimpleSelectorSequence right = parseASimpleSelectorSequence(tokenStream);
+
+            left = (Selector) copyPosTo(combinatorToken, new Combinator(
+                    combinatorTypeForToken(combinatorToken), left, right));
         }
-        let left = /** @type {!SimpleSelectorSequence}*/ (parsed);
-//        while (true) {
-//            // Consume whitespace in front of combinators, while being careful
-//            // to not eat away the infamous "whitespace operator" (sigh, haha).
-//            if ((tokenStream.current().tokenType ===
-//                    tokenize_css.TokenType.WHITESPACE) &&
-//                    !isSimpleSelectorSequenceStart(tokenStream.next())) {
-//                tokenStream.consume();
-//            }
-//            // If present, grab the combinator token which we'll use for line
-//            // / column info.
-//            if (!(((tokenStream.current().tokenType ===
-//                    tokenize_css.TokenType.WHITESPACE) &&
-//                    isSimpleSelectorSequenceStart(tokenStream.next())) ||
-//                    isDelim(tokenStream.current(), '+') ||
-//                    isDelim(tokenStream.current(), '>') ||
-//                    isDelim(tokenStream.current(), '~'))) {
-//                return left;
-//            }
-//    const combinatorToken = tokenStream.current();
-//            tokenStream.consume();
-//            if (tokenStream.current().tokenType === tokenize_css.TokenType.WHITESPACE) {
-//                tokenStream.consume();
-//            }
-//    const right = parseASimpleSelectorSequence(tokenStream);
-//            if (right.tokenType === tokenize_css.TokenType.ERROR) {
-//                return right;  // TODO(johannes): more than one error / partial tree.
-//            }
-//            left = combinatorToken.copyPosTo(new Combinator(
-//                    combinatorTypeForToken(combinatorToken), left,
-//                    /** @type {!SimpleSelectorSequence} */ (right)));
-//        }
+    }
+
+    /**
+     * The CombinatorType for a given token; helper function used when
+     * constructing a Combinator instance.
+     *
+     * @param {!tokenize_css.Token} token
+     * @param combinatorToken
+     * @return {!CombinatorType}
+     */
+    public static Combinator.CombinatorType combinatorTypeForToken(@Nonnull final Token token) throws CssValidationException {
+        if (getTokenType(token) == TokenType.WHITESPACE) {
+            return Combinator.CombinatorType.DESCENDANT;
+        } else if (isDelim(token, ">")) {
+            return Combinator.CombinatorType.CHILD;
+        } else if (isDelim(token, "+")) {
+            return Combinator.CombinatorType.ADJACENT_SIBLING;
+        } else if (isDelim(token, "~")) {
+            return Combinator.CombinatorType.GENERAL_SIBLING;
+        }
+
+        throw new CssValidationException("'Internal Error: not a combinator token");
     }
 
     /**
@@ -270,8 +295,8 @@ public class SelectorUtils {
             tokenStream.consume();
             tokenStream.consume();
         } else if (getTokenType(tokenStream.current()) == TokenType.IDENT &&
-                        isDelim(tokenStream.next(), "|")) {
-    Token ident = tokenStream.current();
+                isDelim(tokenStream.next(), "|")) {
+            Token ident = tokenStream.current();
             namespacePrefix = ident.image;
             tokenStream.consume();
             tokenStream.consume();
@@ -310,7 +335,8 @@ public class SelectorUtils {
      * @param {!TokenStream} tokenStream
      * @return {!ClassSelector}
      */
-    private static ClassSelector parseAClassSelector(@Nonnull final TokenStream tokenStream) throws SelectorException {
+    private static ClassSelector parseAClassSelector(@Nonnull final TokenStream tokenStream) throws
+            SelectorException {
         if (getTokenType(tokenStream.next()) != TokenType.IDENT || !isDelim(tokenStream.current(), ".")) {
             throw new SelectorException("Precondition violated: must start with \".\" and follow with ident");
         }
@@ -328,7 +354,8 @@ public class SelectorUtils {
      * @param {!TokenStream} tokenStream
      * @return {!AttrSelector|!tokenize_css.ErrorToken}
      */
-    public static AttrSelector parseAnAttrSelector(@Nonnull final TokenStream tokenStream) throws SelectorException {
+    public static AttrSelector parseAnAttrSelector(@Nonnull final TokenStream tokenStream) throws
+            SelectorException, CssValidationException {
         if (getTokenType(tokenStream.current()) != TokenType.OPEN_SQUARE) {
             throw new SelectorException("Precondition violated: must be an OpenSquareToken");
         }

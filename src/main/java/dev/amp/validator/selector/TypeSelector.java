@@ -26,6 +26,8 @@ import dev.amp.validator.css.TokenType;
 import dev.amp.validator.selector.Selector;
 import dev.amp.validator.visitor.SelectorVisitor;
 
+import java.util.function.Consumer;
+
 
 /**
  * This node models type selectors and universal selectors.
@@ -56,8 +58,13 @@ public class TypeSelector extends Selector {
         this.elementName = elementName;
     }
 
+    @Override
+    public void forEachChild(Consumer<Selector> selector) {
+
+    }
+
     /** @param visitor a SelectorVisitor instance */
-    void accept(SelectorVisitor visitor) {
+    public void accept(SelectorVisitor visitor) {
         visitor.visitTypeSelector(this);
     }
 
