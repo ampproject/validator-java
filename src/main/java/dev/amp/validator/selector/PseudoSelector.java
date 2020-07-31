@@ -49,24 +49,24 @@ import java.util.function.Consumer;
  */
 
 public class PseudoSelector extends Selector {
-
     /**
-     * @param {boolean} isClass
-     * @param {string} name
-     * @param {!Array<!tokenize_css.Token>} func
+     * Constructor.
+     *
+     * @param isClass pseudo class flag
+     * @param name the name
+     * @param func the function tokens
      */
-    public PseudoSelector(boolean isClass, @Nonnull String name, @Nonnull final List<com.steadystate.css.parser.Token> func) {
+    public PseudoSelector(final boolean isClass, @Nonnull final String name,
+                          @Nonnull final List<com.steadystate.css.parser.Token> func) {
         super();
-        /** @type {boolean} */
         this.isClass = isClass;
-        /** @type {string} */
         this.name = name;
-        /** @type {!Array<!tokenize_css.Token>} */
         this.func = func;
     }
 
     @Override
-    public void forEachChild(Consumer<Selector> selector) {}
+    public void forEachChild(final Consumer<Selector> selector) {
+    }
 
     /**
      * visits a selector
@@ -86,17 +86,17 @@ public class PseudoSelector extends Selector {
     }
 
     /**
-     *
+     * Pseudo class flag.
      */
     private boolean isClass;
 
     /**
-     *
+     * Pseudo selector name.
      */
     private final String name;
 
     /**
-     *
+     * Function tokens.
      */
     private final List<Token> func;
 }

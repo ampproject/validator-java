@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * /**
  * Models a simple selector sequence, e.g. '*|foo#id'.
  *
  * @author nhant01
@@ -39,19 +38,17 @@ import java.util.function.Consumer;
 
 public class SimpleSelectorSequence extends Selector {
     /**
-     * @param {!TypeSelector}     typeSelector
-     * @param {!Array<!Selector>} otherSelectors
+     * @param typeSelector a type selector
+     * @param otherSelectors array of selectors
      */
     public SimpleSelectorSequence(@Nonnull final TypeSelector typeSelector, @Nonnull final List<Selector> otherSelectors) {
         super();
-        /** @type {!TypeSelector} */
         this.typeSelector = typeSelector;
-        /** @type {!Array<!Selector>} */
         this.otherSelectors = otherSelectors;
     }
 
     @Override
-    public void forEachChild(Consumer<Selector> selector) {
+    public void forEachChild(final Consumer<Selector> selector) {
 //        lambda(this.typeSelector);
 //        for (const other of this.otherSelectors) {
 //            lambda(other);
@@ -59,8 +56,7 @@ public class SimpleSelectorSequence extends Selector {
     }
 
     @Override
-    public void accept(SelectorVisitor visitor) {
-
+    public void accept(final SelectorVisitor visitor) {
     }
 
     @Override
@@ -69,12 +65,12 @@ public class SimpleSelectorSequence extends Selector {
     }
 
     /**
-     *
+     * The type selector.
      */
     private TypeSelector typeSelector;
 
     /**
-     *
+     * The list of other selectors.
      */
     private List<Selector> otherSelectors;
 }

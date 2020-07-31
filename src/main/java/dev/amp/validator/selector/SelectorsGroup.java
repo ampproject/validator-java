@@ -39,8 +39,7 @@ import java.util.function.Consumer;
 
 public class SelectorsGroup extends Selector {
     /**
-     * @param {!Array<!SimpleSelectorSequence|
-     *         !Combinator>} elements
+     * @param elements array of selectors
      */
     public SelectorsGroup(@Nonnull final ArrayDeque<Selector> elements) {
         super();
@@ -51,16 +50,16 @@ public class SelectorsGroup extends Selector {
      *  method to run lambda on all elements
      * @param lambda function to executed
      */
-    public void forEachChild(Consumer<Selector> lambda) {
-        for(final Selector selector : this.elements) {
+    public void forEachChild(final Consumer<Selector> lambda) {
+        for (final Selector selector : this.elements) {
             lambda.accept(selector);
         }
     }
 
     /**
-     *
+     * visits a selector
      * @param visitor a SelectorVisitor instance
-     * */
+     */
     public void accept(@Nonnull final SelectorVisitor visitor) {
         visitor.visitSelectorsGroup(this);
     }
@@ -78,5 +77,8 @@ public class SelectorsGroup extends Selector {
         return elements;
     }
 
+    /**
+     * The array of selectors.
+     */
     private final ArrayDeque<Selector> elements;
 }

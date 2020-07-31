@@ -39,7 +39,6 @@ import java.util.function.Consumer;
  */
 
 public class IdSelector extends Selector {
-
     /**
      * @param value to set to
      */
@@ -49,7 +48,8 @@ public class IdSelector extends Selector {
     }
 
     @Override
-    public void forEachChild(Consumer<Selector> selector) {}
+    public void forEachChild(final Consumer<Selector> selector) {
+    }
 
     /**
      * visits a selector
@@ -79,5 +79,5 @@ public class IdSelector extends Selector {
     /**
      * underlying value of selector
      */
-    final String value;
+    private final String value;
 }

@@ -39,15 +39,14 @@ import java.util.function.Consumer;
  */
 
 public class AttrSelector extends Selector {
-
     /**
-     * @param {?string} namespacePrefix
-     * @param {string} attrName
-     * @param {string} matchOperator is either the string
+     * @param namespacePrefix namespace prefix
+     * @param attrName attribute name
+     * @param matchOperator is either the string
      * representation of the match operator (e.g., '=' or '~=') or '',
      * in which case the attribute selector is a check for the presence
      * of the attribute.
-     * @param {string} value is the value to apply the match operator
+     * @param value is the value to apply the match operator
      * against, or if matchOperator is '', then this must be empty as
      * well.
      */
@@ -62,7 +61,7 @@ public class AttrSelector extends Selector {
     }
 
     @Override
-    public void forEachChild(Consumer<Selector> selector) {
+    public void forEachChild(final Consumer<Selector> selector) {
     }
 
     /**
@@ -83,22 +82,22 @@ public class AttrSelector extends Selector {
     }
 
     /**
-     *
+     * Namespace prefix.
      */
-    final String namespacePrefix;
+    private final String namespacePrefix;
 
     /**
-     *
+     * Attribute name.
      */
-    final String attrName;
+    private final String attrName;
 
     /**
-     *
+     * Matching operator.
      */
-    final String matchOperator;
+    private final String matchOperator;
 
     /**
-     *
+     * Value.
      */
-    final String value;
+    private final String value;
 }

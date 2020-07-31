@@ -48,7 +48,20 @@ import static dev.amp.validator.css.Canonicalizer.consumeAFunction;
 import static dev.amp.validator.css.CssTokenUtil.copyPosTo;
 import static dev.amp.validator.css.CssTokenUtil.getTokenType;
 
-public class SelectorUtils {
+/**
+ * Methods to handle selector validation.
+ *
+ * @author nhant01
+ * @author GeorgeLuo
+ */
+
+public final class SelectorUtils {
+    /**
+     * Private constructor.
+     */
+    private SelectorUtils() {
+    }
+
     /**
      * Whether or not the provided token could be the start of a simple
      * selector sequence. See the simple_selector_sequence production in
@@ -58,10 +71,8 @@ public class SelectorUtils {
      * @return is SimpleSelector Sequence Start
      */
     public static boolean isSimpleSelectorSequenceStart(@Nonnull final com.steadystate.css.parser.Token token) {
-
         // Type selector start.
-        if (isDelim(token, "*") || isDelim(token, "|") ||
-                (getTokenType(token) == TokenType.IDENT)) {
+        if (isDelim(token, "*") || isDelim(token, "|") || (getTokenType(token) == TokenType.IDENT)) {
             return true;
         }
         // Id selector start.
@@ -100,24 +111,26 @@ public class SelectorUtils {
      * tokenStream.current must be the first token of the sequence.
      * This function will return an error if no selector is found.
      *
-     * @param {!TokenStream} tokenStream
-     * @return {!SimpleSelectorSequence|!tokenize_css.ErrorToken}
-     * @throws dev.amp.validator.selector.SelectorException
+     * @param tokenStream token stream
+     * @return the SimpleSelectorSequence instance
+     * @throws CssValidationException the CssValidationException
+     * @throws SelectorException the SelectorException
      */
-    public static SimpleSelectorSequence parseASimpleSelectorSequence(@Nonnull final TokenStream tokenStream) throws SelectorException, CssValidationException {
+    public static SimpleSelectorSequence parseASimpleSelectorSequence(@Nonnull final TokenStream tokenStream)
+            throws SelectorException, CssValidationException {
         final Token start = tokenStream.current();
         TypeSelector typeSelector = null;
-        if (isDelim(tokenStream.current(), "*") ||
-                isDelim(tokenStream.current(), "|") ||
-                getTokenType(tokenStream.current()) == TokenType.IDENT) {
+        if (isDelim(tokenStream.current(), "*")
+                || isDelim(tokenStream.current(), "|")
+                || getTokenType(tokenStream.current()) == TokenType.IDENT) {
             typeSelector = parseATypeSelector(tokenStream);
         }
         final List<Selector> otherSelectors = new ArrayList<>();
         while (true) {
             if (getTokenType(tokenStream.current()) == TokenType.HASH) {
                 otherSelectors.add(parseAnIdSelector(tokenStream));
-            } else if (isDelim(tokenStream.current(), ".") &&
-                    getTokenType(tokenStream.next()) == TokenType.IDENT) {
+            } else if (isDelim(tokenStream.current(), ".")
+                    && getTokenType(tokenStream.next()) == TokenType.IDENT) {
                 otherSelectors.add(parseAClassSelector(tokenStream));
             } else if (getTokenType(tokenStream.current()) == TokenType.OPEN_SQUARE) {
                 AttrSelector maybeAttrSelector = parseAnAttrSelector(tokenStream);
@@ -157,10 +170,13 @@ public class SelectorUtils {
      * tokenStream.current() must be the ColonToken. Returns an error if
      * the pseudo token can't be parsed (e.g., a lone ':').
      *
-     * @param {!TokenStream} tokenStream
-     * @return {!PseudoSelector|!tokenize_css.ErrorToken}
+     * @param tokenStream token stream
+     * @return the pseudo selector
+     * @throws CssValidationException the CssValidationException
+     * @throws SelectorException the SelectorException
      */
-    private static PseudoSelector parseAPseudoSelector(@Nonnull final TokenStream tokenStream) throws SelectorException, CssValidationException {
+    private static PseudoSelector parseAPseudoSelector(@Nonnull final TokenStream tokenStream)
+            throws SelectorException, CssValidationException {
         if (getTokenType(tokenStream.current()) != TokenType.COLON) {
             throw new SelectorException("Precondition violated: must be a \":\"");
         }
@@ -201,11 +217,13 @@ public class SelectorUtils {
      * http://www.w3.org/TR/css3-selectors/#grammar
      * Returns an ErrorToken if no selector is found.
      *
-     * @param {!TokenStream} tokenStream
-     * @return {!SimpleSelectorSequence|
-     * !Combinator|!tokenize_css.ErrorToken}
+     * @param tokenStream token stream
+     * @return the selector
+     * @throws CssValidationException the CssValidationException
+     * @throws SelectorException the SelectorException
      */
-    public static Selector parseASelector(@Nonnull final TokenStream tokenStream) throws CssValidationException, SelectorException {
+    public static Selector parseASelector(@Nonnull final TokenStream tokenStream)
+            throws CssValidationException, SelectorException {
         if (!isSimpleSelectorSequenceStart(tokenStream.current())) {
             final List<String> params = new ArrayList<>();
             params.add("style");
@@ -234,10 +252,10 @@ public class SelectorUtils {
             }
             // If present, grab the combinator token which we'll use for line
             // / column info.
-            if (!(((getTokenType(tokenStream.current()) == TokenType.WHITESPACE && isSimpleSelectorSequenceStart(tokenStream.next())) ||
-                    isDelim(tokenStream.current(), "+") ||
-                    isDelim(tokenStream.current(), ">") ||
-                    isDelim(tokenStream.current(), "~")))) {
+            if (!(((getTokenType(tokenStream.current()) == TokenType.WHITESPACE && isSimpleSelectorSequenceStart(tokenStream.next()))
+                    || isDelim(tokenStream.current(), "+")
+                    || isDelim(tokenStream.current(), ">")
+                    || isDelim(tokenStream.current(), "~")))) {
                 return left;
             }
             final Token combinatorToken = tokenStream.current();
@@ -257,9 +275,9 @@ public class SelectorUtils {
      * The CombinatorType for a given token; helper function used when
      * constructing a Combinator instance.
      *
-     * @param {!tokenize_css.Token} token
-     * @param combinatorToken
-     * @return {!CombinatorType}
+     * @param token the token
+     * @return the combinator type
+     * @throws CssValidationException the CssValidationException
      */
     public static Combinator.CombinatorType combinatorTypeForToken(@Nonnull final Token token) throws CssValidationException {
         if (getTokenType(token) == TokenType.WHITESPACE) {
@@ -278,8 +296,8 @@ public class SelectorUtils {
     /**
      * tokenStream.current() is the first token of the type selector.
      *
-     * @param {!TokenStream} tokenStream
-     * @return {!TypeSelector}
+     * @param tokenStream token stream
+     * @return the type selector
      */
     public static TypeSelector parseATypeSelector(@Nonnull final TokenStream tokenStream) {
         String namespacePrefix = null;
@@ -289,13 +307,11 @@ public class SelectorUtils {
         if (isDelim(tokenStream.current(), "|")) {
             namespacePrefix = "";
             tokenStream.consume();
-        } else if (
-                isDelim(tokenStream.current(), "*") && isDelim(tokenStream.next(), "|")) {
+        } else if (isDelim(tokenStream.current(), "*") && isDelim(tokenStream.next(), "|")) {
             namespacePrefix = "*";
             tokenStream.consume();
             tokenStream.consume();
-        } else if (getTokenType(tokenStream.current()) == TokenType.IDENT &&
-                isDelim(tokenStream.next(), "|")) {
+        } else if (getTokenType(tokenStream.current()) == TokenType.IDENT && isDelim(tokenStream.next(), "|")) {
             Token ident = tokenStream.current();
             namespacePrefix = ident.image;
             tokenStream.consume();
@@ -315,11 +331,11 @@ public class SelectorUtils {
     /**
      * tokenStream.current() must be the hash token.
      *
-     * @param {!TokenStream} tokenStream
-     * @return {!IdSelector}
+     * @param tokenStream token stream
+     * @return the selector
+     * @throws SelectorException the SelectorException
      */
     private static Selector parseAnIdSelector(@Nonnull final TokenStream tokenStream) throws SelectorException {
-
         if (getTokenType(tokenStream.current()) != TokenType.HASH) {
             throw new SelectorException("Precondition violated: must start with HashToken");
         }
@@ -332,8 +348,9 @@ public class SelectorUtils {
     /**
      * tokenStream.current() must be the '.' delimiter token.
      *
-     * @param {!TokenStream} tokenStream
-     * @return {!ClassSelector}
+     * @param tokenStream token stream
+     * @return the class selector
+     * @throws SelectorException the SelectorException
      */
     private static ClassSelector parseAClassSelector(@Nonnull final TokenStream tokenStream) throws
             SelectorException {
@@ -351,8 +368,10 @@ public class SelectorUtils {
     /**
      * tokenStream.current() must be the open square token.
      *
-     * @param {!TokenStream} tokenStream
-     * @return {!AttrSelector|!tokenize_css.ErrorToken}
+     * @param tokenStream token stream
+     * @return attribute selector
+     * @throws CssValidationException the CssValidationException
+     * @throws SelectorException the SelectorException
      */
     public static AttrSelector parseAnAttrSelector(@Nonnull final TokenStream tokenStream) throws
             SelectorException, CssValidationException {
@@ -377,8 +396,7 @@ public class SelectorUtils {
             namespacePrefix = "*";
             tokenStream.consume();
             tokenStream.consume();
-        } else if (getTokenType(tokenStream.current()) == TokenType.IDENT &&
-                isDelim(tokenStream.next(), "|")) {
+        } else if (getTokenType(tokenStream.current()) == TokenType.IDENT && isDelim(tokenStream.next(), "|")) {
             final Token ident = tokenStream.current();
             namespacePrefix = ident.image;
             tokenStream.consume();
@@ -471,13 +489,13 @@ public class SelectorUtils {
      * FunctionToken, but excluding the trailing CloseParen token and
      * appended with an EOFToken instead.
      *
-     * @param {!TokenStream}                     tokenStream
-     * @param {!Array<!tokenize_css.ErrorToken>} errors
-     * @return {!Array<!tokenize_css.Token>}
+     * @param tokenStream token stream
+     * @param errors array of error tokens
+     * @return the list of token
+     * @throws CssValidationException the CssValidationException
      */
     public static List<Token> extractAFunction(@Nonnull final TokenStream tokenStream,
                                                @Nonnull final List<ErrorToken> errors) throws CssValidationException {
-        /** @type {!Array<!tokenize_css.Token>} */
         final List<Token> consumedTokens = new ArrayList<>();
         if (!consumeAFunction(tokenStream, consumedTokens, /*depth*/ 0)) {
             final List<String> params = new ArrayList<>();

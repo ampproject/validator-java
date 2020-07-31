@@ -23,7 +23,6 @@
 package dev.amp.validator.selector;
 
 import dev.amp.validator.css.TokenType;
-import dev.amp.validator.selector.Selector;
 import dev.amp.validator.visitor.SelectorVisitor;
 
 import java.util.function.Consumer;
@@ -48,8 +47,8 @@ public class TypeSelector extends Selector {
      *
      * The universal selector is covered by setting the elementName to '*'.
      *
-     * @param {?string} namespacePrefix
-     * @param {string} elementName
+     * @param namespacePrefix a namespace prefix
+     * @param elementName element name
      */
     public TypeSelector(final String namespacePrefix, final String elementName) {
         super();
@@ -59,12 +58,11 @@ public class TypeSelector extends Selector {
     }
 
     @Override
-    public void forEachChild(Consumer<Selector> selector) {
-
+    public void forEachChild(final Consumer<Selector> selector) {
     }
 
     /** @param visitor a SelectorVisitor instance */
-    public void accept(SelectorVisitor visitor) {
+    public void accept(final SelectorVisitor visitor) {
         visitor.visitTypeSelector(this);
     }
 

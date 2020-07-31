@@ -1,3 +1,25 @@
+/*
+ *
+ * ====================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *  ====================================================================
+ */
+
+
+/*
+ * Changes to the original project are Copyright 2019, Verizon Media Inc..
+ */
+
 package dev.amp.validator.selector;
 
 import dev.amp.validator.css.TokenType;
@@ -6,14 +28,21 @@ import dev.amp.validator.visitor.SelectorVisitor;
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
-public class Combinator extends Selector {
+/**
+ * Models a combinator, as described in
+ * http://www.w3.org/TR/css3-selectors/#combinators.
+ *
+ * @author nhant01
+ * @author GeorgeLuo
+ */
 
+public class Combinator extends Selector {
     /**
-     * @param {!CombinatorType} combinatorType
-     * @param {!SimpleSelectorSequence|!Combinator} left
-     * @param {!SimpleSelectorSequence} right
+     * @param combinatorType combinator enumeration type
+     * @param left the selector
+     * @param right the simple selector sequence
      */
-    public Combinator(@Nonnull final CombinatorType combinatorType, Selector left, SimpleSelectorSequence right) {
+    public Combinator(@Nonnull final CombinatorType combinatorType, final Selector left, final SimpleSelectorSequence right) {
         super();
         this.combinatorType = combinatorType;
         this.left = left;
@@ -21,13 +50,11 @@ public class Combinator extends Selector {
     }
 
     @Override
-    public void forEachChild(Consumer<Selector> selector) {
-
+    public void forEachChild(final Consumer<Selector> selector) {
     }
 
     @Override
-    public void accept(SelectorVisitor visitor) {
-
+    public void accept(final SelectorVisitor visitor) {
     }
 
     @Override
@@ -36,17 +63,17 @@ public class Combinator extends Selector {
     }
 
     /**
-     *
+     * The combinator type.
      */
     private CombinatorType combinatorType;
 
     /**
-     *
+     * The left selector.
      */
     private Selector left;
 
     /**
-     *
+     * The simple selector sequence.
      */
     private SimpleSelectorSequence right;
 
@@ -61,6 +88,6 @@ public class Combinator extends Selector {
         /** ADJACENT_SIBLING */
         ADJACENT_SIBLING,
         /** GENERAL_SIBLING */
-        GENERAL_SIBLING,
+        GENERAL_SIBLING;
     }
 }

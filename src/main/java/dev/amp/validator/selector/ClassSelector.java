@@ -40,7 +40,7 @@ import java.util.function.Consumer;
 public class ClassSelector extends Selector {
 
     /**
-     * @param {string} value the class to match.
+     * @param value the class to match.
      */
     public ClassSelector(@Nonnull final String value) {
         super();
@@ -48,7 +48,8 @@ public class ClassSelector extends Selector {
     }
 
     @Override
-    public void forEachChild(Consumer<Selector> selector) {}
+    public void forEachChild(final Consumer<Selector> selector) {
+    }
 
     /**
      * visits a selector
@@ -76,7 +77,7 @@ public class ClassSelector extends Selector {
     }
 
     /**
-     *
+     * The value.
      */
-    final String value;
+    private final String value;
 }

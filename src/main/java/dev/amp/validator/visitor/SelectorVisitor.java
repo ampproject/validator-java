@@ -161,47 +161,47 @@ public abstract class SelectorVisitor implements RuleVisitor {
      *
      * @param typeSelector
      */
-    public abstract void visitTypeSelector(@Nonnull final TypeSelector typeSelector);
+    public abstract void visitTypeSelector(@Nonnull TypeSelector typeSelector);
 
     /**
      *
      * @param idSelector
      */
-    public abstract void visitIdSelector(@Nonnull final IdSelector idSelector);
+    public abstract void visitIdSelector(@Nonnull IdSelector idSelector);
 
     /**
      *
      * @param attrSelector
      */
-    public abstract void visitAttrSelector(@Nonnull final AttrSelector attrSelector);
+    public abstract void visitAttrSelector(@Nonnull AttrSelector attrSelector);
 
     /**
      *
      * @param pseudoSelector
      */
-    public abstract void visitPseudoSelector(@Nonnull final PseudoSelector pseudoSelector);
+    public abstract void visitPseudoSelector(@Nonnull PseudoSelector pseudoSelector);
 
     /**
      *
      * @param classSelector
      */
-    public abstract void visitClassSelector(@Nonnull final ClassSelector classSelector);
+    public abstract void visitClassSelector(@Nonnull ClassSelector classSelector);
 
     /**
      *
      * @param sequence
      */
-    public abstract void visitSimpleSelectorSequence(@Nonnull final SimpleSelectorSequence sequence);
+    public abstract void visitSimpleSelectorSequence(@Nonnull SimpleSelectorSequence sequence);
 
     /**
      *
      * @param combinator
      */
-    public abstract void visitCombinator(@Nonnull final Combinator combinator);
+    public abstract void visitCombinator(@Nonnull Combinator combinator);
 
     /**
      *
      * @param selector
      */
-    public abstract void visitSelectorsGroup(@Nonnull final Selector selector);
+    public abstract void visitSelectorsGroup(@Nonnull Selector selector);
 }
