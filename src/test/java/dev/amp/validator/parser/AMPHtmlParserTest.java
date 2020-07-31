@@ -39,6 +39,21 @@ public class AMPHtmlParserTest {
     ampHtmlParser = new AMPHtmlParser();
   }
 
+  @Test
+  public void testAmpSelectorsPass() {
+    try {
+      String inputHtml =
+              readFile(
+                      "test-cases/css/testAmpSelectorsPASS.html");
+      final int maxNode = 10000;
+      ValidatorProtos.ValidationResult result =
+              ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
+      Assert.assertEquals(result.getErrorsCount(), 0, "Expecting to have 0 error");
+    } catch (final IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+
   //VALIDATION TAG
 // TODO - Tagchowder implicitly added html tag to the parent of head.
 //    @Test
