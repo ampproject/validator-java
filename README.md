@@ -25,9 +25,9 @@ AMP HTML Validator uses maven as tool for building and managing project. Add fol
 
 ```
 <dependency>
-  <groupId>amp.validator</groupId>
-  <artifactId>amphtml-validator</artifactId>
-  <version>1.0</version>
+  <groupId>dev.amp</groupId>
+  <artifactId>validator-java</artifactId>
+  <version>${version.number}</version>
 </dependency>
 ```
 
