@@ -7,7 +7,7 @@
     <groupId>dev.amp</groupId>
     <artifactId>validator-java</artifactId>
     <name>AMP validator Java API</name>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <description>A Java validator for the AMP Html format.</description>
     <packaging>jar</packaging>
     <url>https://github.com/ampproject/validator-java</url>
