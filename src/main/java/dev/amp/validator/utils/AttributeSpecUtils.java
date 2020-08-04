@@ -58,7 +58,9 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static dev.amp.validator.utils.CssSpecUtils.*;
+import static dev.amp.validator.utils.CssSpecUtils.parseInlineStyle;
+import static dev.amp.validator.utils.CssSpecUtils.stripVendorPrefix;
+import static dev.amp.validator.utils.CssSpecUtils.validateAttrCss;
 import static dev.amp.validator.utils.ExtensionsUtils.isAmpRuntimeScript;
 import static dev.amp.validator.utils.ExtensionsUtils.isExtensionScript;
 import static dev.amp.validator.utils.ExtensionsUtils.validateScriptSrcAttr;

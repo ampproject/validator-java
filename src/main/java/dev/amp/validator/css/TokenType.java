@@ -81,4 +81,32 @@ public enum TokenType {
     STRING,
     /** ERROR */
     ERROR,
+    /** TYPE_SELECTOR */
+    TYPE_SELECTOR,
+    /** SELECTORS_GROUP */
+    SELECTORS_GROUP,
+    /** HASH */
+    HASH,
+    /** ATTR_SELECTOR */
+    ATTR_SELECTOR,
+    /** ID_SELECTOR */
+    ID_SELECTOR,
+    /** CLASS_SELECTOR */
+    CLASS_SELECTOR,
+    /** PSEUDO_SELECTOR */
+    PSEUDO_SELECTOR,
+    /** COMBINATOR */
+    COMBINATOR,
+    /** SIMPLE_SELECTOR_SEQUENCE */
+    SIMPLE_SELECTOR_SEQUENCE,
+    /** INCLUDE_MATCH */
+    INCLUDE_MATCH,
+    /** PREFIX_MATCH */
+    PREFIX_MATCH,
+    /** SUFFIX_MATCH */
+    SUFFIX_MATCH,
+    /** SUBSTRING_MATCH */
+    SUBSTRING_MATCH,
+    /** DASH_MATCH */
+    DASH_MATCH;
 }
