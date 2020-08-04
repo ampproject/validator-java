@@ -1,4 +1,5 @@
 # AMP HTML ⚡ Validator
+Build status: [![build_status](https://travis-ci.com/ampproject/validator-java.svg?branch=master)](https://travis-ci.com/ampproject/validator-java)
 
 AMP HTML Validator takes input of HTML text and parses the text tag by tag, running the ruleset against every tag. Resultant from this process is validity of the input text and the errors generated while parsing.
 
@@ -24,9 +25,9 @@ AMP HTML Validator uses maven as tool for building and managing project. Add fol
 
 ```
 <dependency>
-  <groupId>amp.validator</groupId>
-  <artifactId>amphtml-validator</artifactId>
-  <version>1.0</version>
+  <groupId>dev.amp</groupId>
+  <artifactId>validator-java</artifactId>
+  <version>${version.number}</version>
 </dependency>
 ```
 

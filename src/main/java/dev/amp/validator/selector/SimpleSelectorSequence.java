@@ -20,14 +20,16 @@
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.css;
+package dev.amp.validator.selector;
 
+import dev.amp.validator.css.TokenType;
 import dev.amp.validator.visitor.SelectorVisitor;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
- /**
  * Models a simple selector sequence, e.g. '*|foo#id'.
  *
  * @author nhant01
@@ -36,22 +38,39 @@ import java.util.List;
 
 public class SimpleSelectorSequence extends Selector {
     /**
-     * @param {!TypeSelector} typeSelector
-     * @param {!Array<!Selector>} otherSelectors
+     * @param typeSelector a type selector
+     * @param otherSelectors array of selectors
      */
-    public SimpleSelectorSequence(TypeSelector typeSelector, List<Selector> otherSelectors) {
+    public SimpleSelectorSequence(@Nonnull final TypeSelector typeSelector, @Nonnull final List<Selector> otherSelectors) {
         super();
-        /** @type {!TypeSelector} */
         this.typeSelector = typeSelector;
-        /** @type {!Array<!Selector>} */
         this.otherSelectors = otherSelectors;
-        /** @type {!tokenize_css.TokenType} */
-        this.tokenType = tokenize_css.TokenType.SIMPLE_SELECTOR_SEQUENCE;
     }
 
-    /** @param {function(!Selector)} lambda */
-    void forEachChild(SimpleSelectorSequence selector) {}
+    @Override
+    public void forEachChild(final Consumer<Selector> selector) {
+//        lambda(this.typeSelector);
+//        for (const other of this.otherSelectors) {
+//            lambda(other);
+//        }
+    }
 
-    /** @param visitor a SelectorVisitor instance */
-    void accept(SelectorVisitor visitor) {}
+    @Override
+    public void accept(final SelectorVisitor visitor) {
+    }
+
+    @Override
+    public TokenType getTokenType() {
+        return TokenType.SIMPLE_SELECTOR_SEQUENCE;
+    }
+
+    /**
+     * The type selector.
+     */
+    private TypeSelector typeSelector;
+
+    /**
+     * The list of other selectors.
+     */
+    private List<Selector> otherSelectors;
 }

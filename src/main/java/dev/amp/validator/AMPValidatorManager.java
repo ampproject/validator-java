@@ -70,7 +70,7 @@ public class AMPValidatorManager {
         final AMPValidatorLoader ampValidatorLoader = new AMPValidatorLoader();
 
         this.builder = ampValidatorLoader.load(filePath);
-        this.combinedBlacklistedCdataRegexMap = new HashMap<>();
+        this.combinedDisallowedCdataRegexMap = new HashMap<>();
 
         final List<ValidatorProtos.TagSpec> tagSpecs = builder.getTagsList();
 
@@ -97,17 +97,17 @@ public class AMPValidatorManager {
                 dispatchKeyByTagSpecId.put(tagSpecId, dispatchKey);
             }
 
-            final List<ValidatorProtos.BlackListedCDataRegex> blackListedCDataRegexList =
-                    tagSpec.getCdata().getBlacklistedCdataRegexList();
-            if (blackListedCDataRegexList != null) {
+            final List<ValidatorProtos.DisallowedCDataRegex> disallowedCDataRegexList =
+                    tagSpec.getCdata().getDisallowedCdataRegexList();
+            if (disallowedCDataRegexList != null) {
                 final List<String> combined = new ArrayList<>();
-                for (final ValidatorProtos.BlackListedCDataRegex blackListedCDataRegex : blackListedCDataRegexList) {
-                    combined.add(blackListedCDataRegex.getRegex());
+                for (final ValidatorProtos.DisallowedCDataRegex disallowedCDataRegex : disallowedCDataRegexList) {
+                    combined.add(disallowedCDataRegex.getRegex());
                 }
 
                 if (!combined.isEmpty()) {
-                    final String combinedBlacklistedCdataRegex = String.join("|", combined);
-                    this.combinedBlacklistedCdataRegexMap.put(String.valueOf(tagSpecId), combinedBlacklistedCdataRegex);
+                    final String combinedDisallowedCdataRegex = String.join("|", combined);
+                    this.combinedDisallowedCdataRegexMap.put(String.valueOf(tagSpecId), combinedDisallowedCdataRegex);
                 }
             }
 
@@ -265,12 +265,12 @@ public class AMPValidatorManager {
     }
 
     /**
-     * Returns a combined black listed regex.
+     * Returns a combined disallowed listed regex.
      * @param tagSpecId tag spec id.
-     * @return returns a combined black listed regex.
+     * @return returns a combined disallowed listed regex.
      */
-    public String getCombinedBlacklistedCdataRegex(final int tagSpecId) {
-        return combinedBlacklistedCdataRegexMap.get(Integer.toString(tagSpecId));
+    public String getCombinedDisallowedCdataRegex(final int tagSpecId) {
+        return combinedDisallowedCdataRegexMap.get(Integer.toString(tagSpecId));
     }
 
     /** Validator builder rules. */
@@ -291,6 +291,6 @@ public class AMPValidatorManager {
     @Nonnull
     private final Map<Integer, String> dispatchKeyByTagSpecId = new HashMap<>();
 
-    /** Combined black listed Cdata regex per Cdataspec. */
-    private Map<String, String> combinedBlacklistedCdataRegexMap;
+    /** Combined disallowed listed Cdata regex per Cdataspec. */
+    private Map<String, String> combinedDisallowedCdataRegexMap;
 }

@@ -79,6 +79,8 @@ public final class CssTokenUtil {
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.DOT, TokenType.DELIM);
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.TILDE, TokenType.DELIM);
 
+        KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.HASH, TokenType.HASH);
+
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.ONLY, TokenType.IDENT);
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.NOT, TokenType.IDENT);
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.AND, TokenType.IDENT);
@@ -92,6 +94,12 @@ public final class CssTokenUtil {
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.URI, TokenType.URL);
 
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.STRING, TokenType.STRING);
+
+        KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.INCLUDES, TokenType.INCLUDE_MATCH);
+        KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.DASHMATCH, TokenType.DASH_MATCH);
+        KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.PREFIXMATCH, TokenType.PREFIX_MATCH);
+        KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.SUFFIXMATCH, TokenType.SUFFIX_MATCH);
+        KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.SUBSTRINGMATCH, TokenType.SUBSTRING_MATCH);
 
         REFLECT_TOKEN = new HashMap<>();
         REFLECT_TOKEN.put("[", "]");

@@ -22,7 +22,6 @@
 package dev.amp.validator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.amp.validator.css.CssValidationException;
 import dev.amp.validator.exception.ExitOnFirstErrorException;

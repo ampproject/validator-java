@@ -9,7 +9,7 @@ public class ImportantPropertyVisitor implements RuleVisitor {
     /**
      * walk through list of declarations
      *
-     * @param important
+     * @param important list of declarations
      */
     public ImportantPropertyVisitor(@Nonnull final List<Declaration> important) {
         super();

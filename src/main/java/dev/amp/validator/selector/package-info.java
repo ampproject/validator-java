@@ -15,29 +15,11 @@
  *  ====================================================================
  */
 
-
 /*
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.css;
-
-import dev.amp.validator.visitor.SelectorVisitor;
-
-import java.util.function.Function;
-
 /**
- * Abstract super class for CSS Selectors. The Token class, which this
- * class inherits from, has line, col, and tokenType fields.
- *
- * @author nhant01
- * @author GeorgeLuo
+ * AMP validator.
  */
-
-public abstract class Selector extends Token {
-    /** @param {function(!Selector)} lambda */
-    void forEachChild(Selector selector) {}
-
-    /** @param visitor a SelectorVisitor instance */
-    void accept(SelectorVisitor visitor) {}
-}
+package dev.amp.validator.selector;

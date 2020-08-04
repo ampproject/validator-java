@@ -20,9 +20,12 @@
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.css;
+package dev.amp.validator.selector;
 
+import dev.amp.validator.css.TokenType;
 import dev.amp.validator.visitor.SelectorVisitor;
+
+import java.util.function.Consumer;
 
 
 /**
@@ -44,8 +47,8 @@ public class TypeSelector extends Selector {
      *
      * The universal selector is covered by setting the elementName to '*'.
      *
-     * @param {?string} namespacePrefix
-     * @param {string} elementName
+     * @param namespacePrefix a namespace prefix
+     * @param elementName element name
      */
     public TypeSelector(final String namespacePrefix, final String elementName) {
         super();
@@ -54,8 +57,12 @@ public class TypeSelector extends Selector {
         this.elementName = elementName;
     }
 
+    @Override
+    public void forEachChild(final Consumer<Selector> selector) {
+    }
+
     /** @param visitor a SelectorVisitor instance */
-    void accept(SelectorVisitor visitor) {
+    public void accept(final SelectorVisitor visitor) {
         visitor.visitTypeSelector(this);
     }
 

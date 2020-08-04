@@ -20,11 +20,12 @@
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.css;
+package dev.amp.validator.selector;
 
+import dev.amp.validator.css.Token;
 import dev.amp.validator.visitor.SelectorVisitor;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Abstract super class for CSS Selectors. The Token class, which this
@@ -34,25 +35,10 @@ import java.util.List;
  * @author GeorgeLuo
  */
 
-public class SelectorGroup extends Selector {
-    /**
-     * @param {!Array<!SimpleSelectorSequence|
-     *         !Combinator>} elements
-     */
-    public SelectorGroup(final List<Selector> elements) {
-        super();
-        /**
-         @type {!Array<!SimpleSelectorSequence|
-         !Combinator>}
-         */
-        this.elements = elements;
-        /** @type {!tokenize_css.TokenType} */
-        this.tokenType = tokenize_css.TokenType.SELECTORS_GROUP;
-    }
-
-    /** @param {function(!Selector)} lambda */
-    void forEachChild(SelectorGroup selector) {}
+public abstract class Selector extends Token {
+    /** @param selector selector function */
+    public abstract void forEachChild(Consumer<Selector> selector);
 
     /** @param visitor a SelectorVisitor instance */
-    void accept(SelectorVisitor visitor) {}
+    public abstract void accept(SelectorVisitor visitor);
 }

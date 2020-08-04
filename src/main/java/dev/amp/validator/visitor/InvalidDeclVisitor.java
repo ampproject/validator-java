@@ -14,9 +14,9 @@ public class InvalidDeclVisitor implements RuleVisitor {
     /**
      * Visitor for "important" css element
      *
-     * @param spec
-     * @param context
-     * @param result
+     * @param spec the parsed doc css spec
+     * @param context the context
+     * @param result validation result
      */
     public InvalidDeclVisitor(@Nonnull final ParsedDocCssSpec spec, @Nonnull final Context context,
                               @Nonnull final ValidatorProtos.ValidationResult.Builder result) {
