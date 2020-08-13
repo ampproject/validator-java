@@ -27,6 +27,7 @@ import dev.amp.validator.AMPHtmlHandler;
 import dev.amp.validator.ExitCondition;
 import com.yahoo.tagchowder.Parser;
 import com.yahoo.tagchowder.templates.HTMLSchema;
+import dev.amp.validator.utils.ByteUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -86,7 +87,7 @@ public class AMPHtmlParser {
                                             @Nonnull final ExitCondition condition,
                                             final int maxNodes) {
         final Parser parser = new Parser();
-        final AMPHtmlHandler handler = new AMPHtmlHandler(validatorManager, htmlFormat, condition, maxNodes);
+        final AMPHtmlHandler handler = new AMPHtmlHandler(validatorManager, htmlFormat, condition, maxNodes, ByteUtils.byteLength(inputHtml));
         try {
             parser.setContentHandler(handler);
             parser.setProperty(Parser.SCHEMA_PROPERTY, new HTMLSchema(true));
