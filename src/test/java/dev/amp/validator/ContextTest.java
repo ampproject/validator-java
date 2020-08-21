@@ -55,7 +55,7 @@ public class ContextTest {
     @Test
     public void testUpdateFromTagResultsAncestorNoHead() throws TagValidationException {
         mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
-        final Context context = new Context(mockValidatorRules);
+        final Context context = new Context(mockValidatorRules, MAX_BODY_LENGTH);
         final ParsedHtmlTag htmlTag = mock(ParsedHtmlTag.class);
         when(htmlTag.upperName()).thenReturn(UPPER_NAME);
 
@@ -93,7 +93,7 @@ public class ContextTest {
     @Test
     public void testSatisfyMandatoryAlternativesFromTagSpec() throws TagValidationException {
         mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
-        final Context context = new Context(mockValidatorRules);
+        final Context context = new Context(mockValidatorRules, MAX_BODY_LENGTH);
 
         final ParsedTagSpec tagSpec = mock(ParsedTagSpec.class);
         final ValidatorProtos.TagSpec tagSpecMock = mockValidatorRules.getByTagSpecId("test_satisfies").getSpec();
@@ -111,7 +111,7 @@ public class ContextTest {
     @Test
     public void testAddBuiltError() {
         mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
-        final Context context = new Context(mockValidatorRules);
+        final Context context = new Context(mockValidatorRules, MAX_BODY_LENGTH);
 
         final ValidatorProtos.ValidationResult.Builder builder = ValidatorProtos.ValidationResult.newBuilder();
 
@@ -138,7 +138,7 @@ public class ContextTest {
     public void testAddError() {
         final String mockSpecUrl = "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml#links";
         mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
-        final Context context = new Context(mockValidatorRules);
+        final Context context = new Context(mockValidatorRules, MAX_BODY_LENGTH);
         final ValidatorProtos.ValidationResult.Builder builder = ValidatorProtos.ValidationResult.newBuilder();
 
         context.addError(ValidatorProtos.ValidationError.Code.DISALLOWED_ATTR,
@@ -182,7 +182,7 @@ public class ContextTest {
     public void testAddError1() {
         final String mockSpecUrl = "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml#links";
         mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
-        final Context context = new Context(mockValidatorRules);
+        final Context context = new Context(mockValidatorRules, MAX_BODY_LENGTH);
         final ValidatorProtos.ValidationResult.Builder builder = ValidatorProtos.ValidationResult.newBuilder();
 
         context.addError(ValidatorProtos.ValidationError.Code.DISALLOWED_ATTR,
@@ -205,7 +205,7 @@ public class ContextTest {
     public void testAddWarning() {
         final String mockSpecUrl = "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml#links";
         mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
-        final Context context = new Context(mockValidatorRules);
+        final Context context = new Context(mockValidatorRules, MAX_BODY_LENGTH);
         final ValidatorProtos.ValidationResult.Builder builder = ValidatorProtos.ValidationResult.newBuilder();
 
         context.addWarning(ValidatorProtos.ValidationError.Code.DISALLOWED_ATTR,
@@ -248,7 +248,7 @@ public class ContextTest {
     @Test
     public void testLineCol() {
         mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
-        final Context context = new Context(mockValidatorRules);
+        final Context context = new Context(mockValidatorRules, MAX_BODY_LENGTH);
 
         context.setLineCol(new Locator() {
             @Override
@@ -285,7 +285,7 @@ public class ContextTest {
     @Test
     public void testSettersGetters() {
         mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
-        final Context context = new Context(mockValidatorRules);
+        final Context context = new Context(mockValidatorRules, MAX_BODY_LENGTH);
         context.recordTypeIdentifier("type_id");
         context.recordTypeIdentifier("transformed");
 
@@ -305,11 +305,13 @@ public class ContextTest {
     @Test
     public void testByteSizeComputations() {
         mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
-        final Context context = new Context(mockValidatorRules);
+        final Context context = new Context(mockValidatorRules, MAX_BODY_LENGTH);
 
         context.addInlineStyleByteSize(40);
         Assert.assertEquals(context.getInlineStyleByteSize(), 40);
     }
+
+    private int MAX_BODY_LENGTH = 100000;
 
     private ParsedValidatorRules mockValidatorRules;
     private static final String UPPER_NAME = "HEAD";
