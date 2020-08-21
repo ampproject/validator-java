@@ -54,16 +54,17 @@ public class AMPHtmlHandler extends DefaultHandler {
      * @param htmlFormat       HtmlFormat code.
      * @param condition        exit condition.
      * @param maxNodesAllowed  max nodes allowed.
+     * @param docByteSize length of html document.
      */
     public AMPHtmlHandler(@Nonnull final AMPValidatorManager validatorManager,
                           @Nonnull final ValidatorProtos.HtmlFormat.Code htmlFormat, @Nonnull final ExitCondition condition,
-                          final int maxNodesAllowed) {
+                          final int maxNodesAllowed, final int docByteSize) {
         this.validatorManager = validatorManager;
         this.exitCondition = condition;
         this.maxNodesAllowed = maxNodesAllowed;
         this.htmlFormat = htmlFormat;
         this.validationResult = ValidatorProtos.ValidationResult.newBuilder();
-        context = new Context(new ParsedValidatorRules(htmlFormat, validatorManager));
+        context = new Context(new ParsedValidatorRules(htmlFormat, validatorManager), docByteSize);
     }
 
     /**

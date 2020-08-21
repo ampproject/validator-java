@@ -57,8 +57,9 @@ public class Context {
      * Constructor.
      *
      * @param parsedValidatorRules a ParsedValidationRules object.
+     * @param docByteSize size of document
      */
-    public Context(@Nonnull final ParsedValidatorRules parsedValidatorRules) {
+    public Context(@Nonnull final ParsedValidatorRules parsedValidatorRules, final int docByteSize) {
         this.rules = parsedValidatorRules;
         this.mandatoryAlternativesSatisfied = new ArrayList<>();
         this.docLocator = null;
@@ -76,6 +77,8 @@ public class Context {
         this.firstUrlSeenTag = null;
         this.extensions = new ExtensionsContext();
         this.scriptReleaseVersion = ExtensionsUtils.ScriptReleaseVersion.UNKNOWN;
+
+        this.docByteSize = docByteSize;
     }
 
     /**
@@ -413,6 +416,40 @@ public class Context {
     }
 
     /**
+     * Returns true iff `spec` should be used for the type identifiers recorded
+     * in this context, as seen in the document so far. If called before type
+     * identifiers have been recorded, will always return false.
+     *
+     * @param spec to evaluate
+     * @return true iff `spec` should be used for the type identifiers
+     */
+    public boolean isDocSpecValidForTypeIdentifiers(@Nonnull final ParsedDocSpec spec) {
+        return isUsedForTypeIdentifiers(
+                this.getTypeIdentifiers(), spec.enabledBy(), spec.disabledBy());
+    }
+
+    /**
+     * Returns the first (there should be at most one) DocSpec which matches
+     * both the html format and type identifiers recorded so far in this
+     * context. If called before identifiers have been recorded, it may return
+     * an incorrect selection.
+     *
+     * @return first (there should be at most one) DocSpec which matches
+     * both the html format and type identifiers
+     */
+    public ParsedDocSpec matchingDocSpec() {
+        // The specs are usually already filtered by HTML format, so this loop
+        // should be very short, often 1:
+        for (final ParsedDocSpec spec : this.rules.getDoc()) {
+            if (this.rules.isDocSpecCorrectHtmlFormat(spec.spec())
+                    && this.isDocSpecValidForTypeIdentifiers(spec)) {
+                return spec;
+            }
+        }
+        return null;
+    }
+
+    /**
      * @return returns the extensions of the current validation job.
      */
     public ExtensionsContext getExtensions() {
@@ -580,6 +617,14 @@ public class Context {
     }
 
     /**
+     * Returns the document size from the document locator.
+     * @return size of document
+     */
+    public int getDocByteSize() {
+        return this.docByteSize;
+    }
+
+    /**
      * An instance of ParsedValidatorRules.
      */
     private ParsedValidatorRules rules;
@@ -648,4 +693,9 @@ public class Context {
      * flag for LTS runtime engine present
      */
     private ExtensionsUtils.ScriptReleaseVersion scriptReleaseVersion;
+
+    /**
+     * input html length
+     */
+    private int docByteSize;
 }

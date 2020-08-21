@@ -88,6 +88,11 @@ public class ParsedValidatorRules {
                     new ParsedDocCssSpec(cssSpec, this.ampValidatorManager.getRules().getDeclarationListList()));
         }
 
+        this.parsedDoc = new ArrayList<>();
+        for (final ValidatorProtos.DocSpec docSpec : this.ampValidatorManager.getRules().getDocList()) {
+            this.parsedDoc.add(new ParsedDocSpec(docSpec));
+        }
+
         this.tagSpecIdsToTrack = new HashMap<>();
         final int numTags = this.ampValidatorManager.getRules().getTagsList().size();
         for (int tagSpecId = 0; tagSpecId < numTags; ++tagSpecId) {
@@ -661,6 +666,7 @@ public class ParsedValidatorRules {
         this.maybeEmitAlsoRequiresTagValidationErrors(context, validationResult);
         this.maybeEmitMandatoryAlternativesSatisfiedErrors(
                 context, validationResult);
+        this.maybeEmitDocSizeErrors(context, validationResult);
         this.maybeEmitCssLengthSpecErrors(context, validationResult);
         this.maybeEmitValueSetMismatchErrors(context, validationResult);
     }
@@ -879,6 +885,48 @@ public class ParsedValidatorRules {
         }
     }
 
+    /**
+     * Emits errors for doc size limitations across entire document.
+     *
+     * @param context the context to evaluate against
+     * @param validationResult to populate
+     */
+    public void maybeEmitDocSizeErrors(@Nonnull final Context context,
+                                       @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult) {
+        final ParsedDocSpec parsedDocSpec = context.matchingDocSpec();
+        if (parsedDocSpec != null) {
+            final int bytesUsed = context.getDocByteSize();
+            final ValidatorProtos.DocSpec docSpec = parsedDocSpec.spec();
+            if (docSpec.getMaxBytes() != -2 && bytesUsed > docSpec.getMaxBytes()) {
+
+                final List<String> params = new ArrayList<>();
+                params.add(String.valueOf(docSpec.getMaxBytes()));
+                params.add(String.valueOf(bytesUsed));
+                context.addError(
+                        ValidatorProtos.ValidationError.Code.DOCUMENT_SIZE_LIMIT_EXCEEDED,
+                        context.getLineCol(),
+                        params,
+                        /* specUrl */ docSpec.getMaxBytesSpecUrl(),
+                        validationResult);
+            }
+        }
+    }
+
+    /**
+     * Returns true if `spec` is usable for the HTML format these rules are
+     * built for.
+     *
+     * @param docSpec the docSpec to evaluate
+     * @return true if `spec` is usable for the HTML format these rules
+     */
+    public boolean isDocSpecCorrectHtmlFormat(@Nonnull final ValidatorProtos.DocSpec docSpec) {
+        for (final ValidatorProtos.HtmlFormat.Code htmlFormatCode : docSpec.getHtmlFormatList()) {
+            if (htmlFormatCode == htmlFormat) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Returns true if `spec` is usable for the HTML format these rules are
@@ -950,7 +998,16 @@ public class ParsedValidatorRules {
     }
 
     /**
-     * @return {!ParsedAttrSpecs}
+     * Getter for parsed doc
+     *
+     * @return this parsedDoc
+     */
+    public List<ParsedDocSpec> getDoc() {
+        return this.parsedDoc;
+    }
+
+    /**
+     * @return this ParsedAttrSpecs
      */
     public ParsedAttrSpecs getParsedAttrSpecs() {
         return this.parsedAttrSpecs;
@@ -1033,7 +1090,12 @@ public class ParsedValidatorRules {
     private static final int MIN_BYTES = -2;
 
     /**
-     *
+     * this parsed Css specs.
      */
     private List<ParsedDocCssSpec> parsedCss;
+
+    /**
+     * this parsed doc specs.
+     */
+    private List<ParsedDocSpec> parsedDoc;
 }

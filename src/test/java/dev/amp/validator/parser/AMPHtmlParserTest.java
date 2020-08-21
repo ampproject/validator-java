@@ -324,9 +324,10 @@ public class AMPHtmlParserTest {
       final int maxNode = 10000;
       ValidatorProtos.ValidationResult result =
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
-      Assert.assertEquals(result.getErrorsCount(), 2, "Expecting to have 2 errors");
+      Assert.assertEquals(result.getErrorsCount(), 3, "Expecting to have 3 errors");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DISALLOWED_TAG_ANCESTOR);
       Assert.assertTrue(result.getErrors(1).getCode() == ValidatorProtos.ValidationError.Code.TAG_REFERENCE_POINT_CONFLICT);
+      Assert.assertTrue(result.getErrors(2).getCode() == ValidatorProtos.ValidationError.Code.EXTENSION_UNUSED);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -740,7 +741,8 @@ public class AMPHtmlParserTest {
       ValidatorProtos.ValidationResult result =
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.STYLESHEET_TOO_LONG);
-      Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error.");
+      Assert.assertTrue(result.getErrors(1).getCode() == ValidatorProtos.ValidationError.Code.DOCUMENT_SIZE_LIMIT_EXCEEDED);
+      Assert.assertEquals(result.getErrorsCount(), 2, "Expecting to have 2 error.");
     } catch (final IOException ex) {
       ex.printStackTrace();
     }

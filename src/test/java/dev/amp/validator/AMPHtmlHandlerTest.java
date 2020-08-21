@@ -56,7 +56,7 @@ public class AMPHtmlHandlerTest {
     public void testStartDocument() throws SAXException {
         final AMPHtmlHandler handler = new AMPHtmlHandler(ampValidatorManager,
                 ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING,
-                MAX_NODES_ALLOWED);
+                MAX_NODES_ALLOWED, MAX_BODY_LENGTH);
 
         handler.startDocument();
 
@@ -70,7 +70,7 @@ public class AMPHtmlHandlerTest {
     public void testStartElement() throws SAXException {
         final AMPHtmlHandler handler = new AMPHtmlHandler(ampValidatorManager,
                 ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING,
-                MAX_NODES_ALLOWED);
+                MAX_NODES_ALLOWED, MAX_BODY_LENGTH);
 
         final String uri = "";
         final Attributes attrs = mock(Attributes.class);
@@ -119,4 +119,5 @@ public class AMPHtmlHandlerTest {
     private AMPValidatorManager ampValidatorManager;
 
     private static final int MAX_NODES_ALLOWED = 50;
+    private static final int MAX_BODY_LENGTH = 100000;
 }
