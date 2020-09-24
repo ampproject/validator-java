@@ -436,7 +436,7 @@ public class ParsedValidatorRulesTest {
                 Mockito.anyString(),
                 Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 
-        testHtmlFormatCode = ValidatorProtos.HtmlFormat.Code.ACTIONS;
+        testHtmlFormatCode = ValidatorProtos.HtmlFormat.Code.AMP4EMAIL;
         mockContext = Mockito.mock(Context.class);
 
         rules = new ParsedValidatorRules(testHtmlFormatCode, mockValidationManager);
@@ -445,17 +445,16 @@ public class ParsedValidatorRulesTest {
         ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<ValidatorProtos.ValidationError.Code> errorCodeCapture = ArgumentCaptor.forClass(ValidatorProtos.ValidationError.Code.class);
 
-        Mockito.verify(mockContext, Mockito.times(2))
+        Mockito.verify(mockContext, Mockito.times(1))
                 .addError(errorCodeCapture.capture(),
                     Mockito.any(Locator.class),
                     listCaptor.capture(),
                     Mockito.anyString(),
                     Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 
-        Assert.assertEquals(errorCodeCapture.getAllValues().get(1), ValidatorProtos.ValidationError.Code.MANDATORY_ATTR_MISSING);
-        Assert.assertEquals(listCaptor.getAllValues().get(1).size(), 2);
-        Assert.assertEquals(listCaptor.getAllValues().get(1).get(0), "actions");
-        Assert.assertEquals(listCaptor.getAllValues().get(1).get(1), "html");
+        Assert.assertEquals(errorCodeCapture.getAllValues().get(0), ValidatorProtos.ValidationError.Code.MANDATORY_ATTR_MISSING);
+        Assert.assertEquals(listCaptor.getAllValues().get(0).size(), 2);
+        Assert.assertEquals(listCaptor.getAllValues().get(0).get(0), "⚡4email");
     }
 
     @Test

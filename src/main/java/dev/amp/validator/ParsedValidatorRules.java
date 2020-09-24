@@ -474,20 +474,6 @@ public class ParsedValidatorRules {
                 this.validateTypeIdentifiers(
                         htmlTag.attrs(), TagSpecUtils.AMP4EMAIL_IDENTIFIERS, context, validationResult);
                 break;
-            case ACTIONS:
-                this.validateTypeIdentifiers(
-                        htmlTag.attrs(), TagSpecUtils.ACTIONS_IDENTIFIERS, context, validationResult);
-
-                if (!validationResult.getTypeIdentifierList().contains("actions")) {
-                    final List<String> params = new ArrayList<>();
-                    params.add("actions");
-                    params.add("html");
-                    context.addError(
-                            ValidatorProtos.ValidationError.Code.MANDATORY_ATTR_MISSING,
-                            context.getLineCol(), /* params */params,
-                            /* url */"", validationResult);
-                }
-                break;
             default:
                 // fallthrough
         }
