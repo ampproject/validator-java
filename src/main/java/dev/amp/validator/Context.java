@@ -278,7 +278,7 @@ public class Context {
                     continue;
                 }
                 final ParsedAttrSpec parsedAttrSpec =
-                        this.rules.getParsedAttrSpecs().getParsedAttrSpec(attrName, attrValue, attrSpec);
+                        this.rules.getParsedAttrSpecs().getParsedAttrSpec(parsedTagSpec.getSpec().getTagName(), attrName, attrValue, attrSpec);
                 if (parsedAttrSpec != null && parsedAttrSpec.getSpec().getRequiresExtensionCount() > 0) {
                     extensionsCtx.recordUsedExtensions(
                             parsedAttrSpec.getSpec().getRequiresExtensionList());

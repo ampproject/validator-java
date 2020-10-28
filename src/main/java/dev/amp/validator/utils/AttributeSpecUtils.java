@@ -238,7 +238,7 @@ public final class AttributeSpecUtils {
             }
 
             final ParsedAttrSpec parsedAttrSpec =
-                    context.getRules().getParsedAttrSpecs().getParsedAttrSpec(name, value, attrSpec);
+                    context.getRules().getParsedAttrSpecs().getParsedAttrSpec(parsedTagSpec.getSpec().getTagName(), name, value, attrSpec);
             // If this attribute isn't used for these type identifiers, then error.
             if (!parsedAttrSpec.isUsedForTypeIdentifiers(
                     context.getTypeIdentifiers())) {

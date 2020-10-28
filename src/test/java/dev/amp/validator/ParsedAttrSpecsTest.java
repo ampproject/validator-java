@@ -49,10 +49,10 @@ public class ParsedAttrSpecsTest {
         final ParsedAttrSpecs parsedAttrSpecs = new ParsedAttrSpecs(validationManager);
 
         // first time doesn't exist in map
-        Assert.assertNotNull(parsedAttrSpecs.getParsedAttrSpec("a", "b", attrSpec));
+        Assert.assertNotNull(parsedAttrSpecs.getParsedAttrSpec("", "a", "b", attrSpec));
 
         //second time exists in map
-        Assert.assertNotNull(parsedAttrSpecs.getParsedAttrSpec("a", "b", attrSpec));
+        Assert.assertNotNull(parsedAttrSpecs.getParsedAttrSpec("", "a", "b", attrSpec));
 
         Mockito.when(validationManager.getAttrListMap()).thenReturn(Collections.emptyMap());
 
