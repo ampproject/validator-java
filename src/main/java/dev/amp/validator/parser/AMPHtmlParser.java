@@ -92,6 +92,7 @@ public class AMPHtmlParser {
             parser.setContentHandler(handler);
             parser.setProperty(Parser.SCHEMA_PROPERTY, new HTMLSchema(true));
             parser.setFeature(Parser.DEFAULT_ATTRIBUTES_FEATURE, false);
+            parser.setFeature(Parser.AMP_VALIDATION_FEATURE, true);
             parser.parse(new InputSource(new StringReader(inputHtml)));
         } catch (IOException | SAXException ex) {
             final ValidatorProtos.ValidationResult.Builder result = handler.validationResult();

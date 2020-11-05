@@ -32,6 +32,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class AMPHtmlParserTest {
   @BeforeClass
@@ -526,7 +527,7 @@ public class AMPHtmlParserTest {
       ValidatorProtos.ValidationResult result =
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
-      Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DISALLOWED_ATTR);
+      Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.TEMPLATE_IN_ATTR_NAME);
       //Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.TEMPLATE_IN_ATTR_NAME);
     } catch (final IOException ex) {
       ex.printStackTrace();
@@ -1091,7 +1092,7 @@ public class AMPHtmlParserTest {
     final StringBuilder sb = new StringBuilder();
     final InputStream is =
       Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);
-    try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
       String currentLine;
       while ((currentLine = br.readLine()) != null) {
         sb.append(currentLine).append("\n");
