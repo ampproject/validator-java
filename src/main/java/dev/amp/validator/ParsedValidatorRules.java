@@ -59,6 +59,7 @@ public class ParsedValidatorRules {
         this.htmlFormat = htmlFormat;
         this.parsedTagSpecById = new HashMap<>();
         this.tagSpecByTagName = new HashMap<>();
+        this.extTagSpecIdsByExtName = new HashMap<>();
         this.mandatoryTagSpecs = new ArrayList<>();
         this.fullMatchRegexes = new HashMap<>();
         this.fullMatchCaseiRegexes = new HashMap<>();
@@ -139,6 +140,17 @@ public class ParsedValidatorRules {
 
             if (tag.hasMandatory()) {
                 this.mandatoryTagSpecs.add(tagSpecId);
+            }
+            if (tag.hasExtensionSpec()) {
+                List<Integer> tagSpecList;
+                if (this.extTagSpecIdsByExtName.containsKey(tag.getExtensionSpec().getName())) {
+                   tagSpecList = this.extTagSpecIdsByExtName.get(tag.getExtensionSpec().getName());
+                    tagSpecList.add(tagSpecId);
+                } else {
+                    tagSpecList = new ArrayList<>();
+                    tagSpecList.add(tagSpecId);
+                    this.extTagSpecIdsByExtName.put(tag.getExtensionSpec().getName(), tagSpecList);
+                }
             }
         }
 
@@ -376,6 +388,8 @@ public class ParsedValidatorRules {
                                         @Nonnull final List<String> formatIdentifiers, @Nonnull final Context context,
                                         @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult) {
         boolean hasMandatoryTypeIdentifier = false;
+        // The named values should match up to `self` and AMP caches listed at
+        // https://cdn.ampproject.org/caches.json
         for (int i = 0; i < attrs.getLength(); i++) {
             // Verify this attribute is a type identifier. Other attributes are
             // validated in validateAttributes.
@@ -402,7 +416,7 @@ public class ParsedValidatorRules {
                     if ((typeIdentifier.equals("transformed") && !(attrs.getValue(i).equals("")))) {
                         Matcher reResult = TRANSFORMED_VALUE_REGEX.matcher(attrs.getValue(i));
                         if (reResult.matches()) {
-                            validationResult.setTransformerVersion(Integer.parseInt(reResult.group(1)));
+                            validationResult.setTransformerVersion(Integer.parseInt(reResult.group(2)));
                         } else {
                             final List<String> params = new ArrayList<>();
                             params.add(attrs.getLocalName(i));
@@ -649,7 +663,7 @@ public class ParsedValidatorRules {
                                                    @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult)
             throws TagValidationException {
         this.maybeEmitMandatoryTagValidationErrors(context, validationResult);
-        this.maybeEmitAlsoRequiresTagValidationErrors(context, validationResult);
+        this.maybeEmitRequiresOrExcludesValidationErrors(context, validationResult);
         this.maybeEmitMandatoryAlternativesSatisfiedErrors(
                 context, validationResult);
         this.maybeEmitDocSizeErrors(context, validationResult);
@@ -805,7 +819,7 @@ public class ParsedValidatorRules {
      * @param validationResult the ValidationResult.
      * @throws TagValidationException the TagValidationException.
      */
-    public void maybeEmitAlsoRequiresTagValidationErrors(@Nonnull final Context context,
+    public void maybeEmitRequiresOrExcludesValidationErrors(@Nonnull final Context context,
                                                          @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult)
             throws TagValidationException {
         for (final int tagSpecId : context.getTagspecsValidated().keySet()) {
@@ -845,6 +859,14 @@ public class ParsedValidatorRules {
                 final Integer tagSpecIdObj = getTagSpecIdBySpecName(requiresTagWarning);
                 if (tagSpecIdObj == null || !context.getTagspecsValidated().containsKey(tagSpecIdObj)) {
                     final ParsedTagSpec alsoRequiresTagspec = this.getByTagSpecId(tagSpecIdObj);
+                    // If there is an alternative tagspec for extension script tagspecs
+                    // that has been validated, then move on to the next
+                    // alsoRequiresTagWarning.
+                    if (alsoRequiresTagspec.getSpec().hasExtensionSpec() &&
+                            this.hasValidatedAlternativeTagSpec(
+                                    context, alsoRequiresTagspec.getSpec().getExtensionSpec().getName())) {
+                        continue;
+                    }
                     final List<String> params = new ArrayList<>();
                     params.add(TagSpecUtils.getTagSpecName(alsoRequiresTagspec.getSpec()));
                     params.add(TagSpecUtils.getTagSpecName(parsedTagSpec.getSpec()));
@@ -984,6 +1006,24 @@ public class ParsedValidatorRules {
     }
 
     /**
+     * check if tagspec has been validated.
+     * @param context the global context
+     * @param extName the nname of extension to check for
+     * @return true iff one of the alternative tagspec ids has been validated
+     */
+    private boolean hasValidatedAlternativeTagSpec(@Nonnull final Context context, final String extName) {
+        if (extName == null) {
+            return false;
+        }
+        for (final Integer alternativeTagSpecId : this.extTagSpecIdsByExtName.get(extName)) {
+            if (context.getTagspecsValidated().containsKey(alternativeTagSpecId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Getter for parsed doc
      *
      * @return this parsedDoc
@@ -1068,7 +1108,7 @@ public class ParsedValidatorRules {
     /**
      * Transformed value regex pattern.
      */
-    private static final Pattern TRANSFORMED_VALUE_REGEX = Pattern.compile("^\\w+;v=(\\d+)$");
+    private static final Pattern TRANSFORMED_VALUE_REGEX = Pattern.compile("^(bing|google|self);v=(\\d+)$");
 
     /**
      * Minimum bytes length.
@@ -1084,4 +1124,9 @@ public class ParsedValidatorRules {
      * this parsed doc specs.
      */
     private List<ParsedDocSpec> parsedDoc;
+
+    /**
+     * Extension tagspec ids keyed by extension name
+     */
+    private Map<String, List<Integer>> extTagSpecIdsByExtName;
 }
