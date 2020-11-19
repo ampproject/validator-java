@@ -1,0 +1,48 @@
+<!--
+     AMP-CAROUSEL
+-->
+<!doctype html>
+<html amp4email>
+<head>
+    <meta charset="utf-8">
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
+    <script async custom-template="amp-mustache" src="https://cdn.ampproject.org/v0/amp-mustache-0.2.js"></script>
+    <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+    <script async custom-element="amp-bind" src="https://cdn.ampproject.org/v0/amp-bind-0.1.js"></script>
+    <script async custom-element="amp-list" src="https://cdn.ampproject.org/v0/amp-list-0.1.js"></script>
+    <style amp4email-boilerplate>body{visibility:hidden}</style>
+</head>
+<body>
+<!-- Showcase src and alt substitution in amp-img via mustache templating -->
+
+<amp-list id="amp-list-placeholder" noloading width="auto"
+          height="540"
+          single-item
+          items="."
+          layout="fixed-height"
+          src="https://perf-api.vto.assistant.yahoo.com/fetch_store_items?keywords=game&email=epurimk@verizonmedia.com">
+    <template type="amp-mustache">
+        <amp-carousel width="400" height="540" layout="responsive" type="slides" [slide]="selectedSlide"
+                      on="slideChange:AMP.setState({ selectedSlide: event.index, myText: '{{price}}'  })">
+            {{#items}}
+            <div align="center">
+                <div>
+                    <amp-img src="{{img}}" width="400"
+                             height="400" layout="responsive" alt="{{description}}"></amp-img>
+                </div>
+                <div align="center" class="mdl-text">
+                    <h2>{{description}}</h2>
+                </div>
+                <div align="left" class="mdl-text">
+                    <h4>PRICE : ${{price}}</h4>
+                </div>
+            </div>
+            {{/items}}
+        </amp-carousel>
+    </template>
+</amp-list>
+
+
+</body>
+</html>
