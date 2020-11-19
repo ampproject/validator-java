@@ -1011,7 +1011,7 @@ public class ParsedValidatorRules {
      * @param extName the nname of extension to check for
      * @return true iff one of the alternative tagspec ids has been validated
      */
-    private boolean hasValidatedAlternativeTagSpec(@Nonnull final Context context, @Nonnull final String extName) {
+    private boolean hasValidatedAlternativeTagSpec(@Nonnull final Context context, final String extName) {
         if (extName == null) {
             return false;
         }
