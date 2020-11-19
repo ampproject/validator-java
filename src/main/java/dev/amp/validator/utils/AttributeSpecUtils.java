@@ -598,11 +598,16 @@ public final class AttributeSpecUtils {
      * @param value value.
      * @return {boolean}
      */
-    public static boolean attrValueHasTemplateSyntax(@Nonnull final String value) {
+    public static boolean attrValueHasTemplateSyntax(final String value) {
         // Mustache (https://mustache.github.io/mustache.5.html), our template
         // system, supports replacement tags that start with {{ and end with }}.
         // We relax attribute value rules if the value contains this syntax as we
         // will validate the post-processed tag instead.
+
+        if (value == null) {
+            return false;
+        }
+
         return MUSTACHE_TAG_PATTERN.matcher(value).matches();
     }
 
