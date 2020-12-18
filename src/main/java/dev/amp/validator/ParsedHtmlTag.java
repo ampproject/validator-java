@@ -157,7 +157,7 @@ public class ParsedHtmlTag {
      * @return true iff this is an async script tag.
      */
     private boolean isAsyncScriptTag() {
-        return this.upperName().equals("SCRIPT") && this.attrsByKey().containsKey("async")
+        return "SCRIPT".equals(this.upperName()) && this.attrsByKey().containsKey("async")
                 && this.attrsByKey().containsKey("src");
     }
 
@@ -170,7 +170,7 @@ public class ParsedHtmlTag {
         // Examples:
         // https://cdn.ampproject.org/lts/v0.mjs
         // https://cdn.ampproject.org/lts/v0/amp-ad-0.1.mjs
-        final String type = this.getAttrValueOrNull("typ");
+        final String type = this.getAttrValueOrNull("type");
         if (type == null) {
             return false;
         }
