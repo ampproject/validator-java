@@ -863,8 +863,8 @@ public class ParsedValidatorRules {
                     // that has been validated, then move on to the next
                     // alsoRequiresTagWarning.
                     if (alsoRequiresTagspec.getSpec().hasExtensionSpec() && alsoRequiresTagspec.getSpec().
-                            getSpecName().endsWith("extension script") &&
-                            this.hasValidatedAlternativeTagSpec(
+                            getSpecName().endsWith("extension script")
+                            && this.hasValidatedAlternativeTagSpec(
                                     context, alsoRequiresTagspec.getSpec().getExtensionSpec().getName())) {
                         continue;
                     }

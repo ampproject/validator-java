@@ -144,10 +144,10 @@ public class ParsedHtmlTag {
         if (src == null) {
             return false;
         }
-        return this.isAsyncScriptTag() && !this.isExtensionScript() &&
-                src.startsWith("https://cdn.ampproject.org/") &&
-                (src.endsWith("/v0.js") || src.endsWith("/v0.mjs") ||
-                        src.endsWith("/v0.mjs?f=sxg"));
+        return this.isAsyncScriptTag() && !this.isExtensionScript()
+                && src.startsWith("https://cdn.ampproject.org/")
+                && (src.endsWith("/v0.js") || src.endsWith("/v0.mjs")
+                || src.endsWith("/v0.mjs?f=sxg"));
     }
 
     /**
@@ -156,14 +156,14 @@ public class ParsedHtmlTag {
      * @return true iff this is an async script tag.
      */
     private boolean isAsyncScriptTag() {
-        return this.upperName().equals("SCRIPT") && this.attrsByKey().containsKey("async") &&
-                this.attrsByKey().containsKey("src");
+        return this.upperName().equals("SCRIPT") && this.attrsByKey().containsKey("async")
+                && this.attrsByKey().containsKey("src");
     }
 
     /**
      * Tests if this is the module LTS version script tag.
      *
-     * @return {boolean}
+     * @return true iff this is module LTS version script tag
      */
     public boolean isModuleLtsScriptTag() {
         // Examples:
@@ -177,8 +177,8 @@ public class ParsedHtmlTag {
         if (src == null) {
             return false;
         }
-        return this.isAsyncScriptTag() && type.equals("module") &&
-                moduleLtsScriptSrcRegex.matcher(src).find();
+        return this.isAsyncScriptTag() && type.equals("module")
+                && MODULE_LTS_SCRIPT_SRC_REGEX.matcher(src).find();
     }
 
     /**
@@ -194,14 +194,14 @@ public class ParsedHtmlTag {
         if (src == null) {
             return false;
         }
-        return this.isAsyncScriptTag() && this.attrsByKey().containsKey("nomodule") &&
-                nomoduleLtsScriptSrcRegex.matcher(src).find();
+        return this.isAsyncScriptTag() && this.attrsByKey().containsKey("nomodule")
+                && NOMODULE_LTS_SCRIPT_SRC_REGEX.matcher(src).find();
     }
 
     /**
      * Tests if this is the module version script tag.
      *
-     * @return {boolean}
+     * @return true iff module version script tag
      */
     public boolean isModuleScriptTag() {
         // Examples:
@@ -216,14 +216,14 @@ public class ParsedHtmlTag {
             return false;
         }
 
-        return this.isAsyncScriptTag() && type.equals("module") &&
-                moduleScriptSrcRegex.matcher(src).find();
+        return this.isAsyncScriptTag() && type.equals("module")
+                && MODULE_SCRIPT_SRC_REGEX.matcher(src).find();
     }
 
     /**
      * Tests if this is the nomodule version script tag.
      *
-     * @return {boolean}
+     * @return true iff nomodule version script tag
      */
     public boolean isNomoduleScriptTag() {
         // Examples:
@@ -234,14 +234,14 @@ public class ParsedHtmlTag {
             return false;
         }
 
-        return this.isAsyncScriptTag() && this.attrsByKey().containsKey("nomodule") &&
-                nomoduleScriptSrcRegex.matcher(src).find();
+        return this.isAsyncScriptTag() && this.attrsByKey().containsKey("nomodule")
+                && NOMODULE_SCRIPT_SRC_REGEX.matcher(src).find();
     }
 
     /**
      * Tests if this is the LTS version script tag.
      *
-     * @return {boolean}
+     * @return true iff lts script tag
      */
     public boolean isLtsScriptTag() {
         // Examples:
@@ -251,7 +251,7 @@ public class ParsedHtmlTag {
         if (src == null) {
             return false;
         }
-        return this.isAsyncScriptTag() && ltsScriptSrcRegex.matcher(src).find();
+        return this.isAsyncScriptTag() && LTS_SCRIPT_SRC_REGEX.matcher(src).find();
     }
 
     /**
@@ -289,23 +289,23 @@ public class ParsedHtmlTag {
     /** Lazily allocated map from attribute name to value */
     private HashMap<String, String> attrsByKey;
 
-    private static final Pattern moduleLtsScriptSrcRegex =
+    private static final Pattern MODULE_LTS_SCRIPT_SRC_REGEX =
             Pattern.compile("^https:\\/\\/cdn\\.ampproject\\.org\\/lts\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.mjs$",
                     Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern nomoduleLtsScriptSrcRegex = Pattern.compile(
+    private static final Pattern NOMODULE_LTS_SCRIPT_SRC_REGEX = Pattern.compile(
                 "^https:\\/\\/cdn\\.ampproject\\.org\\/lts\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.js$",
             Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern moduleScriptSrcRegex = Pattern.compile(
+    private static final Pattern MODULE_SCRIPT_SRC_REGEX = Pattern.compile(
             "^https://cdn\\.ampproject\\.org\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.mjs$",
             Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern nomoduleScriptSrcRegex = Pattern.compile(
+    private static final Pattern NOMODULE_SCRIPT_SRC_REGEX = Pattern.compile(
             "^https:\\/\\/cdn\\.ampproject\\.org\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.js$",
             Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern ltsScriptSrcRegex = Pattern.compile(
+    private static final Pattern LTS_SCRIPT_SRC_REGEX = Pattern.compile(
             "^https:\\/\\/cdn\\.ampproject\\.org\\/lts\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.js$",
             Pattern.CASE_INSENSITIVE);
 

@@ -37,9 +37,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static dev.amp.validator.utils.AttributeSpecUtils.isUsedForTypeIdentifiers;
-import static dev.amp.validator.utils.ExtensionsUtils.isAmpRuntimeScript;
-import static dev.amp.validator.utils.ExtensionsUtils.isExtensionScript;
-import static dev.amp.validator.utils.ExtensionsUtils.isLtsScriptUrl;
 
 /**
  * The Context keeps track of the line / column that the validator is
@@ -169,7 +166,7 @@ public class Context {
     private void recordScriptReleaseVersionFromTagResult(@Nonnull final ParsedHtmlTag parsedTag) {
         if (this.getScriptReleaseVersion() == ExtensionsUtils.ScriptReleaseVersion.UNKNOWN &&
                 (parsedTag.isExtensionScript() || parsedTag.isAmpRuntimeScript())) {
-            this.scriptReleaseVersion = getScriptReleaseVersion(parsedTag);
+            this.scriptReleaseVersion = ExtensionsUtils.getScriptReleaseVersion(parsedTag);
         }
     }
 
@@ -570,19 +567,6 @@ public class Context {
      */
     public ExtensionsUtils.ScriptReleaseVersion getScriptReleaseVersion() {
         return this.scriptReleaseVersion;
-    }
-
-    /**
-     * @param {!parserInterface.ParsedHtmlTag} tag
-     * @return {!ScriptReleaseVersion}
-     */
-    public ExtensionsUtils.ScriptReleaseVersion getScriptReleaseVersion(@Nonnull final ParsedHtmlTag tag) {
-        if (tag.isModuleLtsScriptTag() || tag.isNomoduleLtsScriptTag())
-            return ExtensionsUtils.ScriptReleaseVersion.MODULE_NOMODULE_LTS;
-        if (tag.isModuleScriptTag() || tag.isNomoduleScriptTag())
-            return ExtensionsUtils.ScriptReleaseVersion.MODULE_NOMODULE;
-        if (tag.isLtsScriptTag()) return ExtensionsUtils.ScriptReleaseVersion.LTS;
-        return ExtensionsUtils.ScriptReleaseVersion.STANDARD;
     }
 
     /**

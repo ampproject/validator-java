@@ -162,12 +162,16 @@ public final class ExtensionsUtils {
    * @param tag
    * @return ScriptReleaseVersion of tag
    */
-  private static ScriptReleaseVersion getScriptReleaseVersion(@Nonnull final ParsedHtmlTag tag) {
-    if (tag.isModuleLtsScriptTag() || tag.isNomoduleLtsScriptTag())
+  public static ScriptReleaseVersion getScriptReleaseVersion(@Nonnull final ParsedHtmlTag tag) {
+    if (tag.isModuleLtsScriptTag() || tag.isNomoduleLtsScriptTag()) {
       return ScriptReleaseVersion.MODULE_NOMODULE_LTS;
-    if (tag.isModuleScriptTag() || tag.isNomoduleScriptTag())
+    }
+    if (tag.isModuleScriptTag() || tag.isNomoduleScriptTag()) {
       return ScriptReleaseVersion.MODULE_NOMODULE;
-    if (tag.isLtsScriptTag()) return ScriptReleaseVersion.LTS;
+    }
+    if (tag.isLtsScriptTag()) {
+      return ScriptReleaseVersion.LTS;
+    }
     return ScriptReleaseVersion.STANDARD;
   }
 }
