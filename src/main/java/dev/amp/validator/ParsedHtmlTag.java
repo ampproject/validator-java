@@ -3,9 +3,10 @@ package dev.amp.validator;
 import org.xml.sax.Attributes;
 
 import javax.annotation.Nonnull;
-import javax.annotation.RegEx;
 import java.util.HashMap;
 import java.util.regex.Pattern;
+
+import static dev.amp.validator.utils.ExtensionsUtils.EXTENSION_SCRIPT_NAMES;
 
 /**
  * The AMP HTML ParsedHtmlTag class.
@@ -103,8 +104,8 @@ public class ParsedHtmlTag {
      * @private
      */
     private String extensionScriptNameAttribute() {
-        if (this.upperName().equals("SCRIPT")) {
-            for (final String attribute : new String[]{"custom-element", "custom-template", "host-service"}) {
+        if ("SCRIPT".equals(this.upperName())) {
+            for (final String attribute : EXTENSION_SCRIPT_NAMES) {
                 if (this.attrsByKey().containsKey(attribute)) {
                     return attribute;
                 }
