@@ -110,5 +110,5 @@ public final class ExtensionsUtils {
   /**
    * list of extension script names
    */
-  public static final String[] EXTENSION_SCRIPT_NAMES = new String[]{"custom-element", "custom-template", "host-service"};
+  public static final String[] EXTENSION_SCRIPT_NAMES = {"custom-element", "custom-template", "host-service"};
 }
