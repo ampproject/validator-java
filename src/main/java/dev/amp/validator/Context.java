@@ -101,6 +101,8 @@ public class Context {
         this.recordAttrRequiresExtension(encounteredTag, tagResult);
         this.updateFromTagResult(referencePointResult);
         this.updateFromTagResult(tagResult);
+        this.recordScriptReleaseVersionFromTagResult(encounteredTag);
+        this.addInlineStyleByteSize(tagResult.getInlineStyleCssBytes());
     }
 
     /**
@@ -163,15 +165,11 @@ public class Context {
      * Record if this document contains a tag requesting the LTS runtime engine.
      *
      * @param parsedTag
-     * @param result    the result
      */
-    private void recordScriptReleaseVersionFromTagResult(@Nonnull final ParsedHtmlTag parsedTag,
-                                                         @Nonnull final ValidatorProtos.ValidationResult result) {
-        if (this.getScriptReleaseVersion() == ExtensionsUtils.ScriptReleaseVersion.UNKNOWN
-                && (isExtensionScript(parsedTag) || isAmpRuntimeScript(parsedTag))) {
-            final String src = (parsedTag.attrsByKey().get("src") != null) ? parsedTag.attrsByKey().get("src") : "";
-            this.scriptReleaseVersion = isLtsScriptUrl(src)
-                    ? ExtensionsUtils.ScriptReleaseVersion.LTS : ExtensionsUtils.ScriptReleaseVersion.STANDARD;
+    private void recordScriptReleaseVersionFromTagResult(@Nonnull final ParsedHtmlTag parsedTag) {
+        if (this.getScriptReleaseVersion() == ExtensionsUtils.ScriptReleaseVersion.UNKNOWN &&
+                (parsedTag.isExtensionScript() || parsedTag.isAmpRuntimeScript())) {
+            this.scriptReleaseVersion = getScriptReleaseVersion(parsedTag);
         }
     }
 
@@ -572,6 +570,19 @@ public class Context {
      */
     public ExtensionsUtils.ScriptReleaseVersion getScriptReleaseVersion() {
         return this.scriptReleaseVersion;
+    }
+
+    /**
+     * @param {!parserInterface.ParsedHtmlTag} tag
+     * @return {!ScriptReleaseVersion}
+     */
+    public ExtensionsUtils.ScriptReleaseVersion getScriptReleaseVersion(@Nonnull final ParsedHtmlTag tag) {
+        if (tag.isModuleLtsScriptTag() || tag.isNomoduleLtsScriptTag())
+            return ExtensionsUtils.ScriptReleaseVersion.MODULE_NOMODULE_LTS;
+        if (tag.isModuleScriptTag() || tag.isNomoduleScriptTag())
+            return ExtensionsUtils.ScriptReleaseVersion.MODULE_NOMODULE;
+        if (tag.isLtsScriptTag()) return ExtensionsUtils.ScriptReleaseVersion.LTS;
+        return ExtensionsUtils.ScriptReleaseVersion.STANDARD;
     }
 
     /**

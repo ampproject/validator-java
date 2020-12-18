@@ -862,7 +862,8 @@ public class ParsedValidatorRules {
                     // If there is an alternative tagspec for extension script tagspecs
                     // that has been validated, then move on to the next
                     // alsoRequiresTagWarning.
-                    if (alsoRequiresTagspec.getSpec().hasExtensionSpec() &&
+                    if (alsoRequiresTagspec.getSpec().hasExtensionSpec() && alsoRequiresTagspec.getSpec().
+                            getSpecName().endsWith("extension script") &&
                             this.hasValidatedAlternativeTagSpec(
                                     context, alsoRequiresTagspec.getSpec().getExtensionSpec().getName())) {
                         continue;
@@ -973,6 +974,9 @@ public class ParsedValidatorRules {
     /**
      * For every tagspec that contains an ExtensionSpec, we add several TagSpec
      * fields corresponding to the data found in the ExtensionSpec.
+     * The addition of module/nomodule extensions happens in validator_gen_js.py
+     * and are built as proper JavaScript classes. They will also be expanded
+     * by this method.
      */
     private void expandExtensionSpec() {
         final int numTags = this.ampValidatorManager.getRules().getTagsList().size();

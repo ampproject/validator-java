@@ -3,7 +3,9 @@ package dev.amp.validator;
 import org.xml.sax.Attributes;
 
 import javax.annotation.Nonnull;
+import javax.annotation.RegEx;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 /**
  * The AMP HTML ParsedHtmlTag class.
@@ -95,6 +97,164 @@ public class ParsedHtmlTag {
     }
 
     /**
+     * Gets the name attribute for an extension script tag.
+     *
+     * @return the name attribute
+     * @private
+     */
+    private String extensionScriptNameAttribute() {
+        if (this.upperName().equals("SCRIPT")) {
+            for (final String attribute : new String[]{"custom-element", "custom-template", "host-service"}) {
+                if (this.attrsByKey().containsKey(attribute)) {
+                    return attribute;
+                }
+            }
+        }
+        return "";
+    }
+
+    /**
+     * Tests if this is an extension script tag.
+     *
+     * @return if is extension script
+     */
+    public boolean isExtensionScript() {
+        return !this.extensionScriptNameAttribute().isEmpty();
+    }
+
+    /**
+     * Returns the value of a given attribute name. If it does not exist then
+     * returns null.
+     *
+     * @param name value
+     * @return value of attribute or null.
+     * @private
+     */
+    private String getAttrValueOrNull(@Nonnull final String name) {
+        return this.attrsByKey().get(name);
+    }
+
+    /**
+     * Tests if this is the AMP runtime script tag.
+     *
+     * @return true iff is AMP runtime script tag
+     */
+    public boolean isAmpRuntimeScript() {
+        final String src = this.getAttrValueOrNull("src");
+        if (src == null) {
+            return false;
+        }
+        return this.isAsyncScriptTag() && !this.isExtensionScript() &&
+                src.startsWith("https://cdn.ampproject.org/") &&
+                (src.endsWith("/v0.js") || src.endsWith("/v0.mjs") ||
+                        src.endsWith("/v0.mjs?f=sxg"));
+    }
+
+    /**
+     * Tests if this is an async script tag.
+     *
+     * @return true iff this is an async script tag.
+     */
+    private boolean isAsyncScriptTag() {
+        return this.upperName().equals("SCRIPT") && this.attrsByKey().containsKey("async") &&
+                this.attrsByKey().containsKey("src");
+    }
+
+    /**
+     * Tests if this is the module LTS version script tag.
+     *
+     * @return {boolean}
+     */
+    public boolean isModuleLtsScriptTag() {
+        // Examples:
+        // https://cdn.ampproject.org/lts/v0.mjs
+        // https://cdn.ampproject.org/lts/v0/amp-ad-0.1.mjs
+        final String type = this.getAttrValueOrNull("typ");
+        if (type == null) {
+            return false;
+        }
+        final String src = this.getAttrValueOrNull("src");
+        if (src == null) {
+            return false;
+        }
+        return this.isAsyncScriptTag() && type.equals("module") &&
+                moduleLtsScriptSrcRegex.matcher(src).find();
+    }
+
+    /**
+     * Tests if this is the nomodule LTS version script tag.
+     *
+     * @return true iff this is nomodule LTS version script tag
+     */
+    public boolean isNomoduleLtsScriptTag() {
+        // Examples:
+        // https://cdn.ampproject.org/lts/v0.js
+        // https://cdn.ampproject.org/lts/v0/amp-ad-0.1.js
+        final String src = this.getAttrValueOrNull("src");
+        if (src == null) {
+            return false;
+        }
+        return this.isAsyncScriptTag() && this.attrsByKey().containsKey("nomodule") &&
+                nomoduleLtsScriptSrcRegex.matcher(src).find();
+    }
+
+    /**
+     * Tests if this is the module version script tag.
+     *
+     * @return {boolean}
+     */
+    public boolean isModuleScriptTag() {
+        // Examples:
+        // https://cdn.ampproject.org/v0.mjs
+        // https://cdn.ampproject.org/v0/amp-ad-0.1.mjs
+        final String type = this.getAttrValueOrNull("type");
+        if (type == null) {
+            return false;
+        }
+        final String src = this.getAttrValueOrNull("src");
+        if (src == null) {
+            return false;
+        }
+
+        return this.isAsyncScriptTag() && type.equals("module") &&
+                moduleScriptSrcRegex.matcher(src).find();
+    }
+
+    /**
+     * Tests if this is the nomodule version script tag.
+     *
+     * @return {boolean}
+     */
+    public boolean isNomoduleScriptTag() {
+        // Examples:
+        // https://cdn.ampproject.org/v0.js
+        // https://cdn.ampproject.org/v0/amp-ad-0.1.js
+        final String src = this.getAttrValueOrNull("src");
+        if (src == null) {
+            return false;
+        }
+
+        return this.isAsyncScriptTag() && this.attrsByKey().containsKey("nomodule") &&
+                nomoduleScriptSrcRegex.matcher(src).find();
+    }
+
+    /**
+     * Tests if this is the LTS version script tag.
+     *
+     * @return {boolean}
+     */
+    public boolean isLtsScriptTag() {
+        // Examples:
+        // https://cdn.ampproject.org/lts/v0.js
+        // https://cdn.ampproject.org/lts/v0/amp-ad-0.1.js
+        final String src = this.getAttrValueOrNull("src");
+        if (src == null) {
+            return false;
+        }
+        return this.isAsyncScriptTag() && ltsScriptSrcRegex.matcher(src).find();
+    }
+
+    /**
      * Method to nullify object values.
      */
     public void cleanup() {
@@ -128,4 +288,25 @@ public class ParsedHtmlTag {
 
     /** Lazily allocated map from attribute name to value */
     private HashMap<String, String> attrsByKey;
+
+    private static final Pattern moduleLtsScriptSrcRegex =
+            Pattern.compile("^https:\\/\\/cdn\\.ampproject\\.org\\/lts\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.mjs$",
+                    Pattern.CASE_INSENSITIVE);
+
+    private static final Pattern nomoduleLtsScriptSrcRegex = Pattern.compile(
+                "^https:\\/\\/cdn\\.ampproject\\.org\\/lts\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.js$",
+            Pattern.CASE_INSENSITIVE);
+
+    private static final Pattern moduleScriptSrcRegex = Pattern.compile(
+            "^https://cdn\\.ampproject\\.org\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.mjs$",
+            Pattern.CASE_INSENSITIVE);
+
+    private static final Pattern nomoduleScriptSrcRegex = Pattern.compile(
+            "^https:\\/\\/cdn\\.ampproject\\.org\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.js$",
+            Pattern.CASE_INSENSITIVE);
+
+    private static final Pattern ltsScriptSrcRegex = Pattern.compile(
+            "^https:\\/\\/cdn\\.ampproject\\.org\\/lts\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.js$",
+            Pattern.CASE_INSENSITIVE);
+
 }

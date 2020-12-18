@@ -40,6 +40,14 @@ public final class ExtensionsUtils {
      * LTS
      */
     LTS,
+    /**
+     * MODULE_NOMODULE
+     */
+    MODULE_NOMODULE,
+    /**
+     * MODULE_NOMODULE
+     */
+    MODULE_NOMODULE_LTS
   }
 
   /**
@@ -124,18 +132,17 @@ public final class ExtensionsUtils {
   /**
    * Validates that LTS is used for either all script sources or none.
    *
-   * @param srcAttr the attr to check
+   * @param tag tag
    * @param tagSpec the spec to check against
    * @param context global context
    * @param result  record to update
    */
-  public static void validateScriptSrcAttr(@Nonnull final String srcAttr, @Nonnull final ValidatorProtos.TagSpec tagSpec,
+  public static void validateScriptSrcAttr(@Nonnull final ParsedHtmlTag tag, @Nonnull final ValidatorProtos.TagSpec tagSpec,
                                            @Nonnull final Context context, @Nonnull final ValidatorProtos.ValidationResult.Builder result) {
     if (context.getScriptReleaseVersion() == UNKNOWN) {
       return;
     }
-    final ExtensionsUtils.ScriptReleaseVersion scriptReleaseVersion = isLtsScriptUrl(srcAttr) ? LTS
-      : ExtensionsUtils.ScriptReleaseVersion.STANDARD;
+    final ScriptReleaseVersion scriptReleaseVersion = getScriptReleaseVersion(tag);
     if (context.getScriptReleaseVersion() != scriptReleaseVersion) {
       List<String> params = new ArrayList<>();
       final String specName = (tagSpec.hasExtensionSpec())
@@ -149,5 +156,18 @@ public final class ExtensionsUtils {
         "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml#required-markup",
         result);
     }
+  }
+
+  /**
+   * @param tag
+   * @return ScriptReleaseVersion of tag
+   */
+  private static ScriptReleaseVersion getScriptReleaseVersion(@Nonnull final ParsedHtmlTag tag) {
+    if (tag.isModuleLtsScriptTag() || tag.isNomoduleLtsScriptTag())
+      return ScriptReleaseVersion.MODULE_NOMODULE_LTS;
+    if (tag.isModuleScriptTag() || tag.isNomoduleScriptTag())
+      return ScriptReleaseVersion.MODULE_NOMODULE;
+    if (tag.isLtsScriptTag()) return ScriptReleaseVersion.LTS;
+    return ScriptReleaseVersion.STANDARD;
   }
 }
