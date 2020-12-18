@@ -37,9 +37,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static dev.amp.validator.utils.AttributeSpecUtils.isUsedForTypeIdentifiers;
-import static dev.amp.validator.utils.ExtensionsUtils.isAmpRuntimeScript;
-import static dev.amp.validator.utils.ExtensionsUtils.isExtensionScript;
-import static dev.amp.validator.utils.ExtensionsUtils.isLtsScriptUrl;
 
 /**
  * The Context keeps track of the line / column that the validator is
@@ -101,6 +98,8 @@ public class Context {
         this.recordAttrRequiresExtension(encounteredTag, tagResult);
         this.updateFromTagResult(referencePointResult);
         this.updateFromTagResult(tagResult);
+        this.recordScriptReleaseVersionFromTagResult(encounteredTag);
+        this.addInlineStyleByteSize(tagResult.getInlineStyleCssBytes());
     }
 
     /**
@@ -163,15 +162,11 @@ public class Context {
      * Record if this document contains a tag requesting the LTS runtime engine.
      *
      * @param parsedTag
-     * @param result    the result
      */
-    private void recordScriptReleaseVersionFromTagResult(@Nonnull final ParsedHtmlTag parsedTag,
-                                                         @Nonnull final ValidatorProtos.ValidationResult result) {
+    private void recordScriptReleaseVersionFromTagResult(@Nonnull final ParsedHtmlTag parsedTag) {
         if (this.getScriptReleaseVersion() == ExtensionsUtils.ScriptReleaseVersion.UNKNOWN
-                && (isExtensionScript(parsedTag) || isAmpRuntimeScript(parsedTag))) {
-            final String src = (parsedTag.attrsByKey().get("src") != null) ? parsedTag.attrsByKey().get("src") : "";
-            this.scriptReleaseVersion = isLtsScriptUrl(src)
-                    ? ExtensionsUtils.ScriptReleaseVersion.LTS : ExtensionsUtils.ScriptReleaseVersion.STANDARD;
+                && (parsedTag.isExtensionScript() || parsedTag.isAmpRuntimeScript())) {
+            this.scriptReleaseVersion = ExtensionsUtils.getScriptReleaseVersion(parsedTag);
         }
     }
 

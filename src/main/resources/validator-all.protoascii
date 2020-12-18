@@ -26,7 +26,7 @@ min_validator_revision_required: 475
 # newer versions of the spec file. This is currently a Google internal
 # mechanism, validator.js does not use this facility. However, any
 # change to this file (validator-main.js) requires updating this revision id.
-spec_file_revision: 1123
+spec_file_revision: 1131
 
 styles_spec_url: "https://amp.dev/documentation/guides-and-tutorials/develop/style_and_layout/style_pages/"
 script_spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/validation-workflow/validation_errors/#custom-javascript-is-not-allowed"
@@ -3835,7 +3835,7 @@ tags: {
 # Note that the type TEXT/PLAIN description is define in
 # validator-amp-mustache.protoascii.
 
-# The three tagspecs below all handle the runtime engine v0.js script. They
+# The three tagspecs below all handle the runtime engine script. They
 # enforce that exactly one runtime script must be included. This tagspec is
 # for the standard runtime, while the one below it is an identical spec but for
 # the LTS runtime, with the only difference being the src attribute. The third
@@ -3856,12 +3856,52 @@ attr_lists: {
     value_casei: "text/javascript"
   }
 }
+attr_lists: {
+  name: "amphtml-module-engine-attrs"
+  attrs: {
+    name: "async"
+    mandatory: true
+    value: ""
+  }
+  attrs: {
+    name: "crossorigin"
+    mandatory: true
+    value: "anonymous"
+  }
+  attrs: {
+    name: "type"
+    mandatory: true
+    value_casei: "module"
+    dispatch_key: NAME_VALUE_DISPATCH
+  }
+}
+attr_lists: {
+  name: "amphtml-nomodule-engine-attrs"
+  attrs: {
+    name: "async"
+    mandatory: true
+    value: ""
+  }
+  attrs: {
+    name: "crossorigin"
+    value: "anonymous"
+  }
+  attrs: {
+    name: "nomodule"
+    mandatory: true
+    value: ""
+  }
+  attrs: {
+    name: "type"
+    value_casei: "text/javascript"
+  }
+}
 tags: {
   html_format: AMP
   tag_name: "SCRIPT"
-  spec_name: "amphtml engine v0.js script"
-  descriptive_name: "amphtml engine v0.js script"
-  mandatory_alternatives: "amphtml engine v0.js script"
+  spec_name: "amphtml engine script"
+  descriptive_name: "amphtml engine script"
+  mandatory_alternatives: "amphtml engine script"
   unique: true
   mandatory_parent: "HEAD"
   attr_lists: "nonce-attr"
@@ -3883,9 +3923,9 @@ tags: {
 tags: {
   html_format: AMP
   tag_name: "SCRIPT"
-  spec_name: "amphtml engine v0.js lts script"
-  descriptive_name: "amphtml engine v0.js script"
-  mandatory_alternatives: "amphtml engine v0.js script"
+  spec_name: "amphtml engine script (LTS)"
+  descriptive_name: "amphtml engine script"
+  mandatory_alternatives: "amphtml engine script"
   unique: true
   mandatory_parent: "HEAD"
   attr_lists: "nonce-attr"
@@ -3904,11 +3944,115 @@ tags: {
   }
   spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#required-markup"
 }
+# TODO(b/167681900): update documentation to cover these script release versions
+# TODO(b/173803451): allow module/nomodule tagspecs.
+#tags: {
+#  html_format: AMP
+#  enabled_by: "transformed"
+#  tag_name: "SCRIPT"
+#  spec_name: "amphtml module engine script"
+#  descriptive_name: "amphtml engine script"
+#  mandatory_alternatives: "amphtml engine script"
+#  unique: true
+#  mandatory_parent: "HEAD"
+#  satisfies: "amphtml module engine script"
+#  requires: "amphtml nomodule engine script"
+#  attr_lists: "nonce-attr"
+#  attr_lists: "amphtml-module-engine-attrs"
+#  attrs: {
+#    name: "src"
+#    mandatory: true
+#    value: "https://cdn.ampproject.org/v0.mjs"
+#    dispatch_key: NAME_VALUE_DISPATCH
+#  }
+#  cdata: {
+#    whitespace_only: true
+#  }
+#  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#required-markup"
+#}
+# TODO(b/167681900): update documentation to cover these script release versions
+# TODO(b/173803451): allow module/nomodule tagspecs.
+#tags: {
+#  html_format: AMP
+#  enabled_by: "transformed"
+#  tag_name: "SCRIPT"
+#  spec_name: "amphtml nomodule engine script"
+#  descriptive_name: "amphtml engine script"
+#  mandatory_alternatives: "amphtml engine script"
+#  unique: true
+#  mandatory_parent: "HEAD"
+#  satisfies: "amphtml nomodule engine script"
+#  requires: "amphtml module engine script"
+#  attr_lists: "nonce-attr"
+#  attr_lists: "amphtml-nomodule-engine-attrs"
+#  attrs: {
+#    name: "src"
+#    mandatory: true
+#    value: "https://cdn.ampproject.org/v0.js"
+#    dispatch_key: NAME_VALUE_DISPATCH
+#  }
+#  cdata: {
+#    whitespace_only: true
+#  }
+#  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#required-markup"
+#}
+# TODO(b/167681900): update documentation to cover these script release versions
+# TODO(b/173803451): allow module/nomodule tagspecs.
+#tags: {
+#  html_format: AMP
+#  enabled_by: "transformed"
+#  tag_name: "SCRIPT"
+#  spec_name: "amphtml module LTS engine script"
+#  descriptive_name: "amphtml engine script"
+#  mandatory_alternatives: "amphtml engine script"
+#  unique: true
+#  mandatory_parent: "HEAD"
+#  satisfies: "amphtml module LTS engine script"
+#  requires: "amphtml nomodule LTS engine script"
+#  attr_lists: "nonce-attr"
+#  attr_lists: "amphtml-module-engine-attrs"
+#  attrs: {
+#    name: "src"
+#    mandatory: true
+#    value: "https://cdn.ampproject.org/lts/v0.mjs"
+#    dispatch_key: NAME_VALUE_DISPATCH
+#  }
+#  cdata: {
+#    whitespace_only: true
+#  }
+#  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#required-markup"
+#}
+# TODO(b/167681900): update documentation to cover these script release versions
+# TODO(b/173803451): allow module/nomodule tagspecs.
+#tags: {
+#  html_format: AMP
+#  enabled_by: "transformed"
+#  tag_name: "SCRIPT"
+#  spec_name: "amphtml nomodule LTS engine script"
+#  descriptive_name: "amphtml engine script"
+#  mandatory_alternatives: "amphtml engine script"
+#  unique: true
+#  mandatory_parent: "HEAD"
+#  satisfies: "amphtml nomodule LTS engine script"
+#  requires: "amphtml module LTS engine script"
+#  attr_lists: "nonce-attr"
+#  attr_lists: "amphtml-nomodule-engine-attrs"
+#  attrs: {
+#    name: "src"
+#    mandatory: true
+#    value: "https://cdn.ampproject.org/lts/v0.js"
+#    dispatch_key: NAME_VALUE_DISPATCH
+#  }
+#  cdata: {
+#    whitespace_only: true
+#  }
+#  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#required-markup"
+#}
 tags: {
   html_format: AMP4EMAIL
   tag_name: "SCRIPT"
-  spec_name: "amphtml engine v0.js script [AMP4EMAIL]"
-  descriptive_name: "amphtml engine v0.js script"
+  spec_name: "amphtml engine script [AMP4EMAIL]"
+  descriptive_name: "amphtml engine script"
   mandatory: true
   unique: true
   mandatory_parent: "HEAD"
@@ -3931,8 +4075,8 @@ tags: {
 tags: {
   html_format: AMP4ADS
   tag_name: "SCRIPT"
-  spec_name: "amp4ads engine amp4ads-v0.js script"
-  descriptive_name: "amphtml engine amp4ads-v0.js script"
+  spec_name: "amp4ads engine script"
+  descriptive_name: "amphtml engine script"
   mandatory: true
   unique: true
   mandatory_parent: "HEAD"
@@ -4518,8 +4662,7 @@ attr_lists: {
   }
 }
 
-# AMP Extension attributes. These attributes are used in every AMP
-# extension script tag
+# AMP Extension attributes.
 attr_lists: {
   name: "common-extension-attrs"
   attrs: {
@@ -5710,100 +5853,101 @@ error_specificity { code: WARNING_EXTENSION_UNUSED specificity: 16 }
 error_specificity { code: WARNING_EXTENSION_DEPRECATED_VERSION specificity: 17 }
 error_specificity { code: NON_LTS_SCRIPT_AFTER_LTS specificity: 18 }
 error_specificity { code: LTS_SCRIPT_AFTER_NON_LTS specificity: 19 }
-error_specificity { code: DISALLOWED_TAG specificity: 20 }
-error_specificity { code: DISALLOWED_ATTR specificity: 21 }
-error_specificity { code: INVALID_ATTR_VALUE specificity: 22 }
-error_specificity { code: DUPLICATE_ATTRIBUTE specificity: 23 }
-error_specificity { code: ATTR_VALUE_REQUIRED_BY_LAYOUT specificity: 24 }
-error_specificity { code: MANDATORY_ATTR_MISSING specificity: 25 }
-error_specificity { code: MANDATORY_ONEOF_ATTR_MISSING specificity: 26 }
-error_specificity { code: MANDATORY_ANYOF_ATTR_MISSING specificity: 27 }
-error_specificity { code: ATTR_REQUIRED_BUT_MISSING specificity: 28 }
-error_specificity { code: DUPLICATE_UNIQUE_TAG specificity: 29 }
-error_specificity { code: DUPLICATE_UNIQUE_TAG_WARNING specificity: 30 }
-error_specificity { code: STYLESHEET_TOO_LONG specificity: 31 }
-error_specificity { code: STYLESHEET_AND_INLINE_STYLE_TOO_LONG specificity: 32 }
-error_specificity { code: INLINE_STYLE_TOO_LONG specificity: 33 }
-error_specificity { code: INLINE_SCRIPT_TOO_LONG specificity: 34 }
-error_specificity { code: CSS_SYNTAX_INVALID_AT_RULE specificity: 35 }
+error_specificity { code: INCORRECT_SCRIPT_RELEASE_VERSION specificity: 20 }
+error_specificity { code: DISALLOWED_TAG specificity: 21 }
+error_specificity { code: DISALLOWED_ATTR specificity: 22 }
+error_specificity { code: INVALID_ATTR_VALUE specificity: 23 }
+error_specificity { code: DUPLICATE_ATTRIBUTE specificity: 24 }
+error_specificity { code: ATTR_VALUE_REQUIRED_BY_LAYOUT specificity: 25 }
+error_specificity { code: MANDATORY_ATTR_MISSING specificity: 26 }
+error_specificity { code: MANDATORY_ONEOF_ATTR_MISSING specificity: 27 }
+error_specificity { code: MANDATORY_ANYOF_ATTR_MISSING specificity: 28 }
+error_specificity { code: ATTR_REQUIRED_BUT_MISSING specificity: 29 }
+error_specificity { code: DUPLICATE_UNIQUE_TAG specificity: 30 }
+error_specificity { code: DUPLICATE_UNIQUE_TAG_WARNING specificity: 31 }
+error_specificity { code: STYLESHEET_TOO_LONG specificity: 32 }
+error_specificity { code: STYLESHEET_AND_INLINE_STYLE_TOO_LONG specificity: 33 }
+error_specificity { code: INLINE_STYLE_TOO_LONG specificity: 34 }
+error_specificity { code: INLINE_SCRIPT_TOO_LONG specificity: 35 }
+error_specificity { code: CSS_SYNTAX_INVALID_AT_RULE specificity: 36 }
 error_specificity {
-  code: MANDATORY_PROPERTY_MISSING_FROM_ATTR_VALUE specificity: 36
+  code: MANDATORY_PROPERTY_MISSING_FROM_ATTR_VALUE specificity: 37
 }
-error_specificity { code: INVALID_PROPERTY_VALUE_IN_ATTR_VALUE specificity: 37 }
-error_specificity { code: DISALLOWED_PROPERTY_IN_ATTR_VALUE specificity: 38 }
-error_specificity { code: MUTUALLY_EXCLUSIVE_ATTRS specificity: 39 }
-error_specificity { code: UNESCAPED_TEMPLATE_IN_ATTR_VALUE specificity: 40 }
-error_specificity { code: TEMPLATE_PARTIAL_IN_ATTR_VALUE specificity: 41 }
-error_specificity { code: TEMPLATE_IN_ATTR_NAME specificity: 42 }
+error_specificity { code: INVALID_PROPERTY_VALUE_IN_ATTR_VALUE specificity: 38 }
+error_specificity { code: DISALLOWED_PROPERTY_IN_ATTR_VALUE specificity: 39 }
+error_specificity { code: MUTUALLY_EXCLUSIVE_ATTRS specificity: 40 }
+error_specificity { code: UNESCAPED_TEMPLATE_IN_ATTR_VALUE specificity: 41 }
+error_specificity { code: TEMPLATE_PARTIAL_IN_ATTR_VALUE specificity: 42 }
+error_specificity { code: TEMPLATE_IN_ATTR_NAME specificity: 43 }
 error_specificity {
-  code: INCONSISTENT_UNITS_FOR_WIDTH_AND_HEIGHT specificity: 43
+  code: INCONSISTENT_UNITS_FOR_WIDTH_AND_HEIGHT specificity: 44
 }
-error_specificity { code: MISSING_LAYOUT_ATTRIBUTES specificity: 44 }
-error_specificity { code: IMPLIED_LAYOUT_INVALID specificity: 45 }
-error_specificity { code: SPECIFIED_LAYOUT_INVALID specificity: 46 }
-error_specificity { code: ATTR_DISALLOWED_BY_IMPLIED_LAYOUT specificity: 47 }
-error_specificity { code: ATTR_DISALLOWED_BY_SPECIFIED_LAYOUT specificity: 48 }
-error_specificity { code: DUPLICATE_DIMENSION specificity: 49 }
-error_specificity { code: DISALLOWED_RELATIVE_URL specificity: 50 }
-error_specificity { code: MISSING_URL specificity: 51 }
-error_specificity { code: DISALLOWED_DOMAIN specificity: 52 }
-error_specificity { code: INVALID_URL_PROTOCOL specificity: 53 }
-error_specificity { code: INVALID_URL specificity: 54 }
-error_specificity { code: DISALLOWED_STYLE_ATTR specificity: 55 }
-error_specificity { code: CSS_SYNTAX_STRAY_TRAILING_BACKSLASH specificity: 56 }
-error_specificity { code: CSS_SYNTAX_UNTERMINATED_COMMENT specificity: 57 }
-error_specificity { code: CSS_SYNTAX_UNTERMINATED_STRING specificity: 58 }
-error_specificity { code: CSS_SYNTAX_BAD_URL specificity: 59 }
+error_specificity { code: MISSING_LAYOUT_ATTRIBUTES specificity: 45 }
+error_specificity { code: IMPLIED_LAYOUT_INVALID specificity: 46 }
+error_specificity { code: SPECIFIED_LAYOUT_INVALID specificity: 47 }
+error_specificity { code: ATTR_DISALLOWED_BY_IMPLIED_LAYOUT specificity: 48 }
+error_specificity { code: ATTR_DISALLOWED_BY_SPECIFIED_LAYOUT specificity: 49 }
+error_specificity { code: DUPLICATE_DIMENSION specificity: 50 }
+error_specificity { code: DISALLOWED_RELATIVE_URL specificity: 51 }
+error_specificity { code: MISSING_URL specificity: 52 }
+error_specificity { code: DISALLOWED_DOMAIN specificity: 53 }
+error_specificity { code: INVALID_URL_PROTOCOL specificity: 54 }
+error_specificity { code: INVALID_URL specificity: 55 }
+error_specificity { code: DISALLOWED_STYLE_ATTR specificity: 56 }
+error_specificity { code: CSS_SYNTAX_STRAY_TRAILING_BACKSLASH specificity: 57 }
+error_specificity { code: CSS_SYNTAX_UNTERMINATED_COMMENT specificity: 58 }
+error_specificity { code: CSS_SYNTAX_UNTERMINATED_STRING specificity: 59 }
+error_specificity { code: CSS_SYNTAX_BAD_URL specificity: 60 }
 error_specificity {
-  code: CSS_SYNTAX_EOF_IN_PRELUDE_OF_QUALIFIED_RULE specificity: 60
+  code: CSS_SYNTAX_EOF_IN_PRELUDE_OF_QUALIFIED_RULE specificity: 61
 }
-error_specificity { code: CSS_SYNTAX_INVALID_DECLARATION specificity: 61 }
-error_specificity { code: CSS_SYNTAX_INCOMPLETE_DECLARATION specificity: 62 }
-error_specificity { code: CSS_SYNTAX_ERROR_IN_PSEUDO_SELECTOR specificity: 63 }
-error_specificity { code: CSS_SYNTAX_MISSING_SELECTOR specificity: 64 }
-error_specificity { code: CSS_SYNTAX_NOT_A_SELECTOR_START specificity: 65 }
+error_specificity { code: CSS_SYNTAX_INVALID_DECLARATION specificity: 62 }
+error_specificity { code: CSS_SYNTAX_INCOMPLETE_DECLARATION specificity: 63 }
+error_specificity { code: CSS_SYNTAX_ERROR_IN_PSEUDO_SELECTOR specificity: 64 }
+error_specificity { code: CSS_SYNTAX_MISSING_SELECTOR specificity: 65 }
+error_specificity { code: CSS_SYNTAX_NOT_A_SELECTOR_START specificity: 66 }
 error_specificity {
-  code: CSS_SYNTAX_UNPARSED_INPUT_REMAINS_IN_SELECTOR specificity: 66
+  code: CSS_SYNTAX_UNPARSED_INPUT_REMAINS_IN_SELECTOR specificity: 67
 }
-error_specificity { code: CSS_SYNTAX_MISSING_URL specificity: 67 }
-error_specificity { code: CSS_SYNTAX_DISALLOWED_DOMAIN specificity: 68 }
-error_specificity { code: CSS_SYNTAX_INVALID_URL specificity: 69 }
-error_specificity { code: CSS_SYNTAX_INVALID_URL_PROTOCOL specificity: 70 }
-error_specificity { code: CSS_SYNTAX_DISALLOWED_RELATIVE_URL specificity: 71 }
-error_specificity { code: INCORRECT_NUM_CHILD_TAGS specificity: 72 }
-error_specificity { code: DISALLOWED_CHILD_TAG_NAME specificity: 73 }
-error_specificity { code: DISALLOWED_FIRST_CHILD_TAG_NAME specificity: 74 }
-error_specificity { code: CSS_SYNTAX_INVALID_ATTR_SELECTOR specificity: 75 }
+error_specificity { code: CSS_SYNTAX_MISSING_URL specificity: 68 }
+error_specificity { code: CSS_SYNTAX_DISALLOWED_DOMAIN specificity: 69 }
+error_specificity { code: CSS_SYNTAX_INVALID_URL specificity: 70 }
+error_specificity { code: CSS_SYNTAX_INVALID_URL_PROTOCOL specificity: 71 }
+error_specificity { code: CSS_SYNTAX_DISALLOWED_RELATIVE_URL specificity: 72 }
+error_specificity { code: INCORRECT_NUM_CHILD_TAGS specificity: 73 }
+error_specificity { code: DISALLOWED_CHILD_TAG_NAME specificity: 74 }
+error_specificity { code: DISALLOWED_FIRST_CHILD_TAG_NAME specificity: 75 }
+error_specificity { code: CSS_SYNTAX_INVALID_ATTR_SELECTOR specificity: 76 }
 error_specificity {
-  code: CHILD_TAG_DOES_NOT_SATISFY_REFERENCE_POINT specificity: 76
+  code: CHILD_TAG_DOES_NOT_SATISFY_REFERENCE_POINT specificity: 77
 }
-error_specificity { code: MANDATORY_REFERENCE_POINT_MISSING specificity: 77 }
-error_specificity { code: DUPLICATE_REFERENCE_POINT specificity: 78 }
-error_specificity { code: TAG_REFERENCE_POINT_CONFLICT specificity: 79 }
+error_specificity { code: MANDATORY_REFERENCE_POINT_MISSING specificity: 78 }
+error_specificity { code: DUPLICATE_REFERENCE_POINT specificity: 79 }
+error_specificity { code: TAG_REFERENCE_POINT_CONFLICT specificity: 80 }
 error_specificity {
   code: CHILD_TAG_DOES_NOT_SATISFY_REFERENCE_POINT_SINGULAR
-  specificity: 80
+  specificity: 81
 }
-error_specificity { code: CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE specificity: 81 }
+error_specificity { code: CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE specificity: 82 }
 error_specificity {
   code: CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE_WITH_HINT
-  specificity: 82
-}
-error_specificity {
-  code: CSS_SYNTAX_PROPERTY_DISALLOWED_WITHIN_AT_RULE
   specificity: 83
 }
 error_specificity {
-  code: CSS_SYNTAX_PROPERTY_DISALLOWED_TOGETHER_WITH
+  code: CSS_SYNTAX_PROPERTY_DISALLOWED_WITHIN_AT_RULE
   specificity: 84
 }
 error_specificity {
-  code: CSS_SYNTAX_PROPERTY_REQUIRES_QUALIFICATION
+  code: CSS_SYNTAX_PROPERTY_DISALLOWED_TOGETHER_WITH
   specificity: 85
 }
 error_specificity {
-  code: BASE_TAG_MUST_PRECEED_ALL_URLS
+  code: CSS_SYNTAX_PROPERTY_REQUIRES_QUALIFICATION
   specificity: 86
+}
+error_specificity {
+  code: BASE_TAG_MUST_PRECEED_ALL_URLS
+  specificity: 87
 }
 error_specificity { code: DISALLOWED_SCRIPT_TAG specificity: 102 }
 error_specificity { code: GENERAL_DISALLOWED_TAG specificity: 103 }
@@ -5932,7 +6076,11 @@ error_formats {
           "deprecated version. Please use a more recent version of this "
           "extension. This may become an error in the future."
 }
-
+error_formats {
+  code: INCORRECT_SCRIPT_RELEASE_VERSION
+  format: "The script version for '%1' is a %2 version which mismatches "
+          "with the first script on the page using the %3 version."
+}
 error_formats {
   code: NON_LTS_SCRIPT_AFTER_LTS
   format: "'%1' must use the LTS version to correspond with the first script "
@@ -5943,7 +6091,6 @@ error_formats {
   format: "'%1' must use the non-LTS version to correspond with the first "
           "script in the page, which does not use LTS."
 }
-
 error_formats {
   code: ATTR_REQUIRED_BUT_MISSING
   format: "The attribute '%1' in tag '%2' is missing or incorrect, but "
@@ -8237,6 +8384,7 @@ tags: {  # <amp-story-player>
     supported_layouts: FIXED_HEIGHT
     supported_layouts: FLEX_ITEM
     supported_layouts: RESPONSIVE
+    supported_layouts: INTRINSIC
   }
 }
 descendant_tag_list {
@@ -8642,6 +8790,42 @@ tags: {  # <amp-delight-player>
   }
 }
 #
+# Copyright 2020 The AMP HTML Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS-IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the license.
+#
+
+tags: {  # amp-story-panning-media
+  html_format: AMP
+  tag_name: "SCRIPT"
+  extension_spec: {
+    name: "amp-story-panning-media"
+    version: "0.1"
+    version: "latest"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # <amp-story-panning-media>
+  html_format: AMP
+  tag_name: "AMP-STORY-PANNING-MEDIA"
+  requires_extension: "amp-story-panning-media"
+  mandatory_ancestor: "AMP-STORY-GRID-LAYER"
+  spec_url: "https://amp.dev/documentation/components/amp-story-panning-media"
+  amp_layout: {
+    supported_layouts: FILL
+  }
+}
+#
 # Copyright 2016 The AMP HTML Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -8676,7 +8860,7 @@ tags: {  # amp-ad
   # Typically the extension_spec takes care of this, but we have
   # a unique situation where we need to refer to this earlier in
   # the rules processing for the also_requires_tag_warning below.
-  spec_name: "amp-ad extension .js script"
+  spec_name: "amp-ad extension script"
   extension_spec: {
     name: "amp-ad"
     version: "0.1"
@@ -8690,7 +8874,7 @@ tags: {  # <amp-ad>
   html_format: AMP  # Ads are not allowed inside ads
   tag_name: "AMP-AD"
   requires_extension: "amp-ad"  # See note at top of file
-  also_requires_tag_warning: "amp-ad extension .js script"
+  also_requires_tag_warning: "amp-ad extension script"
   # If modifying disallowed_ancestors, then please also edit
   # extensions/amp-auto-ads/*/placement.js
   disallowed_ancestor: "AMP-APP-BANNER"
@@ -8726,7 +8910,7 @@ tags: {  # <amp-ad type="custom">
   tag_name: "AMP-AD"
   spec_name: "amp-ad with type=custom"
   requires_extension: "amp-ad"  # See note at top of file
-  also_requires_tag_warning: "amp-ad extension .js script"
+  also_requires_tag_warning: "amp-ad extension script"
   # If modifying disallowed_ancestors, then please also edit
   # extensions/amp-auto-ads/*/placement.js
   disallowed_ancestor: "AMP-APP-BANNER"
@@ -8762,7 +8946,7 @@ tags: {  # <amp-ad data-multi-size>
   tag_name: "AMP-AD"
   spec_name: "amp-ad with data-multi-size attribute"
   requires_extension: "amp-ad"  # See note at top of file
-  also_requires_tag_warning: "amp-ad extension .js script"
+  also_requires_tag_warning: "amp-ad extension script"
   # If modifying disallowed_ancestors, then please also edit
   # extensions/amp-auto-ads/*/placement.js
   disallowed_ancestor: "AMP-APP-BANNER"
@@ -8809,7 +8993,7 @@ tags: {  # <amp-ad data-enable-refresh>
   tag_name: "AMP-AD"
   spec_name: "amp-ad with data-enable-refresh attribute"
   requires_extension: "amp-ad"  # See note at top of file
-  also_requires_tag_warning: "amp-ad extension .js script"
+  also_requires_tag_warning: "amp-ad extension script"
   # If modifying disallowed_ancestors, then please also edit
   # extensions/amp-auto-ads/*/placement.js
   disallowed_ancestor: "AMP-APP-BANNER"
@@ -8852,7 +9036,7 @@ tags: {  # <amp-embed>
   html_format: AMP
   tag_name: "AMP-EMBED"
   requires_extension: "amp-ad"  # See note at top of file
-  also_requires_tag_warning: "amp-ad extension .js script"
+  also_requires_tag_warning: "amp-ad extension script"
   disallowed_ancestor: "AMP-APP-BANNER"
   attrs: { name: "alt" }
   attrs: { name: "json" }
@@ -8884,7 +9068,7 @@ tags: {  # <amp-embed data-multi-size>
   tag_name: "AMP-EMBED"
   spec_name: "amp-embed with data-multi-size attribute"
   requires_extension: "amp-ad"  # See note at top of file
-  also_requires_tag_warning: "amp-ad extension .js script"
+  also_requires_tag_warning: "amp-ad extension script"
   disallowed_ancestor: "AMP-APP-BANNER"
   # amp-embed elements cannot be both children of an amp ad container and have
   # data-multi-size attribute.
@@ -12580,6 +12764,12 @@ tags: {  # <amp-accordion> > <section>
   spec_name: "amp-accordion > section"
   descriptive_name: "amp-accordion > section"
   mandatory_parent: "AMP-ACCORDION"
+  attrs: {
+    # amp-access is disabled in AMP4EMAIL
+    disabled_by: "amp4email"
+    name: "access-hide"
+    value: ""
+  }
   attrs: { name: "expanded" value: "" }
   # amp-bind
   attrs: {
@@ -12806,7 +12996,7 @@ tags: {  # amp-video
   # Typically the extension_spec takes care of this, but we have
   # a unique situation where we need to refer to this earlier in
   # the rules processing for the also_requires_tag_warning below.
-  spec_name: "amp-video extension .js script"
+  spec_name: "amp-video extension script"
   extension_spec: {
     name: "amp-video"
     version: "0.1"
@@ -12899,7 +13089,7 @@ tags: {  # <amp-video> not in amp-story.
   # Typically we'd require the extension j/s, but for historical reasons
   # many pages don't have it, so it ends up late loaded and we warn, instead
   # of making this a validation error.
-  also_requires_tag_warning: "amp-video extension .js script"
+  also_requires_tag_warning: "amp-video extension script"
   attrs: { name: "poster" }
   attr_lists: "extended-amp-global"
   attr_lists: "amp-video-common"
@@ -12910,7 +13100,6 @@ tags: {  # <amp-video> not in amp-story.
     supported_layouts: FIXED
     supported_layouts: FIXED_HEIGHT
     supported_layouts: FLEX_ITEM
-    supported_layouts: INTRINSIC
     supported_layouts: NODISPLAY
     supported_layouts: RESPONSIVE
   }
@@ -12922,7 +13111,7 @@ tags: {  # <amp-video> in amp-story-page-attachment (same rules as regular AMPHT
   tag_name: "AMP-VIDEO"
   spec_name: "amp-story >> amp-story-page-attachment >> amp-video"
   mandatory_ancestor: "AMP-STORY-PAGE-ATTACHMENT"
-  also_requires_tag_warning: "amp-video extension .js script"
+  also_requires_tag_warning: "amp-video extension script"
   attrs: { name: "poster" }
   attr_lists: "extended-amp-global"
   attr_lists: "amp-video-common"
@@ -12933,7 +13122,6 @@ tags: {  # <amp-video> in amp-story-page-attachment (same rules as regular AMPHT
     supported_layouts: FIXED
     supported_layouts: FIXED_HEIGHT
     supported_layouts: FLEX_ITEM
-    supported_layouts: INTRINSIC
     supported_layouts: NODISPLAY
     supported_layouts: RESPONSIVE
   }
@@ -14741,7 +14929,6 @@ descendant_tag_list: {
   tag: "AMP-FIT-TEXT"
   tag: "AMP-FONT"
   tag: "AMP-GIST"
-  tag: "AMP-GOOGLE-VRVIEW-IMAGE"
   tag: "AMP-IMG"
   tag: "AMP-INSTALL-SERVICEWORKER"
   tag: "AMP-LIST"
@@ -14753,6 +14940,7 @@ descendant_tag_list: {
   tag: "AMP-STORY-INTERACTIVE-POLL"
   tag: "AMP-STORY-INTERACTIVE-QUIZ"
   tag: "AMP-STORY-INTERACTIVE-RESULTS"
+  tag: "AMP-STORY-PANNING-MEDIA"
   tag: "AMP-TIMEAGO"
   tag: "AMP-TWITTER"
   tag: "AMP-VIDEO"
@@ -15027,7 +15215,6 @@ descendant_tag_list {
   tag: "AMP-GFYCAT"
   tag: "AMP-GIST"
   tag: "AMP-GOOGLE-DOCUMENT-EMBED"
-  tag: "AMP-GOOGLE-VRVIEW-IMAGE"
   tag: "AMP-HULU"
   tag: "AMP-IMA-VIDEO"
   tag: "AMP-IMAGE-SLIDER"
@@ -15763,7 +15950,7 @@ tags: {  # amp-anim
 tags: {  # amp-anim
   html_format: AMP4EMAIL
   tag_name: "SCRIPT"
-  spec_name: "amp-anim extension .js script (AMP4EMAIL)"
+  spec_name: "amp-anim extension script (AMP4EMAIL)"
   extension_spec: {
     name: "amp-anim"
     # AMP4EMAIL doesn't allow version: "latest".
