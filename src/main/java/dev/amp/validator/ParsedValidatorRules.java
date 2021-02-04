@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * This wrapper class provides access to the validation rules.
@@ -178,63 +179,59 @@ public class ParsedValidatorRules {
     }
 
     /**
-     * TODO - verify ALL regex getXXX() to ensure proper implementation
+     * Find the regex pattern from the map. If found then returns. Otherwise create new pattern. In an event when
+     * a pattern syntax exception occurs, escape curly brace and recompile.
+     * @param regexMap the regex map
+     * @param regex the regex
+     * @return the pattern
+     */
+    public Pattern findOrCreatePattern(@Nonnull final Map<String, Pattern> regexMap, @Nonnull final String regex, final boolean isFullMatch) {
+        if (regexMap.containsKey(regex)) {
+            return regexMap.get(regex);
+        }
+
+        Pattern pattern;
+        String newRegex = isFullMatch ? ("^(" + regex + ")$") : regex;
+        try {
+            pattern = Pattern.compile(newRegex);
+        } catch (final PatternSyntaxException pse) {
+            newRegex = regex.replace("{", "\\{");
+            newRegex = isFullMatch ? ("^(" + newRegex + ")$") : newRegex;
+            pattern = Pattern.compile(newRegex);
+        }
+
+        regexMap.put(regex, pattern);
+
+        return pattern;
+    }
+    /**
+     * Returns full match regex pattern.
      *
      * @param regex the regex.
      * @return returns the full match regex pattern.
      */
     public Pattern getFullMatchRegex(@Nonnull final String regex) {
-        String regexEscape = regex.replace("{", "\\{");
-
-        for (String fullMatchRegex : fullMatchRegexes.keySet()) {
-            if (fullMatchRegex.equals(regex)) {
-                return fullMatchRegexes.get(regexEscape);
-            }
-        }
-        String fullMatchRegex = "^(" + regexEscape + ")$";
-        Pattern pattern = Pattern.compile(fullMatchRegex);
-        fullMatchRegexes.put(regexEscape, pattern);
-
-        return pattern;
+        return findOrCreatePattern(fullMatchRegexes, regex, true);
     }
 
     /**
-     * @param caseiRegex case insensitive regex.
+     * Returns full match case insensitive regex pattern.
+     *
+     * @param regex case insensitive regex.
      * @return returns the full match case insensitive regex pattern.
      */
-    public Pattern getFullMatchCaseiRegex(@Nonnull final String caseiRegex) {
-        String caseiRegexEscape = caseiRegex.replace("{", "\\{");
-
-        for (String fullMatchRegex : fullMatchCaseiRegexes.keySet()) {
-            if (fullMatchRegex.equals(caseiRegexEscape)) {
-                return fullMatchCaseiRegexes.get(caseiRegexEscape);
-            }
-        }
-
-        Pattern pattern = Pattern.compile("^(" + caseiRegexEscape + ")$");
-        this.fullMatchCaseiRegexes.put(caseiRegexEscape, pattern);
-        return pattern;
+    public Pattern getFullMatchCaseiRegex(@Nonnull final String regex) {
+        return findOrCreatePattern(fullMatchCaseiRegexes, regex, true);
     }
 
     /**
      * Returns the partial match case insensitive match regex pattern.
      *
-     * @param caseiRegex the regex.
+     * @param regex the regex.
      * @return returns the partial match case insensitive match regex pattern.
      */
-    public Pattern getPartialMatchCaseiRegex(@Nonnull final String caseiRegex) {
-        final String caseiRegexEscape = caseiRegex.replace("{", "\\{");
-
-        for (String fullMatchRegex : partialMatchCaseiRegexes.keySet()) {
-            if (fullMatchRegex.equals(caseiRegexEscape)) {
-                return partialMatchCaseiRegexes.get(caseiRegexEscape);
-            }
-        }
-
-        Pattern pattern = Pattern.compile(caseiRegexEscape);
-        partialMatchCaseiRegexes.put(caseiRegexEscape, pattern);
-
-        return pattern;
+    public Pattern getPartialMatchCaseiRegex(@Nonnull final String regex) {
+        return findOrCreatePattern(partialMatchCaseiRegexes, regex, false);
     }
 
     /**
