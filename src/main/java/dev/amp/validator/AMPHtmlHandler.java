@@ -89,7 +89,7 @@ public class AMPHtmlHandler extends DefaultHandler {
             if (validationResult.getStatus() == ValidatorProtos.ValidationResult.Status.UNKNOWN) {
                 validationResult.setStatus(ValidatorProtos.ValidationResult.Status.PASS);
             }
-            if (validationResult.getErrorsCount() > 0) {
+            if (validationResult.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL) {
                 validationResult.setStatus(ValidatorProtos.ValidationResult.Status.FAIL);
             }
         } catch (TagValidationException tve) {
@@ -173,7 +173,7 @@ public class AMPHtmlHandler extends DefaultHandler {
             this.validationResult.mergeFrom(resultForTag.getValidationResult().build());
             this.context.updateFromTagResults(encounteredTag, resultForReferencePoint, resultForTag);
 
-            if (this.validationResult.getErrorsCount() > 0
+            if (this.validationResult.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL
                     && exitCondition == ExitCondition.EXIT_ON_FIRST_ERROR) {
                 throw new ExitOnFirstErrorException();
             }
