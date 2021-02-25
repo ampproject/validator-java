@@ -101,6 +101,20 @@ public final class TagSpecUtils {
     }
 
     /**
+     * For creating error messages, we either find the descriptiveName in the tag
+     * spec or fall back to the tagName.
+     *
+     * @param tagSpec TagSpec instance from the validator.protoscii file.
+     * @return return the descriptive tag spec name.
+     * @private
+     */
+    public static String getTagDescriptiveName(@Nonnull final ValidatorProtos.TagSpec tagSpec) {
+        return tagSpec.hasDescriptiveName() ? tagSpec.getDescriptiveName()
+                : tagSpec.getTagName().toLowerCase();
+    }
+
+
+    /**
      * We only track (that is, add them to Context.RecordTagspecValidated) validated
      * tagspecs as necessary. That is, if it's needed for document scope validation:
      * - Mandatory tags

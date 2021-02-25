@@ -326,7 +326,7 @@ public class CdataMatcher {
         stylesheet.accept(invalidRuleVisitor);
 
         // Validate the allowed CSS declarations (eg: `background-color`)
-        if (maybeDocCssSpec != null && !maybeDocCssSpec.getSpec().getAllowAllDeclarationInStyleTag()) {
+        if (maybeDocCssSpec != null && !maybeDocCssSpec.getSpec().getAllowAllDeclarationInStyle()) {
             final InvalidDeclVisitor invalidDeclVisitor =
                     new InvalidDeclVisitor(maybeDocCssSpec, context, validationResult);
             stylesheet.accept(invalidDeclVisitor);

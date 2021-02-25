@@ -385,6 +385,9 @@ public class ParsedValidatorRules {
                                         @Nonnull final List<String> formatIdentifiers, @Nonnull final Context context,
                                         @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult) {
         boolean hasMandatoryTypeIdentifier = false;
+        boolean hasEmailTypeIdentifier = false;
+        boolean hasCssStrictTypeIdentifier = false;
+
         // The named values should match up to `self` and AMP caches listed at
         // https://cdn.ampproject.org/caches.json
         for (int i = 0; i < attrs.getLength(); i++) {
@@ -436,6 +439,12 @@ public class ParsedValidatorRules {
                                 context.getLineCol(), /*params=*/new ArrayList<>(), /*url*/ "",
                                 validationResult);
                     }
+                    if (typeIdentifier.equals("amp4email")) {
+                        hasEmailTypeIdentifier = true;
+                    }
+                    if (typeIdentifier.equals("data-css-strict")) {
+                        hasCssStrictTypeIdentifier = true;
+                    }
                 } else {
                     final List<String> params = new ArrayList<>();
                     params.add(attrs.getLocalName(i));
@@ -447,6 +456,15 @@ public class ParsedValidatorRules {
                             validationResult);
                 }
             }
+        }
+        // If AMP Email format and not set to data-css-strict, then issue a warning
+        // that not having data-css-strict is deprecated. See b/179798751.
+        if (hasEmailTypeIdentifier && !hasCssStrictTypeIdentifier) {
+            context.addWarning(
+                    ValidatorProtos.ValidationError.Code.AMP_EMAIL_MISSING_STRICT_CSS_ATTR,
+                    context.getLineCol(), new ArrayList<String>(),
+            "https://github.com/ampproject/amphtml/issues/32587",
+                    validationResult);
         }
         if (!hasMandatoryTypeIdentifier) {
             // Missing mandatory type identifier (any AMP variant but "actions" or
