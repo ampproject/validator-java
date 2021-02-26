@@ -50,6 +50,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static dev.amp.validator.utils.TagSpecUtils.getTagDescriptiveName;
+
 /**
  * CdataMatcher maintains a constraint to check which an opening tag
  * introduces: a tag's cdata matches constraints set by it's cdata
@@ -328,7 +330,7 @@ public class CdataMatcher {
         // Validate the allowed CSS declarations (eg: `background-color`)
         if (maybeDocCssSpec != null && !maybeDocCssSpec.getSpec().getAllowAllDeclarationInStyle()) {
             final InvalidDeclVisitor invalidDeclVisitor =
-                    new InvalidDeclVisitor(maybeDocCssSpec, context, validationResult);
+                    new InvalidDeclVisitor(maybeDocCssSpec, context, getTagDescriptiveName(this.getTagSpec()), validationResult);
             stylesheet.accept(invalidDeclVisitor);
         }
 

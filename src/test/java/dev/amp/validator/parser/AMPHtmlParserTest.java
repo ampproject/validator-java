@@ -421,7 +421,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DEPRECATED_TAG);
-      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.PASS);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -490,7 +490,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.INVALID_JSON_CDATA);
-      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.PASS);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -1158,7 +1158,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.WARNING_EXTENSION_DEPRECATED_VERSION);
-      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.PASS);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
