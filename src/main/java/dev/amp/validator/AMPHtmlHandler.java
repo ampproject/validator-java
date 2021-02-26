@@ -38,6 +38,7 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Validation handler which accepts callbacks from HTML parser.
@@ -86,12 +87,7 @@ public class AMPHtmlHandler extends DefaultHandler {
     public void endDocument() throws SAXException {
         try {
             context.getRules().maybeEmitGlobalTagValidationErrors(context, validationResult);
-            if (validationResult.getStatus() == ValidatorProtos.ValidationResult.Status.UNKNOWN) {
-                validationResult.setStatus(ValidatorProtos.ValidationResult.Status.PASS);
-            }
-            if (validationResult.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL) {
-                validationResult.setStatus(ValidatorProtos.ValidationResult.Status.FAIL);
-            }
+            setValidationResultStatus();
         } catch (TagValidationException tve) {
             /** ignore */
         }
@@ -171,6 +167,7 @@ public class AMPHtmlHandler extends DefaultHandler {
                     resultForTag.getValidationResult());
 
             this.validationResult.mergeFrom(resultForTag.getValidationResult().build());
+
             this.context.updateFromTagResults(encounteredTag, resultForReferencePoint, resultForTag);
 
             if (this.validationResult.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL
@@ -276,6 +273,24 @@ public class AMPHtmlHandler extends DefaultHandler {
                 params,
                 refPointSpec.getReferencePoints().parentSpecUrl(),
                 validationResult);
+    }
+
+    /**
+     * If the errors list contain at least one ValidatorProtos.ValidationError.Severity.ERROR,
+     * set the status to ValidatorProtos.ValidationResult.Status.FAIL.
+     */
+    private void setValidationResultStatus() {
+        validationResult.setStatus(ValidatorProtos.ValidationResult.Status.PASS);
+        if (validationResult.getErrorsList().isEmpty()) {
+            return;
+        }
+        Optional<ValidatorProtos.ValidationError> validationError =
+                validationResult.getErrorsList().stream()
+                        .filter(r -> r.getSeverity() == ValidatorProtos.ValidationError.Severity.ERROR)
+                        .findFirst();
+        if (validationError.isPresent()) {
+            validationResult.setStatus(ValidatorProtos.ValidationResult.Status.FAIL);
+        }
     }
 
     /**

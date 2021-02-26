@@ -79,6 +79,7 @@ public class ParsedValidatorRules {
         typeIdentifiers.put("actions", 0);
         typeIdentifiers.put("transformed", 0);
         typeIdentifiers.put("data-ampdevmode", 0);
+        typeIdentifiers.put("data-css-strict", 0);
 
         expandExtensionSpec();
 
@@ -404,11 +405,11 @@ public class ParsedValidatorRules {
                         validationResult.addTypeIdentifier(typeIdentifier);
                         context.recordTypeIdentifier(typeIdentifier);
                     }
-                    // The type identifier "actions" and "transformed" are not considered
-                    // mandatory unlike other type identifiers.
-                    if (!typeIdentifier.equals("actions")
-                            && !typeIdentifier.equals("transformed")
-                            && !typeIdentifier.equals("data-ampdevmode")) {
+                    // The type identifier "transformed" is not considered mandatory
+                    // unlike other type identifiers.
+                    if (!typeIdentifier.equals("transformed")
+                            && !typeIdentifier.equals("data-ampdevmode")
+                            && !typeIdentifier.equals("data-css-strict")) {
                         hasMandatoryTypeIdentifier = true;
                     }
                     // The type identifier "transformed" has restrictions on it's value.
