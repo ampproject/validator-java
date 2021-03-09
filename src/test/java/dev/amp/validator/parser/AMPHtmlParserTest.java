@@ -1088,8 +1088,9 @@ public class AMPHtmlParserTest {
       final int maxNode = 10000;
       ValidatorProtos.ValidationResult result =
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
-      Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
+      Assert.assertEquals(result.getErrorsCount(), 2, "Expecting to have 2 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.CSS_EXCESSIVELY_NESTED);
+      Assert.assertTrue(result.getErrors(1).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_ERROR_IN_PSEUDO_SELECTOR);
       Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();

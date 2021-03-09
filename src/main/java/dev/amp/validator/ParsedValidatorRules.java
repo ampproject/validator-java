@@ -184,6 +184,7 @@ public class ParsedValidatorRules {
      * a pattern syntax exception occurs, escape curly brace and recompile.
      * @param regexMap the regex map
      * @param regex the regex
+     * @param isFullMatch if we are looking for a full match
      * @return the pattern
      */
     public Pattern findOrCreatePattern(@Nonnull final Map<String, Pattern> regexMap, @Nonnull final String regex, final boolean isFullMatch) {

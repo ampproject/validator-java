@@ -42,6 +42,7 @@ import dev.amp.validator.utils.UrlUtils;
 import dev.amp.validator.visitor.InvalidDeclVisitor;
 import dev.amp.validator.visitor.InvalidRuleVisitor;
 import dev.amp.validator.visitor.MediaQueryVisitor;
+import dev.amp.validator.visitor.SelectorSpecVisitor;
 import org.xml.sax.Locator;
 
 import javax.annotation.Nonnull;
@@ -247,6 +248,10 @@ public class CdataMatcher {
             }
         }
 
+        if (cssSpec.hasSelectorSpec()) {
+            this.matchSelectors(stylesheet, cssSpec.getSelectorSpec(), cssErrors);
+        }
+
         if (cssSpec.getValidateAmp4Ads()) {
             CssSpecUtils.validateAmp4AdsCss(stylesheet, cssErrors);
         }
@@ -344,7 +349,6 @@ public class CdataMatcher {
      * @param spec        the spec to validate against
      * @param errorBuffer the errors collection to populate
      * @throws CssValidationException css validation exception.
-     * @private
      */
     private void matchMediaQuery(@Nonnull final Stylesheet stylesheet,
                                  @Nonnull final ValidatorProtos.MediaQuerySpec spec,
@@ -382,6 +386,21 @@ public class CdataMatcher {
             }
         }
     }
+
+    /**
+     * Matches the provided stylesheet against a SelectorSpec
+     * @param stylesheet the stylesheet to match
+     * @param  spec the spec to match against
+     * @param  errorBuffer the error buffer to populate
+     * @throws CssValidationException
+     */
+    private void matchSelectors(@Nonnull final Stylesheet stylesheet,
+                                @Nonnull final ValidatorProtos.SelectorSpec spec,
+                                @Nonnull final List<ErrorToken> errorBuffer) throws CssValidationException {
+        final SelectorSpecVisitor visitor = new SelectorSpecVisitor(spec, errorBuffer);
+        stylesheet.accept(visitor);
+    }
+
 
     /**
      * @return lineCol of CdataMatcher
