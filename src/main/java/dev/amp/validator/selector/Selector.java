@@ -40,6 +40,8 @@ public abstract class Selector extends Token {
     /** @param selector selector function */
     public abstract void forEachChild(Consumer<Selector> selector);
 
-    /** @param visitor a SelectorVisitor instance */
+    /** @param visitor a SelectorVisitor instance
+     * @throws CssValidationException
+     */
     public abstract void accept(SelectorVisitor visitor) throws CssValidationException;
 }

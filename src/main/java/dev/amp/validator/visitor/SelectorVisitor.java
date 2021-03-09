@@ -108,6 +108,8 @@ public abstract class SelectorVisitor implements RuleVisitor {
      *
      * @param tokenStream to work with
      * @return selectors group from top of stream
+     * @throws CssValidationException
+     * @throws SelectorException
      */
     public static Selector parseASelectorsGroup(@Nonnull final TokenStream tokenStream) throws CssValidationException, SelectorException {
         if (!isSimpleSelectorSequenceStart(tokenStream.current())) {
@@ -171,12 +173,14 @@ public abstract class SelectorVisitor implements RuleVisitor {
     /**
      *
      * @param attrSelector
+     * @throws CssValidationException
      */
     public abstract void visitAttrSelector(@Nonnull AttrSelector attrSelector) throws CssValidationException;
 
     /**
      *
      * @param pseudoSelector
+     * @throws CssValidationException
      */
     public abstract void visitPseudoSelector(@Nonnull PseudoSelector pseudoSelector) throws CssValidationException;
 
