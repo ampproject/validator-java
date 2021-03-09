@@ -392,7 +392,7 @@ public class CdataMatcher {
      * @param stylesheet the stylesheet to match
      * @param  spec the spec to match against
      * @param  errorBuffer the error buffer to populate
-     * @throws CssValidationException
+     * @throws CssValidationException CssValidationException
      */
     private void matchSelectors(@Nonnull final Stylesheet stylesheet,
                                 @Nonnull final ValidatorProtos.SelectorSpec spec,

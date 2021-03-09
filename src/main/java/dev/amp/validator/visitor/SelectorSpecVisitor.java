@@ -49,7 +49,7 @@ public class SelectorSpecVisitor extends SelectorVisitor {
     /**
      * visitor for attr selector
      * @param attrSelector to visit
-     * @throws CssValidationException
+     * @throws CssValidationException CssValidationException
      */
     @Override
     public void visitAttrSelector(@Nonnull final AttrSelector attrSelector) throws CssValidationException {
@@ -73,7 +73,7 @@ public class SelectorSpecVisitor extends SelectorVisitor {
     /**
      * visitor for pseudo selector
      * @param pseudoSelector to visit
-     * @throws CssValidationException
+     * @throws CssValidationException CssValidationException
      */
     @Override
     public void visitPseudoSelector(@Nonnull final PseudoSelector pseudoSelector) throws CssValidationException {
