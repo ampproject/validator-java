@@ -106,7 +106,6 @@ public final class TagSpecUtils {
      *
      * @param tagSpec TagSpec instance from the validator.protoscii file.
      * @return return the descriptive tag spec name.
-     * @private
      */
     public static String getTagDescriptiveName(@Nonnull final ValidatorProtos.TagSpec tagSpec) {
         return tagSpec.hasDescriptiveName() ? tagSpec.getDescriptiveName()

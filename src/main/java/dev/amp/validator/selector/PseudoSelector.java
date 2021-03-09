@@ -72,7 +72,7 @@ public class PseudoSelector extends Selector {
     /**
      * visits a selector
      * @param visitor a SelectorVisitor instance
-     * @throws CssValidationException
+     * @throws CssValidationException CssValidationException
      */
     public void accept(@Nonnull final SelectorVisitor visitor) throws CssValidationException {
         visitor.visitPseudoSelector(this);
