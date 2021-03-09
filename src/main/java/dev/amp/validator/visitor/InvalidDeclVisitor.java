@@ -53,7 +53,7 @@ public class InvalidDeclVisitor implements RuleVisitor {
         if (cssDeclaration.getValueCaseiList().size() > 0) {
             boolean hasValidValue = false;
             for (final String value : cssDeclaration.getValueCaseiList()) {
-                if (firstIdent.toLowerCase() == value) {
+                if (firstIdent.toLowerCase().equals(value)) {
                     hasValidValue = true;
                     break;
                 }
