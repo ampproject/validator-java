@@ -68,6 +68,7 @@ public class AttrSelector extends Selector {
     /**
      * visits a selector
      * @param visitor a SelectorVisitor instance
+     * @throws CssValidationException
      */
     public void accept(@Nonnull final SelectorVisitor visitor) throws CssValidationException {
         visitor.visitAttrSelector(this);

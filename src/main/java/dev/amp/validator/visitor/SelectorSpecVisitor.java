@@ -47,7 +47,9 @@ public class SelectorSpecVisitor extends SelectorVisitor {
     }
 
     /**
+     * visitor for attr selector
      * @param attrSelector to visit
+     * @throws CssValidationException
      * @override
      */
     @Override
@@ -69,6 +71,12 @@ public class SelectorSpecVisitor extends SelectorVisitor {
         this.errorBuffer.add(errorToken);
     }
 
+    /**
+     * visitor for pseudo selector
+     * @param pseudoSelector to visit
+     * @throws CssValidationException
+     * @override
+     */
     @Override
     public void visitPseudoSelector(@Nonnull final PseudoSelector pseudoSelector) throws CssValidationException {
         if (pseudoSelector.isClass()) {  // pseudo-class
