@@ -101,6 +101,20 @@ public final class TagSpecUtils {
     }
 
     /**
+     * For creating error messages, we either find the descriptiveName in the tag
+     * spec or fall back to the tagName.
+     *
+     * @param tagSpec TagSpec instance from the validator.protoscii file.
+     * @return return the descriptive tag spec name.
+     * @private
+     */
+    public static String getTagDescriptiveName(@Nonnull final ValidatorProtos.TagSpec tagSpec) {
+        return tagSpec.hasDescriptiveName() ? tagSpec.getDescriptiveName()
+                : tagSpec.getTagName().toLowerCase();
+    }
+
+
+    /**
      * We only track (that is, add them to Context.RecordTagspecValidated) validated
      * tagspecs as necessary. That is, if it's needed for document scope validation:
      * - Mandatory tags
@@ -885,7 +899,8 @@ public final class TagSpecUtils {
     public static final List AMP4ADS_IDENTIFIERS = Arrays.asList("\u26a14ads", "\u26a1\ufe0f4ads", "amp4ads", "data-ampdevmode");
 
     /** List identifiers for AMP4EMAIL format. */
-    public static final List AMP4EMAIL_IDENTIFIERS = Arrays.asList("\u26a14email", "\u26a1\ufe0f4email", "amp4email", "data-ampdevmode");
+    public static final List AMP4EMAIL_IDENTIFIERS = Arrays.asList("\u26a14email", "\u26a1\ufe0f4email", "amp4email",
+            "data-ampdevmode", "data-css-strict");
 
     /** List identifiers for ACTIONS format. */
     public static final List ACTIONS_IDENTIFIERS = Arrays.asList("\u26a1", "\u26a1\ufe0f", "amp", "actions", "data-ampdevmode");

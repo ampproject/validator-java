@@ -22,6 +22,7 @@
 
 package dev.amp.validator.selector;
 
+import dev.amp.validator.css.CssValidationException;
 import dev.amp.validator.css.TokenType;
 import dev.amp.validator.visitor.SelectorVisitor;
 
@@ -68,7 +69,7 @@ public class AttrSelector extends Selector {
      * visits a selector
      * @param visitor a SelectorVisitor instance
      */
-    public void accept(@Nonnull final SelectorVisitor visitor) {
+    public void accept(@Nonnull final SelectorVisitor visitor) throws CssValidationException {
         visitor.visitAttrSelector(this);
     }
 
@@ -79,6 +80,14 @@ public class AttrSelector extends Selector {
     @Override
     public TokenType getTokenType() {
         return TokenType.ATTR_SELECTOR;
+    }
+
+    /**
+     * get token type
+     * @return the token type
+     */
+    public String getAttrName() {
+        return this.attrName;
     }
 
     /**
