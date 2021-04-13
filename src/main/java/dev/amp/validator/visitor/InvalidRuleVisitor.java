@@ -92,12 +92,18 @@ public class InvalidRuleVisitor implements RuleVisitor {
      */
     public boolean isAtRuleValid(@Nonnull final ValidatorProtos.CssSpec cssSpec,
                                  @Nonnull final String atRuleName) {
-      for (final ValidatorProtos.AtRuleSpec atRuleSpec : cssSpec.getAtRuleSpecList()) {
-        if (atRuleSpec.getName().equals(stripVendorPrefix(atRuleName))) {
-          return true;
+        for (final ValidatorProtos.AtRuleSpec atRuleSpec : cssSpec.getAtRuleSpecList()) {
+            // "-moz-document" is specified in the list of allowed rules with an
+            // explicit vendor prefix. The idea here is that only this specific vendor
+            // prefix is allowed, not "-ms-document" or even "document". We first
+            // search the allowed list for the seen `at_rule_name` with stripped
+            // vendor prefix, then if not found, we search again without sripping the
+            // vendor prefix.
+            if (atRuleSpec.getName().equals(stripVendorPrefix(atRuleName))) {
+                return true;
+            }
         }
-      }
-      return false;
+        return false;
     }
 
     /**

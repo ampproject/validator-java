@@ -39,6 +39,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import static dev.amp.validator.utils.TagSpecUtils.shouldRecordTagspecValidated;
+
 /**
  * This wrapper class provides access to the validation rules.
  *
@@ -115,6 +117,12 @@ public class ParsedValidatorRules {
             for (String otherTag : tag.getAlsoRequiresTagWarningList()) {
                 this.tagSpecIdsToTrack.put(otherTag, true);
             }
+
+            final ParsedTagSpec parsed = new ParsedTagSpec(
+                    this.parsedAttrSpecs,
+                    shouldRecordTagspecValidated(tag, tagSpecId, this.tagSpecIdsToTrack),
+                    tag, tagSpecId);
+            this.parsedTagSpecById.put(tagSpecId, parsed);
 
             if (!tag.getTagName().equals("$REFERENCE_POINT")) {
                 if (!(tagSpecByTagName.containsKey(tag.getTagName()))) {
@@ -281,25 +289,9 @@ public class ParsedValidatorRules {
      *
      * @param id tag spec id.
      * @return returns the ParsedTagSpec.
-     * @throws TagValidationException the TagValidationException.
      */
-    public ParsedTagSpec getByTagSpecId(final int id) throws TagValidationException {
-        ParsedTagSpec parsed = this.parsedTagSpecById.get(id);
-        if (parsed != null) {
-            return parsed;
-        }
-
-        ValidatorProtos.TagSpec tag = this.ampValidatorManager.getRules().getTags(id);
-        if (tag == null) {
-            throw new TagValidationException("TagSpec is null for tag spec id " + id);
-        }
-
-        parsed = new ParsedTagSpec(
-                this.parsedAttrSpecs,
-                TagSpecUtils.shouldRecordTagspecValidated(tag, id, this.tagSpecIdsToTrack), tag,
-                id);
-        this.parsedTagSpecById.put(id, parsed);
-        return parsed;
+    public ParsedTagSpec getByTagSpecId(final int id) {
+        return this.parsedTagSpecById.get(id);
     }
 
     /**
@@ -834,11 +826,9 @@ public class ParsedValidatorRules {
      *
      * @param context          the Context.
      * @param validationResult the ValidationResult.
-     * @throws TagValidationException the TagValidationException.
      */
     public void maybeEmitRequiresOrExcludesValidationErrors(@Nonnull final Context context,
-                                                         @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult)
-            throws TagValidationException {
+                                                            @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult) {
         for (final int tagSpecId : context.getTagspecsValidated().keySet()) {
             final ParsedTagSpec parsedTagSpec = this.getByTagSpecId(tagSpecId);
             // Skip TagSpecs that aren't used for these type identifiers.

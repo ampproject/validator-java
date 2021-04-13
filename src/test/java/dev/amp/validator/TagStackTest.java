@@ -181,7 +181,7 @@ public class TagStackTest {
                 return 2;
             }
         };
-        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
+        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ampValidatorManager);
         final ParsedHtmlTag htmlTag = mock(ParsedHtmlTag.class);
         when(htmlTag.upperName()).thenReturn("test_satisfies_parent_head");
         final ValidateTagResult mockReferencePointResult = mock(ValidateTagResult.class);
@@ -233,7 +233,7 @@ public class TagStackTest {
                 return 2;
             }
         };
-        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
+        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ampValidatorManager);
         final ParsedHtmlTag htmlTag = mock(ParsedHtmlTag.class);
         when(htmlTag.upperName()).thenReturn("test_satisfies_parent_head");
         final ValidateTagResult mockReferencePointResult = mock(ValidateTagResult.class);
@@ -306,7 +306,7 @@ public class TagStackTest {
                 return 2;
             }
         };
-        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
+        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ampValidatorManager);
         final ParsedHtmlTag htmlTag = mock(ParsedHtmlTag.class);
         when(htmlTag.upperName()).thenReturn("test_satisfies_parent_head");
         final ValidateTagResult mockReferencePointResult = mock(ValidateTagResult.class);
@@ -394,7 +394,7 @@ public class TagStackTest {
         final ValidateTagResult mockTagResult = mock(ValidateTagResult.class);
         final ValidatorProtos.ValidationResult.Builder validationBuilder = ValidatorProtos.ValidationResult.newBuilder();
         validationBuilder.setStatus(ValidatorProtos.ValidationResult.Status.PASS);
-        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
+        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ampValidatorManager);
 
         final ParsedTagSpec tagSpec = mockValidatorRules.getByTagSpecId("test_parent");
         when(mockTagResult.getBestMatchTagSpec()).thenReturn(tagSpec);
@@ -430,7 +430,7 @@ public class TagStackTest {
                 return 2;
             }
         };
-        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
+        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ampValidatorManager);
         final ParsedHtmlTag htmlTag = mock(ParsedHtmlTag.class);
         when(htmlTag.upperName()).thenReturn("test_satisfies");
         final ValidateTagResult mockReferencePointResult = mock(ValidateTagResult.class);
@@ -550,7 +550,7 @@ public class TagStackTest {
                 return 2;
             }
         };
-        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
+        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ampValidatorManager);
         final ParsedHtmlTag htmlTag = mock(ParsedHtmlTag.class);
         final ValidateTagResult mockReferencePointResult = mock(ValidateTagResult.class);
         when(mockReferencePointResult.getBestMatchTagSpec()).thenReturn(mockValidatorRules

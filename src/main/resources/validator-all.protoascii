@@ -26,7 +26,7 @@ min_validator_revision_required: 475
 # newer versions of the spec file. This is currently a Google internal
 # mechanism, validator.js does not use this facility. However, any
 # change to this file (validator-main.js) requires updating this revision id.
-spec_file_revision: 1155
+spec_file_revision: 1165
 
 styles_spec_url: "https://amp.dev/documentation/guides-and-tutorials/develop/style_and_layout/style_pages/"
 script_spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/validation-workflow/validation_errors/#custom-javascript-is-not-allowed"
@@ -223,6 +223,7 @@ tags: {
         "components|"
         "import|"
         "manifest|"  # Handled separately below, has specific requirements.
+        "modulepreload|"  # Handled separately below, has specific requirements.
         "preload|"  # Handled separately below, has specific requirements.
         "serviceworker|"
         "stylesheet|"  # Handled separately below, has specific requirements.
@@ -286,6 +287,35 @@ tags: {
     dispatch_key: NAME_VALUE_DISPATCH
   }
   attr_lists: "common-link-attrs"
+  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#html-tags"
+}
+tags: {
+  html_format: AMP
+  tag_name: "LINK"
+  spec_name: "link rel=modulepreload"
+  descriptive_name: "link rel=modulepreload"
+  mandatory_parent: "HEAD"
+  attrs: {
+    name: "as"
+    mandatory: true
+    value: "script"
+  }
+  attrs: {
+    name: "crossorigin"
+    mandatory: true
+    value: "anonymous"
+  }
+  attrs: {
+    name: "href"
+    mandatory: true
+    value_regex: ".*\\.mjs$"
+  }
+  attrs: {
+    name: "rel"
+    mandatory: true
+    value_casei: "modulepreload"
+    dispatch_key: NAME_VALUE_DISPATCH
+  }
   spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#html-tags"
 }
 tags: {
@@ -514,7 +544,7 @@ tags: {
   spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#html-tags"
 }
 # AMP & AMP4ADS metadata, name=amp-experiments-opt-in
-# https://github.com/lannka/amphtml/blob/master/tools/experiments/README.md
+# https://github.com/ampproject/amphtml/blob/main/tools/experiments/README.md
 tags: {
   html_format: AMP
   html_format: AMP4ADS
@@ -3340,6 +3370,25 @@ tags: {
     }
   }
 }
+# Enables early styling on fast failure to load v0.js. See GitHub #22543.
+tags: {
+  html_format: AMP
+  tag_name: "SCRIPT"
+  spec_name: "script amp-onerror"
+  descriptive_name: "script amp-onerror"
+  unique: true
+  mandatory_parent: "HEAD"
+  attrs: {
+    name: "amp-onerror"
+    value: ""
+    mandatory: true
+    dispatch_key: NAME_VALUE_DISPATCH
+  }
+  cdata: {
+    mandatory_cdata: "document.querySelector(\"script[src*='/v0.js']\").onerror=function(){document.querySelector('style[amp-boilerplate]').textContent=''}"
+  }
+}
+
 # Specific script tags for custom elements and runtime imports.
 # 4.11.2 The noscript element
 tags: {
@@ -5006,6 +5055,11 @@ attr_lists: {
   attrs: { name: "[class]" }
   attrs: { name: "[hidden]" }
   attrs: { name: "[text]" }
+  attrs: {
+    enabled_by: "transformed"
+    name: "i-amphtml-binding"
+    value: ""
+  }
   # <amp-sidebar>
   attrs: {
     name: "autoscroll"
@@ -7868,6 +7922,7 @@ tags: {  # amp-date-display
   extension_spec: {
     name: "amp-date-display"
     version: "0.1"
+    version: "1.0"
     version: "latest"
   }
   attr_lists: "common-extension-attrs"
@@ -7936,6 +7991,7 @@ tags: {  # amp-base-carousel
   extension_spec: {
     name: "amp-base-carousel"
     version: "0.1"
+    version: "1.0"
     version: "latest"
   }
   attr_lists: "common-extension-attrs"
@@ -7978,7 +8034,7 @@ attr_lists: {
     value_regex: "([^,]+\\s+(always|auto|never),\\s*)*(always|auto|never)"
   }
   attrs: {
-    name: "horizontal"
+    name: "horizontal" # 0.1 only
     # Media query / boolean pairs
     value_regex: "([^,]+\\s+(true|false),\\s*)*(true|false)"
   }
@@ -7991,6 +8047,11 @@ attr_lists: {
     name: "mixed-length"
     # Media query / boolean pairs
     value_regex: "([^,]+\\s+(true|false),\\s*)*(true|false)"
+  }
+  attrs: {
+    name: "orientation" # 1.0 only
+    # Media query / boolean pairs
+    value_regex: "([^,]+\\s+(horizontal|vertical),\\s*)*(horizontal|vertical)"
   }
   attrs: {
     name: "slide"
@@ -8024,9 +8085,10 @@ attr_lists: {
   attrs: { name: "[auto-advance-count]" }
   attrs: { name: "[auto-advance-interval]" }
   attrs: { name: "[auto-advance-loops]" }
-  attrs: { name: "[horizontal]" }
+  attrs: { name: "[horizontal]" } # 0.1 only
   attrs: { name: "[loop]" }
   attrs: { name: "[mixed-length]" }
+  attrs: { name: "[orientation]" } # 1.0 only
   attrs: { name: "[slide]" }
   attrs: { name: "[snap]" }
   attrs: { name: "[snap-align]" }
@@ -8336,7 +8398,7 @@ tags: {  # <amp-ad type="custom">
     dispatch_key: NAME_VALUE_DISPATCH
   }
   attr_lists: "extended-amp-global"
-  spec_url: "https://github.com/ampproject/amphtml/blob/master/ads/custom.md"
+  spec_url: "https://github.com/ampproject/amphtml/blob/main/ads/custom.md"
   amp_layout: {
     supported_layouts: FILL
     supported_layouts: FIXED
@@ -8962,11 +9024,11 @@ tags: {  # amp-date-countdown
   extension_spec: {
     name: "amp-date-countdown"
     version: "0.1"
+    version: "1.0"
     version: "latest"
   }
   attr_lists: "common-extension-attrs"
 }
-
 tags: {  # <amp-date-countdown>
   html_format: AMP
   tag_name: "AMP-DATE-COUNTDOWN"
@@ -8978,7 +9040,11 @@ tags: {  # <amp-date-countdown>
     value_casei: "minutes"
     value_casei: "seconds"
   }
-  attrs {
+  attrs: {  # attribute is not used in version 0.1 of the component (see #33480)
+    name: "count-up"
+    value: ""
+  }
+  attrs: {  # attribute is not used in version 1.0 of the component (see #33480)
     name: "data-count-up"
     value: ""
   }
@@ -10324,7 +10390,7 @@ tags: {  # <amp-brid-player>
   }
   attrs: {
     name: "data-outstream"
-    mandatory_oneof: "['data-outstream', 'data-playlist', 'data-video']"
+    mandatory_oneof: "['data-carousel', 'data-outstream', 'data-playlist', 'data-video']"
     value_regex: "[0-9]+"
   }
   attrs: {
@@ -10339,12 +10405,17 @@ tags: {  # <amp-brid-player>
   }
   attrs: {
     name: "data-playlist"
-    mandatory_oneof: "['data-outstream', 'data-playlist', 'data-video']"
+    mandatory_oneof: "['data-carousel', 'data-outstream', 'data-playlist', 'data-video']"
     value_regex: ".+"
   }
   attrs: {
     name: "data-video"
-    mandatory_oneof: "['data-outstream', 'data-playlist', 'data-video']"
+    mandatory_oneof: "['data-carousel', 'data-outstream', 'data-playlist', 'data-video']"
+    value_regex: "[0-9]+"
+  }
+  attrs: {
+    name: "data-carousel"
+    mandatory_oneof: "['data-carousel', 'data-outstream', 'data-playlist', 'data-video']"
     value_regex: "[0-9]+"
   }
   attrs: {
@@ -12667,6 +12738,7 @@ attr_lists: {
     name: "implements-rotate-to-fullscreen"
     value: ""
   }
+  attrs: { name: "poster" }
   attrs: { name: "referrerpolicy" }
   attrs: {
     name: "rotate-to-fullscreen"
@@ -12684,45 +12756,15 @@ attr_lists: {
   attrs: { name: "[src]" }
 }
 
-tags: {  # <amp-video-iframe> with poster
-  html_format: AMP
-  tag_name: "AMP-VIDEO-IFRAME"
-  spec_name: "AMP-VIDEO-IFRAME[poster]"
-  requires_extension: "amp-video-iframe"
-  attrs: {
-    name: "poster"
-    mandatory: true
-  }
-  attr_lists: "extended-amp-global"
-  attr_lists: "amp-video-iframe-common"
-  attr_lists: "lightboxable-elements"
-  spec_url: "https://amp.dev/documentation/components/amp-video-iframe/"
-  amp_layout: {
-    supported_layouts: FILL
-    supported_layouts: FIXED
-    supported_layouts: FIXED_HEIGHT
-    supported_layouts: FLEX_ITEM
-    supported_layouts: INTRINSIC
-    supported_layouts: NODISPLAY
-    supported_layouts: RESPONSIVE
-  }
-}
-
-tags: {  # <amp-video-iframe> with [placeholder]
+tags: {  # <amp-video-iframe>
   html_format: AMP
   disabled_by: "transformed"
   tag_name: "AMP-VIDEO-IFRAME"
-  spec_name: "AMP-VIDEO-IFRAME with [placeholder]"
   requires_extension: "amp-video-iframe"
   attr_lists: "extended-amp-global"
   attr_lists: "amp-video-iframe-common"
   attr_lists: "lightboxable-elements"
   spec_url: "https://amp.dev/documentation/components/amp-video-iframe/"
-  reference_points: {
-    tag_spec_name: "AMP-VIDEO-IFRAME > [placeholder]"
-    mandatory: true
-    unique: true
-  }
   amp_layout: {
     supported_layouts: FILL
     supported_layouts: FIXED
@@ -12734,24 +12776,16 @@ tags: {  # <amp-video-iframe> with [placeholder]
   }
 }
 
-tags: {  # <amp-video-iframe> with [placeholder] (transformed)
+tags: {  # <amp-video-iframe> (transformed)
   html_format: AMP
   enabled_by: "transformed"
   tag_name: "AMP-VIDEO-IFRAME"
-  spec_name: "AMP-VIDEO-IFRAME with [placeholder] (transformed)"
+  spec_name: "AMP-VIDEO-IFRAME (transformed)"
   requires_extension: "amp-video-iframe"
   attr_lists: "extended-amp-global"
   attr_lists: "amp-video-iframe-common"
   attr_lists: "lightboxable-elements"
   spec_url: "https://amp.dev/documentation/components/amp-video-iframe/"
-  reference_points: {
-    tag_spec_name: "AMP-VIDEO-IFRAME > [placeholder]"
-    mandatory: true
-    unique: true
-  }
-  reference_points: {
-    tag_spec_name: "AMP-VIDEO-IFRAME > I-AMPHTML-SIZER [style]"
-  }
   amp_layout: {
     supported_layouts: FILL
     supported_layouts: FIXED
@@ -12761,36 +12795,6 @@ tags: {  # <amp-video-iframe> with [placeholder] (transformed)
     supported_layouts: NODISPLAY
     supported_layouts: RESPONSIVE
   }
-}
-
-tags: {
-  html_format: AMP
-  tag_name: "$REFERENCE_POINT"
-  spec_name: "AMP-VIDEO-IFRAME > [placeholder]"
-  attrs: {
-    name: "placeholder"
-    mandatory: true
-  }
-  spec_url: "https://amp.dev/documentation/components/amp-video-iframe/"
-}
-
-tags: {
-  html_format: AMP
-  enabled_by: "transformed"
-  tag_name: "$REFERENCE_POINT"
-  spec_name: "AMP-VIDEO-IFRAME > I-AMPHTML-SIZER [style]"
-  explicit_attrs_only: true
-  attrs: {
-    name: "style"
-    mandatory: true
-    disallowed_value_regex: "!\\s*important"
-    css_declaration: {
-      name: "display"
-      value_casei: "block"
-    }
-    css_declaration: { name: "padding-top" }
-  }
-  spec_url: "https://amp.dev/documentation/components/amp-video-iframe/"
 }
 #
 # Copyright 2016 The AMP HTML Authors. All Rights Reserved.
@@ -13375,12 +13379,27 @@ attr_lists: {
 # limitations under the license.
 #
 
-tags: {  # amp-social-share
+tags: {  # amp-social-share 1.0
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-social-share 1.0"
+  excludes: "amp-social-share 0.1"
+  extension_spec: {
+    name: "amp-social-share"
+    version_name: "v1.0"
+    version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # amp-social-share 0.1 and latest
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "SCRIPT"
+  satisfies: "amp-social-share 0.1"
+  excludes: "amp-social-share 1.0"
   extension_spec: {
     name: "amp-social-share"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     requires_usage: EXEMPTED
@@ -13850,6 +13869,7 @@ tags: {  # <amp-story>
     child_tag_name_oneof: "AMP-STORY-AUTO-ANALYTICS"
     child_tag_name_oneof: "AMP-STORY-BOOKEND"
     child_tag_name_oneof: "AMP-STORY-PAGE"
+    child_tag_name_oneof: "AMP-STORY-SOCIAL-SHARE"
   }
 }
 tags: {  # <amp-story-page>
@@ -14144,6 +14164,46 @@ tags: {  # amp-story-bookend (json)
   }
   attr_lists: "nonce-attr"
 }
+tags: {  # <amp-story-social-share>
+  html_format: AMP
+  tag_name: "AMP-STORY-SOCIAL-SHARE"
+  mandatory_ancestor: "AMP-STORY"
+  mandatory_last_child: true
+  descendant_tag_list: "amp-story-social-share-allowed-descendants"
+  attrs: {
+    name: "layout"
+    mandatory: true
+    value: "nodisplay"
+  }
+  attrs: {
+    name: "src"
+    value_url: {
+      protocol: "http"
+      protocol: "https"
+    }
+  }
+}
+descendant_tag_list: {
+  name: "amp-story-social-share-allowed-descendants"
+  tag: "SCRIPT"
+}
+tags: {  # amp-story-social-share (json)
+  html_format: AMP
+  tag_name: "SCRIPT"
+  spec_name: "amp-story-social-share extension .json script"
+  requires_extension: "amp-story"
+  mandatory_parent: "AMP-STORY-SOCIAL-SHARE"
+  unique: true
+  mandatory_last_child: true
+  siblings_disallowed: true
+  attrs: {
+    name: "type"
+    mandatory: true
+    value_casei: "application/json"
+    dispatch_key: NAME_VALUE_PARENT_DISPATCH
+  }
+  attr_lists: "nonce-attr"
+}
 tags: {  # amp-story-consent (json)
   html_format: AMP
   tag_name: "SCRIPT"
@@ -14274,6 +14334,7 @@ descendant_tag_list: {
   tag: "ADDRESS"
   tag: "AMP-CALL-TRACKING"
   tag: "AMP-DATE-COUNTDOWN"
+  tag: "AMP-DATE-DISPLAY"
   tag: "AMP-FIT-TEXT"
   tag: "AMP-FONT"
   tag: "AMP-IMG"
@@ -14387,6 +14448,7 @@ descendant_tag_list: {
   tag: "AMP-ANALYTICS"
   tag: "AMP-AUDIO"
   tag: "AMP-DATE-COUNTDOWN"
+  tag: "AMP-DATE-DISPLAY"
   tag: "AMP-EXPERIMENT"
   tag: "AMP-FIT-TEXT"
   tag: "AMP-FONT"
@@ -14548,6 +14610,14 @@ tags: {  # <amp-story-page-attachment> with href
       protocol: "https"
     }
   }
+  attrs: {
+    name: "cta-image"
+    value_url: {
+      # protocol: "http"  # TODO(honeybaderdontcare): readd once transformers in prod
+      protocol: "https"
+      allow_relative: false  # TODO(honeybaderdontcare): remove once transformers in prod
+    }
+  }
   child_tags: {
     mandatory_num_child_tags: 0
   }
@@ -14559,6 +14629,22 @@ tags: {  # <amp-story-page-attachment> with no href
   mandatory_ancestor: "AMP-STORY-PAGE"
   descendant_tag_list: "amp-story-page-attachment-allowed-descendants"
   mandatory_last_child: true
+  attrs: {
+    name: "cta-image"
+    value_url: {
+      # protocol: "http"  # TODO(honeybaderdontcare): readd once transformers in prod
+      protocol: "https"
+      allow_relative: false  # TODO(honeybaderdontcare): remove once transformers in prod
+    }
+  }
+  attrs: {
+    name: "cta-image-2"
+    value_url: {
+      # protocol: "http"  # TODO(honeybaderdontcare): readd once transformers in prod
+      protocol: "https"
+      allow_relative: false  # TODO(honeybaderdontcare): remove once transformers in prod
+    }
+  }
   attrs: {
     name: "layout"
     mandatory: true
@@ -14667,6 +14753,7 @@ descendant_tag_list {
   tag: "AMP-CAROUSEL"
   tag: "AMP-DAILYMOTION"
   tag: "AMP-DATE-COUNTDOWN"
+  tag: "AMP-DATE-DISPLAY"
   tag: "AMP-EMBEDLY-CARD"
   tag: "AMP-FACEBOOK"
   tag: "AMP-FACEBOOK-COMMENTS"
@@ -15612,6 +15699,124 @@ tags: {  # <amp-byside-content>
   }
 }
 #
+# Copyright 2020 The AMP HTML Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS-IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the license.
+#
+
+tags: {  # amp-stream-gallery
+  html_format: AMP
+  tag_name: "SCRIPT"
+  extension_spec: {
+    name: "amp-stream-gallery"
+    version: "1.0"
+    version: "latest"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # <amp-stream-gallery>
+  html_format: AMP
+  tag_name: "AMP-STREAM-GALLERY"
+  requires_extension: "amp-stream-gallery"
+  attr_lists: "amp-stream-gallery-common"
+  attr_lists: "extended-amp-global"
+  spec_url: "https://github.com/ampproject/amphtml/blob/master/extensions/amp-stream-gallery/amp-stream-gallery.md"
+  amp_layout: {
+    supported_layouts: FILL
+    supported_layouts: FIXED
+    supported_layouts: FIXED_HEIGHT
+    supported_layouts: FLEX_ITEM
+    supported_layouts: INTRINSIC
+    supported_layouts: NODISPLAY
+    supported_layouts: RESPONSIVE
+  }
+}
+
+# Examples for media query / value pairs:
+# (min-width: 600px) and (min-height: 800px)  false, true
+# (min-width: 600px) false,(min-width: 600px) true,false
+# true
+attr_lists: {
+  name: "amp-stream-gallery-common"
+  attrs: {
+    name: "controls"
+    # Media query / (always|auto|never)
+    value_regex: "([^,]+\\s+(always|auto|never),\\s*)*(always|auto|never)"
+  }
+  attrs: {
+    name: "extra-space"
+    value: "between"
+  }
+  attrs: {
+    name: "loop"
+    # Media query / boolean pairs
+    value_regex: "([^,]+\\s+(true|false),\\s*)*(true|false)"
+  }
+  attrs: {
+    name: "min-visible-count"
+    # Media query / positive float pairs
+    value_regex: "([^,]+\\s+(\\d+(\\.\\d+)?),\\s*)*(\\d+(\\.\\d+)?)"
+  }
+  attrs: {
+    name: "max-visible-count"
+    # Media query / positive float pairs
+    value_regex: "([^,]+\\s+(\\d+(\\.\\d+)?),\\s*)*(\\d+(\\.\\d+)?)"
+  }
+  attrs: {
+    name: "min-item-width"
+    # Media query / positive integer pairs
+    value_regex: "([^,]+\\s+(\\d+),\\s*)*(\\d+)"
+  }
+  attrs: {
+    name: "max-item-width"
+    # Media query / positive integer pairs
+    value_regex: "([^,]+\\s+(\\d+),\\s*)*(\\d+)"
+  }
+  attrs: {
+    name: "outset-arrows"
+    # Media query / boolean pairs
+    value_regex: "([^,]+\\s+(true|false),\\s*)*(true|false)"
+  }
+  attrs: {
+    name: "peek"
+    # Media query / positive float pairs
+    value_regex: "([^,]+\\s+(\\d+(\\.\\d+)?),\\s*)*(\\d+(\\.\\d+)?)"
+  }
+  attrs: {
+    name: "slide-align"
+    # Media query / (start|center) pairs
+    value_regex: "([^,]+\\s+(start|center),\\s*)*(start|center)"
+  }
+  attrs: {
+    name: "snap"
+    # Media query / boolean pairs
+    value_regex: "([^,]+\\s+(true|false),\\s*)*(true|false)"
+  }
+
+  # amp-bind
+  attrs: { name: "[controls]" }
+  attrs: { name: "[extra-space]" }
+  attrs: { name: "[loop]" }
+  attrs: { name: "[min-visible-count]" }
+  attrs: { name: "[max-visible-count]" } # 0.1 only
+  attrs: { name: "[min-item-width]" }
+  attrs: { name: "[max-item-width]" }
+  attrs: { name: "[outset-arrows]" }
+  attrs: { name: "[peek]" }
+  attrs: { name: "[slide-align]" }
+  attrs: { name: "[snap]" }
+}
+#
 # Copyright 2019 The AMP HTML Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15728,6 +15933,8 @@ tags: { # <amp-sidebar> in amp-story
     marker: AUTOSCROLL
   }
   spec_url: "https://amp.dev/documentation/components/amp-sidebar/"
+  deprecation: "anchor tags or amp-story-player controls"
+  deprecation_url: "https://github.com/ampproject/amphtml/issues/33293"
 }
 tags: {  # amp-sidebar > nav
   html_format: AMP
@@ -15856,19 +16063,23 @@ tags: {  # <amp-nested-menu> <div amp-nested-submenu(-open/-close)>
   html_format: AMP
   tag_name: "DIV"
   spec_name: "div amp-nested-menu"
+  descriptive_name: "div amp-nested-menu"
   mandatory_ancestor: "AMP-NESTED-MENU"
   # submenus inside accordion do not display correctly due to styling of <amp-accordion>.
   disallowed_ancestor: "AMP-ACCORDION"
   attrs: {
     name: "amp-nested-submenu"
+    dispatch_key: NAME_VALUE_DISPATCH
     mandatory_oneof: "['amp-nested-submenu', 'amp-nested-submenu-close', 'amp-nested-submenu-open']"
   }
   attrs: {
     name: "amp-nested-submenu-close"
+    dispatch_key: NAME_VALUE_DISPATCH
     mandatory_oneof: "['amp-nested-submenu', 'amp-nested-submenu-close', 'amp-nested-submenu-open']"
   }
   attrs: {
     name: "amp-nested-submenu-open"
+    dispatch_key: NAME_VALUE_DISPATCH
     mandatory_oneof: "['amp-nested-submenu', 'amp-nested-submenu-close', 'amp-nested-submenu-open']"
   }
 }
@@ -17041,6 +17252,7 @@ tags: {  # amp-inline-gallery
   extension_spec: {
     name: "amp-inline-gallery"
     version: "0.1"
+    version: "1.0"
     version: "latest"
   }
   attr_lists: "common-extension-attrs"
@@ -17102,14 +17314,20 @@ tags: {  # <amp-inline-gallery-thumbnails>
       also_requires_attr: "aspect-ratio-width"
     }
   }
-  attrs: {
-    name: "aspect-ratio-width"
+  attrs: { 
+    name: "aspect-ratio-width" # 0.1 only
     # Non-zero number
     value_regex: "\\d+(\\.\\d+)?"
     disallowed_value_regex: "^0+(\\.0+)?$"
     trigger: {
       also_requires_attr: "aspect-ratio-height"
     }
+  }
+  attrs: { 
+    name: "aspect-ratio" # 1.0 only
+    # Non-zero number
+    value_regex: "\\d+(\\.\\d+)?"
+    disallowed_value_regex: "^0+(\\.0+)?$"
   }
   attrs: {
     name: "loop"
@@ -17437,6 +17655,7 @@ tags: {  # amp-timeago
   extension_spec: {
     name: "amp-timeago"
     version: "0.1"
+    version: "1.0"
     version: "latest"
   }
   attr_lists: "common-extension-attrs"

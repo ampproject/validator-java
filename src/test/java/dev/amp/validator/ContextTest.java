@@ -54,7 +54,7 @@ public class ContextTest {
      */
     @Test
     public void testUpdateFromTagResultsAncestorNoHead() throws TagValidationException {
-        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
+        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ampValidatorManager);
         final Context context = new Context(mockValidatorRules, MAX_BODY_LENGTH);
         final ParsedHtmlTag htmlTag = mock(ParsedHtmlTag.class);
         when(htmlTag.upperName()).thenReturn(UPPER_NAME);
@@ -92,7 +92,7 @@ public class ContextTest {
      */
     @Test
     public void testSatisfyMandatoryAlternativesFromTagSpec() throws TagValidationException {
-        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP, ampValidatorManager);
+        mockValidatorRules = new ParsedValidatorRules(ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ampValidatorManager);
         final Context context = new Context(mockValidatorRules, MAX_BODY_LENGTH);
 
         final ParsedTagSpec tagSpec = mock(ParsedTagSpec.class);

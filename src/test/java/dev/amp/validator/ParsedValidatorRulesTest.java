@@ -87,7 +87,7 @@ public class ParsedValidatorRulesTest {
         rulesBuilder.addTags(ValidatorProtos.TagSpec.newBuilder()
                 .setTagName("$REFERENCE_POINT")
                 .setSpecName("AMP-SELECTOR option")
-                .addHtmlFormat(ValidatorProtos.HtmlFormat.Code.AMP)
+                .addHtmlFormat(ValidatorProtos.HtmlFormat.Code.AMP4EMAIL)
                 .build());
         rulesBuilder.addTags(ValidatorProtos.TagSpec.newBuilder()
                 .addHtmlFormat(ValidatorProtos.HtmlFormat.Code.AMP4EMAIL)
@@ -688,10 +688,8 @@ public class ParsedValidatorRulesTest {
         Mockito.when(mockContext.satisfiesCondition("requires")).thenReturn(false);
         Mockito.when(mockContext.satisfiesCondition("excludes")).thenReturn(true);
         Mockito.when(mockContext.getTagspecsValidated()).thenReturn(ImmutableMap.of(0, true,
-                1, true,
                 2, true,
-                3, true,
-                4, true));
+                3, true));
         final ExtensionsContext mockExtContext = Mockito.mock(ExtensionsContext.class);
         Mockito.when(mockExtContext.unusedExtensionsRequired()).thenReturn(ImmutableList.of("unused_ext_1"));
 

@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static dev.amp.validator.utils.DispatchKeyUtils.makeDispatchKey;
+
 /**
  * This class provides access to a TagSpec and a tag id
  * which is unique within its context, the ParsedValidatorRules.
@@ -96,6 +98,36 @@ public class ParsedTagSpec {
         // explicitAttrsOnly is true).
         if (!tagSpec.hasExplicitAttrsOnly() && !this.isReferencePoint) {
             this.mergeAttrs(parsedAttrSpecs.getGlobalAttrs(), parsedAttrSpecs);
+        }
+
+        this.dispatchKeys = new ArrayList<>();
+        for (final String attrName : this.attrsByName.keySet()) {
+            final ValidatorProtos.AttrSpec attrSpecKey = this.attrsByName.get(attrName);
+            // negative attr ids are simple attrs (only name set).
+            if (attrSpecKey == null || (attrSpecKey.getName() != null
+                    && attrSpecKey.getAllFields().size() == 1)) {
+                continue;
+            }
+
+            ParsedAttrSpec parsedAttrSpec = parsedAttrSpecs.getParsedAttrSpec(tagSpec.getTagName(), attrName, "", attrSpecKey);
+
+            final ValidatorProtos.AttrSpec attrSpec = parsedAttrSpec.getSpec();
+            if (attrSpec.hasDispatchKey()) {
+                final String mandatoryParent =
+                        tagSpec.hasMandatoryParent() ? tagSpec.getMandatoryParent() : "";
+                if (attrSpec.getValueList().size() > 0) {
+                    this.dispatchKeys.add(makeDispatchKey(
+                            attrSpec.getDispatchKey(), attrName, attrSpec.getValue(0).toLowerCase(),
+                            mandatoryParent));
+                } else if (attrSpec.getValueCaseiList().size() > 0) {
+                    this.dispatchKeys.add(makeDispatchKey(
+                            attrSpec.getDispatchKey(), attrName, attrSpec.getValueCasei(0),
+                            mandatoryParent));
+                } else {
+                    this.dispatchKeys.add(makeDispatchKey(
+                            attrSpec.getDispatchKey(), attrName, "", mandatoryParent));
+                }
+            }
         }
     }
 
@@ -378,7 +410,7 @@ public class ParsedTagSpec {
             }
             if (spec.getName().equals("type") && spec.getValueCaseiList().size() > 0) {
                 for (final String v : spec.getValueCaseiList()) {
-                    if ("application/json".equals(v)) {
+                    if ("application/json".equals(v) || "application/ld+json".equals(v)) {
                         this.isTypeJson = true;
                         break;
                     }
@@ -391,6 +423,23 @@ public class ParsedTagSpec {
                 this.attrsCanSatisfyExtension = true;
             }
         }
+    }
+
+    /**
+     * Returns an array (typically empty) of all unique dispatch keys for this
+     * tagspec. A dispatch key is a combination of attribute name, attribute
+     * value, and / or tag parent. If multiple TagSpecs have the same dispatch
+     * key, then the Tagwith the first instance of that dispatch key is used.
+     * When an encounttag matches this dispatch key, it is validated first
+     * against that first TagSpec in order to improve validation performance and
+     * error message selection. Not all TagSpecs have a dispatch key. If the
+     * attribute value is used (either value or value_casei), uses the first
+     * value from the protoascii.
+     *
+     * @return dispatchKeys
+     */
+    public List<String> getDispatchKeys() {
+        return this.dispatchKeys;
     }
 
     /**
@@ -432,6 +481,11 @@ public class ParsedTagSpec {
      * ParsedAttributes keyed by name.
      */
     private Map<String, ValidatorProtos.AttrSpec> attrsByName;
+
+    /**
+     * dispatchKeys associated dispatch keys.
+     */
+    private List<String> dispatchKeys;
 
     /**
      * Attributes that are mandatory for this tag to legally validate.
