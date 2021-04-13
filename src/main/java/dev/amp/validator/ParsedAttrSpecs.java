@@ -54,20 +54,22 @@ public class ParsedAttrSpecs {
     /**
      * Returns the ParsedAttrSpec.
      *
-     * @param name     the attr spec name.
+     * @param tagName  the tag spec name.
+     * @param attrName the attr spec name.
      * @param value    the attr spec value.
      * @param attrSpec the AttributeSpec.
      * @return returns the ParsedAttrSpec.
      */
-    public ParsedAttrSpec getParsedAttrSpec(@Nonnull final String name,
+    public ParsedAttrSpec getParsedAttrSpec(@Nonnull final String tagName,
+                                            @Nonnull final String attrName,
                                             @Nonnull final String value,
                                             @Nonnull final ValidatorProtos.AttrSpec attrSpec) {
-        final String key = name + value;
+        final String key = tagName + attrName + value;
         if (this.parsedAttrSpecs.containsKey(key)) {
             return parsedAttrSpecs.get(key);
         }
 
-        final ParsedAttrSpec parsed = new ParsedAttrSpec(attrSpec, name);
+        final ParsedAttrSpec parsed = new ParsedAttrSpec(attrSpec, attrName);
         this.parsedAttrSpecs.put(key, parsed);
 
         return parsed;

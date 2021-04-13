@@ -23,6 +23,7 @@
 package dev.amp.validator.selector;
 
 import com.steadystate.css.parser.Token;
+import dev.amp.validator.css.CssValidationException;
 import dev.amp.validator.css.TokenType;
 import dev.amp.validator.visitor.SelectorVisitor;
 
@@ -71,8 +72,9 @@ public class PseudoSelector extends Selector {
     /**
      * visits a selector
      * @param visitor a SelectorVisitor instance
+     * @throws CssValidationException CssValidationException
      */
-    public void accept(@Nonnull final SelectorVisitor visitor) {
+    public void accept(@Nonnull final SelectorVisitor visitor) throws CssValidationException {
         visitor.visitPseudoSelector(this);
     }
 
@@ -83,6 +85,22 @@ public class PseudoSelector extends Selector {
     @Override
     public TokenType getTokenType() {
         return TokenType.PSEUDO_SELECTOR;
+    }
+
+    /**
+     * if is a class
+     * @return true if isClass
+     */
+    public boolean isClass() {
+        return isClass;
+    }
+
+    /**
+     * getter for name
+     * @return the name of selector
+     */
+    public String getName() {
+        return name;
     }
 
     /**

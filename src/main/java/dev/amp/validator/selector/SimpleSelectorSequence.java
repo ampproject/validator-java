@@ -48,11 +48,10 @@ public class SimpleSelectorSequence extends Selector {
     }
 
     @Override
-    public void forEachChild(final Consumer<Selector> selector) {
-//        lambda(this.typeSelector);
-//        for (const other of this.otherSelectors) {
-//            lambda(other);
-//        }
+    public void forEachChild(final Consumer<Selector> lambda) {
+        for (final Selector selector : this.otherSelectors) {
+            lambda.accept(selector);
+        }
     }
 
     @Override

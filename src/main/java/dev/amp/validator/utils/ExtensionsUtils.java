@@ -40,30 +40,14 @@ public final class ExtensionsUtils {
      * LTS
      */
     LTS,
-  }
-
-  /**
-   * Tests if a tag is an extension script tag.
-   *
-   * @param tag to test
-   * @return true iff a tag is an extension script tag
-   */
-  public static boolean isExtensionScript(final ParsedHtmlTag tag) {
-    // checks for a falsy value of ExtensionScriptNameAttribute,
-    // falsy means null or empty string
-    return !extensionScriptNameAttribute(tag).equals("");
-  }
-
-  /**
-   * Tests if a tag is the AMP runtime script tag.
-   *
-   * @param tag to test
-   * @return true iff a tag is the AMP runtime script tag.
-   */
-  public static boolean isAmpRuntimeScript(final ParsedHtmlTag tag) {
-    final String src = (tag.attrsByKey().get("src") != null) ? tag.attrsByKey().get("src") : "";
-    return isAsyncScriptTag(tag) && !isExtensionScript(tag)
-      && src.startsWith("https://cdn.ampproject.org/") && src.endsWith("/v0.js");
+    /**
+     * MODULE_NOMODULE
+     */
+    MODULE_NOMODULE,
+    /**
+     * MODULE_NOMODULE
+     */
+    MODULE_NOMODULE_LTS
   }
 
   /**
@@ -73,69 +57,24 @@ public final class ExtensionsUtils {
    * @return true iff a tag is an async script tag.
    */
   public static boolean isAsyncScriptTag(final ParsedHtmlTag tag) {
-    return tag.upperName().equals("SCRIPT") && tag.attrsByKey().
+    return "SCRIPT".equals(tag.upperName()) && tag.attrsByKey().
       containsKey("async") && tag.attrsByKey().containsKey("src");
-  }
-
-  /**
-   * Tests if a URL is for the LTS version of a script.
-   *
-   * @param url to test
-   * @return true iff a URL is for the LTS version of a script.
-   */
-  public static boolean isLtsScriptUrl(@Nonnull final String url) {
-    return url.startsWith("https://cdn.ampproject.org/lts/");
-  }
-
-  /**
-   * Gets the name attribute for an extension script tag.
-   *
-   * @param tag to extract name attribute from
-   * @return name attribute for an extension script tag
-   */
-  public static String extensionScriptNameAttribute(@Nonnull final ParsedHtmlTag tag) {
-    if (tag.upperName().equals("SCRIPT")) {
-      final String[] myStringArray = new String[]{"custom-element", "custom-template", "host-service"};
-      for (final String attribute : myStringArray) {
-        if (tag.attrsByKey().containsKey(attribute)) {
-          return attribute;
-        }
-      }
-    }
-    return "";
-  }
-
-  /**
-   * Gets the extension name for an extension script tag.
-   *
-   * @param tag to get extension name from
-   * @return extension name for an extension script tag
-   */
-  public static String extensionScriptName(final ParsedHtmlTag tag) {
-    final String nameAttr = extensionScriptNameAttribute(tag);
-    if (nameAttr != null) {
-      // Extension script names are required to be in lowercase by the validator,
-      // so we don't need to lowercase them here.
-      return (tag.attrsByKey().get(nameAttr) != null) ? tag.attrsByKey().get(nameAttr) : "";
-    }
-    return "";
   }
 
   /**
    * Validates that LTS is used for either all script sources or none.
    *
-   * @param srcAttr the attr to check
+   * @param tag tag
    * @param tagSpec the spec to check against
    * @param context global context
    * @param result  record to update
    */
-  public static void validateScriptSrcAttr(@Nonnull final String srcAttr, @Nonnull final ValidatorProtos.TagSpec tagSpec,
+  public static void validateScriptSrcAttr(@Nonnull final ParsedHtmlTag tag, @Nonnull final ValidatorProtos.TagSpec tagSpec,
                                            @Nonnull final Context context, @Nonnull final ValidatorProtos.ValidationResult.Builder result) {
     if (context.getScriptReleaseVersion() == UNKNOWN) {
       return;
     }
-    final ExtensionsUtils.ScriptReleaseVersion scriptReleaseVersion = isLtsScriptUrl(srcAttr) ? LTS
-      : ExtensionsUtils.ScriptReleaseVersion.STANDARD;
+    final ScriptReleaseVersion scriptReleaseVersion = getScriptReleaseVersion(tag);
     if (context.getScriptReleaseVersion() != scriptReleaseVersion) {
       List<String> params = new ArrayList<>();
       final String specName = (tagSpec.hasExtensionSpec())
@@ -150,4 +89,26 @@ public final class ExtensionsUtils {
         result);
     }
   }
+
+  /**
+   * @param tag
+   * @return ScriptReleaseVersion of tag
+   */
+  public static ScriptReleaseVersion getScriptReleaseVersion(@Nonnull final ParsedHtmlTag tag) {
+    if (tag.isModuleLtsScriptTag() || tag.isNomoduleLtsScriptTag()) {
+      return ScriptReleaseVersion.MODULE_NOMODULE_LTS;
+    }
+    if (tag.isModuleScriptTag() || tag.isNomoduleScriptTag()) {
+      return ScriptReleaseVersion.MODULE_NOMODULE;
+    }
+    if (tag.isLtsScriptTag()) {
+      return ScriptReleaseVersion.LTS;
+    }
+    return ScriptReleaseVersion.STANDARD;
+  }
+
+  /**
+   * list of extension script names
+   */
+  public static final String[] EXTENSION_SCRIPT_NAMES = {"custom-element", "custom-template", "host-service"};
 }

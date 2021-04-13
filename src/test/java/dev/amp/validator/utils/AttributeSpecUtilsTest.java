@@ -107,7 +107,7 @@ public class AttributeSpecUtilsTest {
     Mockito.when(parsedAttrSpec.getSpec()).thenReturn(attrSpecBuilder.build());
 
     ParsedAttrSpecs parsedAttrSpecs = Mockito.mock(ParsedAttrSpecs.class);
-    Mockito.when(parsedAttrSpecs.getParsedAttrSpec("HTML", "htmlValue",
+    Mockito.when(parsedAttrSpecs.getParsedAttrSpec("","HTML", "htmlValue",
       attrSpecBuilder.build())).thenReturn(parsedAttrSpec);
 
     ParsedValidatorRules parsedValidatorRules = Mockito.mock(ParsedValidatorRules.class);
@@ -181,7 +181,7 @@ public class AttributeSpecUtilsTest {
     Mockito.when(parsedAttrSpec.getSpec()).thenReturn(attrSpecBuilder.build());
 
     parsedAttrSpecs = Mockito.mock(ParsedAttrSpecs.class);
-    Mockito.when(parsedAttrSpecs.getParsedAttrSpec("HTML", "htmlValue", attrSpecBuilder.build())).thenReturn(parsedAttrSpec);
+    Mockito.when(parsedAttrSpecs.getParsedAttrSpec("","HTML", "htmlValue", attrSpecBuilder.build())).thenReturn(parsedAttrSpec);
 
     parsedValidatorRules = Mockito.mock(ParsedValidatorRules.class);
     Mockito.when(parsedValidatorRules.getParsedAttrSpecs()).thenReturn(parsedAttrSpecs);
@@ -243,7 +243,7 @@ public class AttributeSpecUtilsTest {
     Mockito.when(parsedAttrSpec.getSpec()).thenReturn(attrSpecBuilder.build());
 
     parsedAttrSpecs = Mockito.mock(ParsedAttrSpecs.class);
-    Mockito.when(parsedAttrSpecs.getParsedAttrSpec("HTML", "htmlValue", attrSpecBuilder.build())).thenReturn(parsedAttrSpec);
+    Mockito.when(parsedAttrSpecs.getParsedAttrSpec("", "HTML", "htmlValue", attrSpecBuilder.build())).thenReturn(parsedAttrSpec);
 
     parsedValidatorRules = Mockito.mock(ParsedValidatorRules.class);
     Mockito.when(parsedValidatorRules.getParsedAttrSpecs()).thenReturn(parsedAttrSpecs);
@@ -308,8 +308,8 @@ public class AttributeSpecUtilsTest {
     Mockito.when(parsedAttrSpec.getSpec()).thenReturn(attrSpecBuilder.build());
 
     parsedAttrSpecs = Mockito.mock(ParsedAttrSpecs.class);
-    Mockito.when(parsedAttrSpecs.getParsedAttrSpec("attr", "attrValue", attrSpecBuilder.build())).thenReturn(parsedAttrSpec);
-    Mockito.when(parsedAttrSpecs.getParsedAttrSpec("href", "hrefValue", attrSpecBuilder.build())).thenReturn(parsedAttrSpec);
+    Mockito.when(parsedAttrSpecs.getParsedAttrSpec("BASE", "attr", "attrValue", attrSpecBuilder.build())).thenReturn(parsedAttrSpec);
+    Mockito.when(parsedAttrSpecs.getParsedAttrSpec("BASE", "href", "hrefValue", attrSpecBuilder.build())).thenReturn(parsedAttrSpec);
 
     parsedValidatorRules = Mockito.mock(ParsedValidatorRules.class);
     Mockito.when(parsedValidatorRules.getParsedAttrSpecs()).thenReturn(parsedAttrSpecs);

@@ -53,10 +53,8 @@ The are several known bugs in the validation output.
 - the DOCTYPE tag is assumed to exist. Documents without the tag will fail to return an error.
 - Observance of afterbody mode is not implemented. Tags that appear following a body closing tag should be interpreted as within the body tag. Specs that mandate relationships between tags and ancestors related to the body tag will not account for this behavior and will return unexpected errors.
 - Attributes are de-duped by the internal html parser (the last value assigned to an attribute is the one returned to the handler). This leads to discrepancies in attribute validation to do with validation of the uniqueness of attributes and unexpected behavior in value validation.
-- Attributes are sanitized for disallowed characters. This affects operators with contextual meaning such as '{' or '['. This will affect amp-mustache tag validation.
 - Validation of URLs found within the HTML document may not return the same errors as the Node.js implementation. This stems from the fact that the internal URL library is lenient in terms of validating hostnames and characters used within the URL.
-- The parser obfuscates Unicode values, this is grievous as the amp symbol is never discovered (⚡), this package only handles the literal "amp4email."
-  Importantly, this validator prioritizes amp4email html content, enforcement of validator logic for other formats is not guaranteed.
+- This validator prioritizes amp4email html content, enforcement of validator logic for other formats is not guaranteed.
 - CSS validation does not yet configure for a max nodes value
 
 ## Contribute

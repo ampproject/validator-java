@@ -61,8 +61,6 @@ import java.util.regex.Pattern;
 import static dev.amp.validator.utils.CssSpecUtils.parseInlineStyle;
 import static dev.amp.validator.utils.CssSpecUtils.stripVendorPrefix;
 import static dev.amp.validator.utils.CssSpecUtils.validateAttrCss;
-import static dev.amp.validator.utils.ExtensionsUtils.isAmpRuntimeScript;
-import static dev.amp.validator.utils.ExtensionsUtils.isExtensionScript;
 import static dev.amp.validator.utils.ExtensionsUtils.validateScriptSrcAttr;
 
 /**
@@ -178,9 +176,9 @@ public final class AttributeSpecUtils {
             // If |spec| is the runtime or an extension script, validate that LTS is
             // either used by all pages or no pages.
             if (encounteredTag.attrs().getValue(i).equals("src")
-                    && (isExtensionScript(encounteredTag)
-                    || isAmpRuntimeScript(encounteredTag))) {
-                validateScriptSrcAttr(encounteredTag.attrs().getValue(i), spec, context, result.getValidationResult());
+                    && (encounteredTag.isExtensionScript()
+                    || encounteredTag.isAmpRuntimeScript())) {
+                validateScriptSrcAttr(encounteredTag, spec, context, result.getValidationResult());
             }
             if (!(attrsByName.containsKey(name))) {
                 // The HTML tag specifies type identifiers which are validated in
@@ -206,7 +204,7 @@ public final class AttributeSpecUtils {
                 // method.  For 'src', we also keep track whether we validated it this
                 // way, (seen_src_attr), since it's a mandatory attr.
                 if (spec.hasExtensionSpec()
-                        && validateAttributeInExtension(spec, context, name, value, result.getValidationResult())) {
+                        && validateAttrInExtension(spec, context, name, value, result.getValidationResult())) {
                     if (name.equals("src")) {
                         seenExtensionSrcAttr = true;
                     }
@@ -238,7 +236,7 @@ public final class AttributeSpecUtils {
             }
 
             final ParsedAttrSpec parsedAttrSpec =
-                    context.getRules().getParsedAttrSpecs().getParsedAttrSpec(name, value, attrSpec);
+                    context.getRules().getParsedAttrSpecs().getParsedAttrSpec(parsedTagSpec.getSpec().getTagName(), name, value, attrSpec);
             // If this attribute isn't used for these type identifiers, then error.
             if (!parsedAttrSpec.isUsedForTypeIdentifiers(
                     context.getTypeIdentifiers())) {
@@ -598,11 +596,16 @@ public final class AttributeSpecUtils {
      * @param value value.
      * @return {boolean}
      */
-    public static boolean attrValueHasTemplateSyntax(@Nonnull final String value) {
+    public static boolean attrValueHasTemplateSyntax(final String value) {
         // Mustache (https://mustache.github.io/mustache.5.html), our template
         // system, supports replacement tags that start with {{ and end with }}.
         // We relax attribute value rules if the value contains this syntax as we
         // will validate the post-processed tag instead.
+
+        if (value == null) {
+            return false;
+        }
+
         return MUSTACHE_TAG_PATTERN.matcher(value).matches();
     }
 
@@ -1222,7 +1225,7 @@ public final class AttributeSpecUtils {
      * @return returns value indicates whether or not the provided attribute is explained by validation function.
      * @throws TagValidationException the tag validation exception.
      */
-    public static boolean validateAttributeInExtension(@Nonnull final ValidatorProtos.TagSpec tagSpec,
+    public static boolean validateAttrInExtension(@Nonnull final ValidatorProtos.TagSpec tagSpec,
                                                        @Nonnull final Context context,
                                                        @Nonnull final String attrName,
                                                        @Nonnull final String attrValue,
@@ -1472,5 +1475,5 @@ public final class AttributeSpecUtils {
      * Src url Regex.
      */
     private static final Pattern SRC_URL_REGEX =
-            Pattern.compile("^https:\\/\\/cdn\\.ampproject\\.org\\/v0\\/(amp-[a-z0-9-]*)-([a-z0-9.]*)\\.js$");
+            Pattern.compile("^https:\\/\\/cdn\\.ampproject\\.org\\/v0\\/(amp-[a-z0-9-]*)-([a-z0-9.]*)\\.(?:m)?js(?:\\?f=sxg)?$");
 }

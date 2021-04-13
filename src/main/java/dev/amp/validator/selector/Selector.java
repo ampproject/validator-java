@@ -22,6 +22,7 @@
 
 package dev.amp.validator.selector;
 
+import dev.amp.validator.css.CssValidationException;
 import dev.amp.validator.css.Token;
 import dev.amp.validator.visitor.SelectorVisitor;
 
@@ -39,6 +40,8 @@ public abstract class Selector extends Token {
     /** @param selector selector function */
     public abstract void forEachChild(Consumer<Selector> selector);
 
-    /** @param visitor a SelectorVisitor instance */
-    public abstract void accept(SelectorVisitor visitor);
+    /** @param visitor a SelectorVisitor instance
+     * @throws CssValidationException
+     */
+    public abstract void accept(SelectorVisitor visitor) throws CssValidationException;
 }

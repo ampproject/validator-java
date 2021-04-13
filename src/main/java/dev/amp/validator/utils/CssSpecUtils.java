@@ -50,6 +50,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+
+import static dev.amp.validator.utils.TagSpecUtils.getTagDescriptiveName;
 
 /**
  * Methods to handle Css Spec processing.
@@ -429,29 +432,29 @@ public final class CssSpecUtils {
             return;
         }
 
-        final ParsedDocCssSpec maybeSpec = context.matchingDocCssSpec();
-        if (maybeSpec != null) {
+        final ParsedDocCssSpec maybeDocCssSpec = context.matchingDocCssSpec();
+        if (maybeDocCssSpec != null) {
             // Determine if we've exceeded the maximum bytes per inline style
             // requirements.
-            if (maybeSpec.getSpec().getMaxBytesPerInlineStyle() >= 0
-                    && attrByteLen > maybeSpec.getSpec().getMaxBytesPerInlineStyle()) {
+            if (maybeDocCssSpec.getSpec().getMaxBytesPerInlineStyle() >= 0
+                    && attrByteLen > maybeDocCssSpec.getSpec().getMaxBytesPerInlineStyle()) {
                 List<String> params = new ArrayList<>();
                 params.add(TagSpecUtils.getTagSpecName(tagSpec));
                 params.add(Integer.toString(attrByteLen));
-                params.add(Integer.toString(maybeSpec.getSpec().getMaxBytesPerInlineStyle()));
+                params.add(Integer.toString(maybeDocCssSpec.getSpec().getMaxBytesPerInlineStyle()));
 
-                if (maybeSpec.getSpec().getMaxBytesIsWarning()) {
+                if (maybeDocCssSpec.getSpec().getMaxBytesIsWarning()) {
                     context.addWarning(
                             ValidatorProtos.ValidationError.Code.INLINE_STYLE_TOO_LONG,
                             context.getLineCol(), params,
-                            maybeSpec.getSpec().getSpecUrl(), result.getValidationResult());
+                            maybeDocCssSpec.getSpec().getSpecUrl(), result.getValidationResult());
                     //TODO - tagchowder doesn't seem to maintain duplicate attributes.
                     //encounteredTag.dedupeAttrs();
                 } else {
                     context.addError(
                             ValidatorProtos.ValidationError.Code.INLINE_STYLE_TOO_LONG,
                             context.getLineCol(), params,
-                            maybeSpec.getSpec().getSpecUrl(), result.getValidationResult());
+                            maybeDocCssSpec.getSpec().getSpecUrl(), result.getValidationResult());
                 }
             }
 
@@ -459,20 +462,72 @@ public final class CssSpecUtils {
             // in the allowed list for this DocCssSpec, and have allowed values if
             // relevant.
             for (final Declaration declaration : declarations) {
-                // Allowed declarations vary by context. SVG has its own set of CSS
-                // declarations not supported generally in HTML.
-                ValidatorProtos.CssDeclaration cssDeclaration = maybeSpec.getCssDeclarationByName(declaration.getName());
-                if (parsedAttrSpec.getSpec().getValueDocCss()) {
-                    cssDeclaration = maybeSpec.getCssDeclarationSvgByName(declaration.getName());
+                final String firstIdent = declaration.firstIdent();
+                // Validate declarations only when they are not all allowed.
+                if (!maybeDocCssSpec.getSpec().getAllowAllDeclarationInStyle()) {
+                    // Allowed declarations vary by context. SVG has its own set of CSS
+                    // declarations not supported generally in HTML.
+                    final ValidatorProtos.CssDeclaration cssDeclaration =
+                            parsedAttrSpec.getSpec().getValueDocSvgCss()
+                                    ? maybeDocCssSpec.getCssDeclarationSvgByName(declaration.getName())
+                                    : maybeDocCssSpec.getCssDeclarationByName(declaration.getName());
+                    // If there is no matching declaration in the rules, then this
+                    // declaration is not allowed.
+                    if (cssDeclaration == null) {
+                        final List<String> params = new ArrayList<>();
+                        params.add(declaration.getName());
+                        params.add(attrName);
+                        params.add(getTagDescriptiveName(tagSpec));
+                        context.addError(
+                                ValidatorProtos.ValidationError.Code.DISALLOWED_PROPERTY_IN_ATTR_VALUE,
+                                context.getLineCol(),
+                                params,
+                                context.getRules().getStylesSpecUrl(), result.getValidationResult());
+                        // Don't emit additional errors for this declaration.
+                        continue;
+                    } else if (cssDeclaration.getValueCaseiList().size() > 0) {
+                        boolean hasValidValue = false;
+                        for (final String value : cssDeclaration.getValueCaseiList()) {
+                            if (firstIdent.toLowerCase().equals(value)) {
+                                hasValidValue = true;
+                                break;
+                            }
+                        }
+                        if (!hasValidValue) {
+                            // Declaration value not allowed.
+                            final List<String> params = new ArrayList<>();
+                            params.add(getTagDescriptiveName(tagSpec));
+                            params.add(declaration.getName());
+                            params.add(firstIdent);
+                            context.addError(
+                                    ValidatorProtos.ValidationError.Code
+                                            .CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE,
+                                    context.getLineCol(),
+                                    params,
+                                    context.getRules().getStylesSpecUrl(), result.getValidationResult());
+                        }
+                    } else if (cssDeclaration.hasValueRegexCasei()) {
+                        final Pattern valueRegex =
+                                context.getRules().getFullMatchCaseiRegex((cssDeclaration.getValueRegexCasei()));
+                        if (!valueRegex.matcher(firstIdent).matches()) {
+                            final List<String> params = new ArrayList<>();
+                            params.add(getTagDescriptiveName(tagSpec));
+                            params.add(declaration.getName());
+                            params.add(firstIdent);
+                            context.addError(
+                                    ValidatorProtos.ValidationError.Code
+                                            .CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE,
+                                    context.getLineCol(), /* params */
+                                    params,
+                                    context.getRules().getStylesSpecUrl(), result.getValidationResult());
+                        }
+                    }
                 }
-                // If there is no matching declaration in the rules, then this declaration
-                // is not allowed.
-                if (cssDeclaration == null) {
+                if (declaration.getName().contains("i-amphtml-")) {
                     List<String> params = new ArrayList<>();
                     params.add(declaration.getName());
                     params.add(attrName);
                     params.add(TagSpecUtils.getTagSpecName(tagSpec));
-
                     context.addError(
                             ValidatorProtos.ValidationError.Code.DISALLOWED_PROPERTY_IN_ATTR_VALUE,
                             context.getLineCol().getLineNumber() + declaration.getLine(),
@@ -482,31 +537,8 @@ public final class CssSpecUtils {
                             result.getValidationResult());
                     // Don't emit additional errors for this declaration.
                     continue;
-                } else if (cssDeclaration.getValueCaseiList().size() > 0) {
-                    boolean hasValidValue = false;
-                    final String firstIdent = declaration.firstIdent();
-                    for (final String value : cssDeclaration.getValueCaseiList()) {
-                        if (firstIdent.toLowerCase().equals(value)) {
-                            hasValidValue = true;
-                            break;
-                        }
-                    }
-                    if (!hasValidValue) {
-                        // Declaration value not allowed.
-                        List<String> params = new ArrayList<>();
-                        params.add(TagSpecUtils.getTagSpecName(tagSpec));
-                        params.add(declaration.getName());
-                        params.add(firstIdent);
-
-                        context.addError(
-                                ValidatorProtos.ValidationError.Code
-                                        .CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE,
-                                context.getLineCol(),
-                                params,
-                                context.getRules().getStylesSpecUrl(), result.getValidationResult());
-                    }
                 }
-                if (!maybeSpec.getSpec().getAllowImportant()) {
+                if (!maybeDocCssSpec.getSpec().getAllowImportant()) {
                     if (declaration.getImportant()) {
                         // TODO(gregable): Use a more specific error message for
                         // `!important` errors.
@@ -542,16 +574,16 @@ public final class CssSpecUtils {
                     // Validate that the URL itself matches the spec.
                     // Only image specs apply to inline styles. Fonts are only defined in
                     // @font-face rules which we require a full stylesheet to define.
-                    if (maybeSpec.getSpec().hasImageUrlSpec()) {
+                    if (maybeDocCssSpec.getSpec().hasImageUrlSpec()) {
                         final UrlErrorInStylesheetAdapter adapter = new UrlErrorInStylesheetAdapter(
                                 context.getLineCol().getLineNumber(), context.getLineCol().getColumnNumber());
                         AttributeSpecUtils.validateUrlAndProtocol(
-                                maybeSpec.getImageUrlSpec(), adapter, context, url.getUtf8Url(), tagSpec,
+                                maybeDocCssSpec.getImageUrlSpec(), adapter, context, url.getUtf8Url(), tagSpec,
                                 result.getValidationResult());
                     }
                     // Subtract off URL lengths from doc-level inline style bytes, if
                     // specified by the DocCssSpec.
-                    if (!maybeSpec.getSpec().getUrlBytesIncluded() && !UrlUtils.isDataUrl(url.getUtf8Url())) {
+                    if (!maybeDocCssSpec.getSpec().getUrlBytesIncluded() && !UrlUtils.isDataUrl(url.getUtf8Url())) {
                         result.setInlineStyleCssBytes(result.getInlineStyleCssBytes() - ByteUtils.byteLength(url.getUtf8Url()));
                     }
                 }

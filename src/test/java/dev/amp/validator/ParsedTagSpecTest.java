@@ -89,7 +89,7 @@ public class ParsedTagSpecTest {
 
         when(parsedHeightSpec.getSpec()).thenReturn(heightSpec.build());
 
-        when(parsedAttrSpecs.getParsedAttrSpec(anyString(), anyString(), any(ValidatorProtos.AttrSpec.class))).thenReturn(parsedHeightSpec);
+        when(parsedAttrSpecs.getParsedAttrSpec(anyString(), anyString(), anyString(), any(ValidatorProtos.AttrSpec.class))).thenReturn(parsedHeightSpec);
 
         tagSpecBuilder.setChildTags(ValidatorProtos.ChildTagSpec.newBuilder().setMandatoryMinNumChildTags(1).build());
         final ValidatorProtos.TagSpec tagSpec = tagSpecBuilder.build();

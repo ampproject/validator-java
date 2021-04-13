@@ -697,7 +697,7 @@ public class ParsedValidatorRulesTest {
 
         final ValidatorProtos.ValidationResult.Builder result = ValidatorProtos.ValidationResult.newBuilder();
 
-        rules.maybeEmitAlsoRequiresTagValidationErrors(mockContext, result);
+        rules.maybeEmitRequiresOrExcludesValidationErrors(mockContext, result);
 
         ArgumentCaptor<List> listCaptor = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<ValidatorProtos.ValidationError.Code> errorCodeCapture = ArgumentCaptor.forClass(ValidatorProtos.ValidationError.Code.class);

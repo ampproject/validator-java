@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import static dev.amp.validator.utils.TagSpecUtils.shouldRecordTagspecValidated;
 
@@ -61,6 +62,7 @@ public class ParsedValidatorRules {
         this.htmlFormat = htmlFormat;
         this.parsedTagSpecById = new HashMap<>();
         this.tagSpecByTagName = new HashMap<>();
+        this.extTagSpecIdsByExtName = new HashMap<>();
         this.mandatoryTagSpecs = new ArrayList<>();
         this.fullMatchRegexes = new HashMap<>();
         this.fullMatchCaseiRegexes = new HashMap<>();
@@ -79,6 +81,7 @@ public class ParsedValidatorRules {
         typeIdentifiers.put("actions", 0);
         typeIdentifiers.put("transformed", 0);
         typeIdentifiers.put("data-ampdevmode", 0);
+        typeIdentifiers.put("data-css-strict", 0);
 
         expandExtensionSpec();
 
@@ -148,6 +151,17 @@ public class ParsedValidatorRules {
             if (tag.hasMandatory()) {
                 this.mandatoryTagSpecs.add(tagSpecId);
             }
+            if (tag.hasExtensionSpec()) {
+                List<Integer> tagSpecList;
+                if (this.extTagSpecIdsByExtName.containsKey(tag.getExtensionSpec().getName())) {
+                   tagSpecList = this.extTagSpecIdsByExtName.get(tag.getExtensionSpec().getName());
+                    tagSpecList.add(tagSpecId);
+                } else {
+                    tagSpecList = new ArrayList<>();
+                    tagSpecList.add(tagSpecId);
+                    this.extTagSpecIdsByExtName.put(tag.getExtensionSpec().getName(), tagSpecList);
+                }
+            }
         }
 
         this.errorCodes = new HashMap<>();
@@ -174,63 +188,60 @@ public class ParsedValidatorRules {
     }
 
     /**
-     * TODO - verify ALL regex getXXX() to ensure proper implementation
+     * Find the regex pattern from the map. If found then returns. Otherwise create new pattern. In an event when
+     * a pattern syntax exception occurs, escape curly brace and recompile.
+     * @param regexMap the regex map
+     * @param regex the regex
+     * @param isFullMatch if we are looking for a full match
+     * @return the pattern
+     */
+    public Pattern findOrCreatePattern(@Nonnull final Map<String, Pattern> regexMap, @Nonnull final String regex, final boolean isFullMatch) {
+        if (regexMap.containsKey(regex)) {
+            return regexMap.get(regex);
+        }
+
+        Pattern pattern;
+        String newRegex = isFullMatch ? ("^(" + regex + ")$") : regex;
+        try {
+            pattern = Pattern.compile(newRegex);
+        } catch (final PatternSyntaxException pse) {
+            newRegex = regex.replace("{", "\\{");
+            newRegex = isFullMatch ? ("^(" + newRegex + ")$") : newRegex;
+            pattern = Pattern.compile(newRegex);
+        }
+
+        regexMap.put(regex, pattern);
+
+        return pattern;
+    }
+    /**
+     * Returns full match regex pattern.
      *
      * @param regex the regex.
      * @return returns the full match regex pattern.
      */
     public Pattern getFullMatchRegex(@Nonnull final String regex) {
-        String regexEscape = regex.replace("{", "\\{");
-
-        for (String fullMatchRegex : fullMatchRegexes.keySet()) {
-            if (fullMatchRegex.equals(regex)) {
-                return fullMatchRegexes.get(regexEscape);
-            }
-        }
-        String fullMatchRegex = "^(" + regexEscape + ")$";
-        Pattern pattern = Pattern.compile(fullMatchRegex);
-        fullMatchRegexes.put(regexEscape, pattern);
-
-        return pattern;
+        return findOrCreatePattern(fullMatchRegexes, regex, true);
     }
 
     /**
-     * @param caseiRegex case insensitive regex.
+     * Returns full match case insensitive regex pattern.
+     *
+     * @param regex case insensitive regex.
      * @return returns the full match case insensitive regex pattern.
      */
-    public Pattern getFullMatchCaseiRegex(@Nonnull final String caseiRegex) {
-        String caseiRegexEscape = caseiRegex.replace("{", "\\{");
-
-        for (String fullMatchRegex : fullMatchCaseiRegexes.keySet()) {
-            if (fullMatchRegex.equals(caseiRegexEscape)) {
-                return fullMatchCaseiRegexes.get(caseiRegexEscape);
-            }
-        }
-
-        Pattern pattern = Pattern.compile("^(" + caseiRegexEscape + ")$");
-        this.fullMatchCaseiRegexes.put(caseiRegexEscape, pattern);
-        return pattern;
+    public Pattern getFullMatchCaseiRegex(@Nonnull final String regex) {
+        return findOrCreatePattern(fullMatchCaseiRegexes, regex, true);
     }
 
     /**
      * Returns the partial match case insensitive match regex pattern.
      *
-     * @param caseiRegex the regex.
+     * @param regex the regex.
      * @return returns the partial match case insensitive match regex pattern.
      */
-    public Pattern getPartialMatchCaseiRegex(@Nonnull final String caseiRegex) {
-        final String caseiRegexEscape = caseiRegex.replace("{", "\\{");
-
-        for (String fullMatchRegex : partialMatchCaseiRegexes.keySet()) {
-            if (fullMatchRegex.equals(caseiRegexEscape)) {
-                return partialMatchCaseiRegexes.get(caseiRegexEscape);
-            }
-        }
-
-        Pattern pattern = Pattern.compile(caseiRegexEscape);
-        partialMatchCaseiRegexes.put(caseiRegexEscape, pattern);
-
-        return pattern;
+    public Pattern getPartialMatchCaseiRegex(@Nonnull final String regex) {
+        return findOrCreatePattern(partialMatchCaseiRegexes, regex, false);
     }
 
     /**
@@ -368,6 +379,11 @@ public class ParsedValidatorRules {
                                         @Nonnull final List<String> formatIdentifiers, @Nonnull final Context context,
                                         @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult) {
         boolean hasMandatoryTypeIdentifier = false;
+        boolean hasEmailTypeIdentifier = false;
+        boolean hasCssStrictTypeIdentifier = false;
+
+        // The named values should match up to `self` and AMP caches listed at
+        // https://cdn.ampproject.org/caches.json
         for (int i = 0; i < attrs.getLength(); i++) {
             // Verify this attribute is a type identifier. Other attributes are
             // validated in validateAttributes.
@@ -382,11 +398,11 @@ public class ParsedValidatorRules {
                         validationResult.addTypeIdentifier(typeIdentifier);
                         context.recordTypeIdentifier(typeIdentifier);
                     }
-                    // The type identifier "actions" and "transformed" are not considered
-                    // mandatory unlike other type identifiers.
-                    if (!typeIdentifier.equals("actions")
-                            && !typeIdentifier.equals("transformed")
-                            && !typeIdentifier.equals("data-ampdevmode")) {
+                    // The type identifier "transformed" is not considered mandatory
+                    // unlike other type identifiers.
+                    if (!typeIdentifier.equals("transformed")
+                            && !typeIdentifier.equals("data-ampdevmode")
+                            && !typeIdentifier.equals("data-css-strict")) {
                         hasMandatoryTypeIdentifier = true;
                     }
                     // The type identifier "transformed" has restrictions on it's value.
@@ -394,7 +410,7 @@ public class ParsedValidatorRules {
                     if ((typeIdentifier.equals("transformed") && !(attrs.getValue(i).equals("")))) {
                         Matcher reResult = TRANSFORMED_VALUE_REGEX.matcher(attrs.getValue(i));
                         if (reResult.matches()) {
-                            validationResult.setTransformerVersion(Integer.parseInt(reResult.group(1)));
+                            validationResult.setTransformerVersion(Integer.parseInt(reResult.group(2)));
                         } else {
                             final List<String> params = new ArrayList<>();
                             params.add(attrs.getLocalName(i));
@@ -417,6 +433,12 @@ public class ParsedValidatorRules {
                                 context.getLineCol(), /*params=*/new ArrayList<>(), /*url*/ "",
                                 validationResult);
                     }
+                    if (typeIdentifier.equals("amp4email")) {
+                        hasEmailTypeIdentifier = true;
+                    }
+                    if (typeIdentifier.equals("data-css-strict")) {
+                        hasCssStrictTypeIdentifier = true;
+                    }
                 } else {
                     final List<String> params = new ArrayList<>();
                     params.add(attrs.getLocalName(i));
@@ -428,6 +450,15 @@ public class ParsedValidatorRules {
                             validationResult);
                 }
             }
+        }
+        // If AMP Email format and not set to data-css-strict, then issue a warning
+        // that not having data-css-strict is deprecated. See b/179798751.
+        if (hasEmailTypeIdentifier && !hasCssStrictTypeIdentifier) {
+            context.addWarning(
+                    ValidatorProtos.ValidationError.Code.AMP_EMAIL_MISSING_STRICT_CSS_ATTR,
+                    context.getLineCol(), new ArrayList<String>(),
+            "https://github.com/ampproject/amphtml/issues/32587",
+                    validationResult);
         }
         if (!hasMandatoryTypeIdentifier) {
             // Missing mandatory type identifier (any AMP variant but "actions" or
@@ -641,7 +672,7 @@ public class ParsedValidatorRules {
                                                    @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult)
             throws TagValidationException {
         this.maybeEmitMandatoryTagValidationErrors(context, validationResult);
-        this.maybeEmitAlsoRequiresTagValidationErrors(context, validationResult);
+        this.maybeEmitRequiresOrExcludesValidationErrors(context, validationResult);
         this.maybeEmitMandatoryAlternativesSatisfiedErrors(
                 context, validationResult);
         this.maybeEmitDocSizeErrors(context, validationResult);
@@ -797,8 +828,7 @@ public class ParsedValidatorRules {
      * @param validationResult the ValidationResult.
      */
     public void maybeEmitAlsoRequiresTagValidationErrors(@Nonnull final Context context,
-                                                         @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult) {
-        for (final int tagSpecId : context.getTagspecsValidated().keySet()) {
+                                                         @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult) {        for (final int tagSpecId : context.getTagspecsValidated().keySet()) {
             final ParsedTagSpec parsedTagSpec = this.getByTagSpecId(tagSpecId);
             // Skip TagSpecs that aren't used for these type identifiers.
             if (!parsedTagSpec.isUsedForTypeIdentifiers(
@@ -835,6 +865,15 @@ public class ParsedValidatorRules {
                 final Integer tagSpecIdObj = getTagSpecIdBySpecName(requiresTagWarning);
                 if (tagSpecIdObj == null || !context.getTagspecsValidated().containsKey(tagSpecIdObj)) {
                     final ParsedTagSpec alsoRequiresTagspec = this.getByTagSpecId(tagSpecIdObj);
+                    // If there is an alternative tagspec for extension script tagspecs
+                    // that has been validated, then move on to the next
+                    // alsoRequiresTagWarning.
+                    if (alsoRequiresTagspec.getSpec().hasExtensionSpec() && alsoRequiresTagspec.getSpec().
+                            getSpecName().endsWith("extension script")
+                            && this.hasValidatedAlternativeTagSpec(
+                                    context, alsoRequiresTagspec.getSpec().getExtensionSpec().getName())) {
+                        continue;
+                    }
                     final List<String> params = new ArrayList<>();
                     params.add(TagSpecUtils.getTagSpecName(alsoRequiresTagspec.getSpec()));
                     params.add(TagSpecUtils.getTagSpecName(parsedTagSpec.getSpec()));
@@ -941,6 +980,9 @@ public class ParsedValidatorRules {
     /**
      * For every tagspec that contains an ExtensionSpec, we add several TagSpec
      * fields corresponding to the data found in the ExtensionSpec.
+     * The addition of module/nomodule extensions happens in validator_gen_js.py
+     * and are built as proper JavaScript classes. They will also be expanded
+     * by this method.
      */
     private void expandExtensionSpec() {
         final int numTags = this.ampValidatorManager.getRules().getTagsList().size();
@@ -971,6 +1013,24 @@ public class ParsedValidatorRules {
 
             this.ampValidatorManager.getRules().setTags(tagSpecId, tagSpecBuilder.build());
         }
+    }
+
+    /**
+     * check if tagspec has been validated.
+     * @param context the global context
+     * @param extName the nname of extension to check for
+     * @return true iff one of the alternative tagspec ids has been validated
+     */
+    private boolean hasValidatedAlternativeTagSpec(@Nonnull final Context context, final String extName) {
+        if (extName == null) {
+            return false;
+        }
+        for (final Integer alternativeTagSpecId : this.extTagSpecIdsByExtName.get(extName)) {
+            if (context.getTagspecsValidated().containsKey(alternativeTagSpecId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -1058,7 +1118,7 @@ public class ParsedValidatorRules {
     /**
      * Transformed value regex pattern.
      */
-    private static final Pattern TRANSFORMED_VALUE_REGEX = Pattern.compile("^\\w+;v=(\\d+)$");
+    private static final Pattern TRANSFORMED_VALUE_REGEX = Pattern.compile("^(bing|google|self);v=(\\d+)$");
 
     /**
      * Minimum bytes length.
@@ -1074,4 +1134,9 @@ public class ParsedValidatorRules {
      * this parsed doc specs.
      */
     private List<ParsedDocSpec> parsedDoc;
+
+    /**
+     * Extension tagspec ids keyed by extension name
+     */
+    private Map<String, List<Integer>> extTagSpecIdsByExtName;
 }

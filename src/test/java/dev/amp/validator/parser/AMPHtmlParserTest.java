@@ -32,11 +32,27 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class AMPHtmlParserTest {
   @BeforeClass
   public void init() throws Exception {
     ampHtmlParser = new AMPHtmlParser();
+  }
+
+  @Test
+  public void testAmpTimeAgo() {
+    try {
+      String inputHtml =
+              readFile(
+                      "test-cases/tags/testAmpTimeAgo.html");
+      final int maxNode = 10000;
+      ValidatorProtos.ValidationResult result =
+              ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
+      Assert.assertTrue(onlyErrorIsWarning(result));
+    } catch (final IOException ex) {
+      ex.printStackTrace();
+    }
   }
 
   @Test
@@ -49,6 +65,55 @@ public class AMPHtmlParserTest {
       ValidatorProtos.ValidationResult result =
               ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 0, "Expecting to have 0 error");
+      Assert.assertEquals(result.getStatus(), ValidatorProtos.ValidationResult.Status.PASS);
+    } catch (final IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  @Test
+  public void testCarousel() {
+    try {
+      String inputHtml =
+              readFile(
+                      "test-cases/tags/testAmpCarousel.html");
+      final int maxNode = 10000;
+      ValidatorProtos.ValidationResult result =
+              ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
+      Assert.assertEquals(result.getErrorsCount(), 0, "Expecting to have 0 error");
+      Assert.assertEquals(result.getStatus(), ValidatorProtos.ValidationResult.Status.PASS);
+    } catch (final IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  @Test
+  public void testTransformedValueRe() {
+    try {
+      String inputHtml =
+              readFile(
+                      "test-cases/tags/testTransformedValueRe.html");
+      final int maxNode = 10000;
+      ValidatorProtos.ValidationResult result =
+              ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
+      Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DISALLOWED_ATTR);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
+    } catch (final IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  @Test
+  public void testAmpList() {
+    try {
+      String inputHtml =
+              readFile(
+                      "test-cases/tags/testAmpList.html");
+      final int maxNode = 10000;
+      ValidatorProtos.ValidationResult result =
+              ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.EXIT_ON_FIRST_ERROR, maxNode);
+      Assert.assertEquals(result.getErrorsCount(), 0, "Expecting to have 0 error");
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.PASS);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -93,6 +158,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DISALLOWED_TAG);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -109,6 +175,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DISALLOWED_SCRIPT_TAG);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -125,6 +192,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DUPLICATE_UNIQUE_TAG);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -141,6 +209,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.WRONG_PARENT_TAG);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -157,6 +226,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DISALLOWED_TAG_ANCESTOR);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -178,6 +248,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.MANDATORY_TAG_ANCESTOR);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -199,6 +270,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.INCORRECT_NUM_CHILD_TAGS);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -220,6 +292,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DISALLOWED_CHILD_TAG_NAME);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -236,6 +309,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DISALLOWED_FIRST_CHILD_TAG_NAME);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -292,8 +366,10 @@ public class AMPHtmlParserTest {
       final int maxNode = 10000;
       ValidatorProtos.ValidationResult result =
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
-      Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
-      Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.MISSING_REQUIRED_EXTENSION);
+      Assert.assertEquals(result.getErrorsCount(), 2, "Expecting to have 2 error");
+      Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.AMP_EMAIL_MISSING_STRICT_CSS_ATTR);
+      Assert.assertTrue(result.getErrors(1).getCode() == ValidatorProtos.ValidationError.Code.MISSING_REQUIRED_EXTENSION);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -310,6 +386,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.SPECIFIED_LAYOUT_INVALID);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -327,6 +404,7 @@ public class AMPHtmlParserTest {
       Assert.assertEquals(result.getErrorsCount(), 2, "Expecting to have 2 errors");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DISALLOWED_TAG_ANCESTOR);
       Assert.assertTrue(result.getErrors(1).getCode() == ValidatorProtos.ValidationError.Code.TAG_REFERENCE_POINT_CONFLICT);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -343,6 +421,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DEPRECATED_TAG);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.PASS);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -359,6 +438,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.EXTENSION_UNUSED);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -375,6 +455,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.NON_WHITESPACE_CDATA_ENCOUNTERED);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -392,6 +473,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.MANDATORY_CDATA_MISSING_OR_INCORRECT);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -408,6 +490,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.INVALID_JSON_CDATA);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.PASS);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -427,6 +510,7 @@ public class AMPHtmlParserTest {
       Assert.assertEquals(result.getErrorsCount(), 2, "Expecting to have 2 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DISALLOWED_ATTR);
       Assert.assertTrue(result.getErrors(1).getCode() == ValidatorProtos.ValidationError.Code.MANDATORY_ATTR_MISSING);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
       // TODO : write a containsError helper method
     } catch (final IOException ex) {
       ex.printStackTrace();
@@ -444,6 +528,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.INVALID_ATTR_VALUE);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -477,6 +562,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.MANDATORY_ATTR_MISSING);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -493,6 +579,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.ATTR_MISSING_REQUIRED_EXTENSION);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -511,7 +598,8 @@ public class AMPHtmlParserTest {
       ValidatorProtos.ValidationResult result =
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
-      Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DISALLOWED_ATTR);
+      Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.TEMPLATE_IN_ATTR_NAME);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
       //Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.TEMPLATE_IN_ATTR_NAME);
     } catch (final IOException ex) {
       ex.printStackTrace();
@@ -529,6 +617,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.UNESCAPED_TEMPLATE_IN_ATTR_VALUE);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -545,6 +634,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.TEMPLATE_PARTIAL_IN_ATTR_VALUE);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -561,6 +651,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.MISSING_LAYOUT_ATTRIBUTES);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -577,6 +668,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.ATTR_DISALLOWED_BY_SPECIFIED_LAYOUT);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -593,6 +685,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.ATTR_DISALLOWED_BY_IMPLIED_LAYOUT);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -609,6 +702,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.ATTR_VALUE_REQUIRED_BY_LAYOUT);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -641,6 +735,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.INCONSISTENT_UNITS_FOR_WIDTH_AND_HEIGHT);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -657,6 +752,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.ATTR_REQUIRED_BUT_MISSING);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -673,6 +769,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DISALLOWED_PROPERTY_IN_ATTR_VALUE);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -689,6 +786,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.MISSING_URL);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -705,6 +803,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.DISALLOWED_RELATIVE_URL);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -721,6 +820,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.INVALID_URL_PROTOCOL);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -741,6 +841,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.STYLESHEET_TOO_LONG);
       Assert.assertTrue(result.getErrors(1).getCode() == ValidatorProtos.ValidationError.Code.DOCUMENT_SIZE_LIMIT_EXCEEDED);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
       Assert.assertEquals(result.getErrorsCount(), 2, "Expecting to have 2 error.");
     } catch (final IOException ex) {
       ex.printStackTrace();
@@ -758,6 +859,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.INLINE_STYLE_TOO_LONG);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error.");
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -774,6 +876,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error.");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_UNTERMINATED_COMMENT);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -794,7 +897,7 @@ public class AMPHtmlParserTest {
       Assert.assertTrue(result.getErrors(1).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_UNTERMINATED_STRING);
       Assert.assertTrue(result.getErrors(2).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_INVALID_DECLARATION);
       Assert.assertTrue(result.getErrors(3).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_INVALID_DECLARATION);
-
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -814,6 +917,7 @@ public class AMPHtmlParserTest {
         == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_STRAY_TRAILING_BACKSLASH);
       Assert.assertTrue(result.getErrors(1).getCode()
         == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_INVALID_DECLARATION);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -830,7 +934,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error.");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_INVALID_DECLARATION);
-
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -847,7 +951,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error.");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_INCOMPLETE_DECLARATION);
-
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -864,7 +968,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error.");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_DISALLOWED_MEDIA_TYPE);
-
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -881,7 +985,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error.");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE);
-
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -901,6 +1005,7 @@ public class AMPHtmlParserTest {
       Assert.assertTrue(result.getErrors(1).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_INVALID_AT_RULE);
       Assert.assertTrue(result.getErrors(2).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_INVALID_AT_RULE);
       Assert.assertTrue(result.getErrors(3).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_INVALID_AT_RULE);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -917,7 +1022,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error.");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_MALFORMED_MEDIA_QUERY);
-
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -934,7 +1039,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error.");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_DISALLOWED_MEDIA_FEATURE);
-
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -951,6 +1056,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_MISSING_URL);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -967,6 +1073,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_BAD_URL);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -981,8 +1088,10 @@ public class AMPHtmlParserTest {
       final int maxNode = 10000;
       ValidatorProtos.ValidationResult result =
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
-      Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
+      Assert.assertEquals(result.getErrorsCount(), 2, "Expecting to have 2 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.CSS_EXCESSIVELY_NESTED);
+      Assert.assertTrue(result.getErrors(1).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_ERROR_IN_PSEUDO_SELECTOR);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -1015,6 +1124,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.CSS_SYNTAX_INVALID_URL_PROTOCOL);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.FAIL);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -1049,6 +1159,7 @@ public class AMPHtmlParserTest {
         ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
       Assert.assertEquals(result.getErrorsCount(), 1, "Expecting to have 1 error");
       Assert.assertTrue(result.getErrors(0).getCode() == ValidatorProtos.ValidationError.Code.WARNING_EXTENSION_DEPRECATED_VERSION);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.PASS);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
@@ -1076,13 +1187,18 @@ public class AMPHtmlParserTest {
     final StringBuilder sb = new StringBuilder();
     final InputStream is =
       Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);
-    try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
       String currentLine;
       while ((currentLine = br.readLine()) != null) {
         sb.append(currentLine).append("\n");
       }
     }
     return sb.toString();
+  }
+
+  public static boolean onlyErrorIsWarning(final ValidatorProtos.ValidationResult result) {
+    return (result.getErrorsCount() == 1 && result.getErrors(0).getCode()
+            == ValidatorProtos.ValidationError.Code.AMP_EMAIL_MISSING_STRICT_CSS_ATTR);
   }
 
   /**

@@ -3204,6 +3204,146 @@ tags: {
   # TODO(b/167681900): update spec_url to cover these script release versions
   spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#required-markup"
 }
+attr_lists: {
+  name: "amphtml-module-engine-attrs"
+  attrs: {
+    name: "async"
+    mandatory: true
+    value: ""
+  }
+  attrs: {
+    name: "crossorigin"
+    mandatory: true
+    value: "anonymous"
+  }
+  attrs: {
+    name: "type"
+    mandatory: true
+    value_casei: "module"
+    dispatch_key: NAME_VALUE_DISPATCH
+  }
+}
+attr_lists: {
+  name: "amphtml-nomodule-engine-attrs"
+  attrs: {
+    name: "async"
+    mandatory: true
+    value: ""
+  }
+  attrs: {
+    name: "crossorigin"
+    value: "anonymous"
+  }
+  attrs: {
+    name: "nomodule"
+    mandatory: true
+    value: ""
+  }
+  attrs: {
+    name: "type"
+    value_casei: "text/javascript"
+  }
+}
+tags: {
+  html_format: AMP
+  enabled_by: "transformed"
+  tag_name: "SCRIPT"
+  spec_name: "amphtml module LTS engine script"
+  descriptive_name: "amphtml module LTS engine script"
+  mandatory_alternatives: "amphtml engine script"
+  unique: true
+  mandatory_parent: "HEAD"
+  satisfies: "amphtml module LTS engine script"
+  requires: "amphtml nomodule LTS engine script"
+  attr_lists: "nonce-attr"
+  attr_lists: "amphtml-module-engine-attrs"
+  attrs: {
+    name: "src"
+    mandatory: true
+    value: "https://cdn.ampproject.org/lts/v0.mjs"
+    dispatch_key: NAME_VALUE_DISPATCH
+  }
+  cdata: {
+    whitespace_only: true
+  }
+  # TODO(b/167681900): update spec_url to cover these script release versions
+  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#required-markup"
+}
+tags: {
+  html_format: AMP
+  enabled_by: "transformed"
+  tag_name: "SCRIPT"
+  spec_name: "amphtml nomodule LTS engine script"
+  descriptive_name: "amphtml nomdule LTS engine script"
+  mandatory_alternatives: "amphtml engine script"
+  unique: true
+  mandatory_parent: "HEAD"
+  satisfies: "amphtml nomodule LTS engine script"
+  requires: "amphtml module LTS engine script"
+  attr_lists: "nonce-attr"
+  attr_lists: "amphtml-nomodule-engine-attrs"
+  attrs: {
+    name: "src"
+    mandatory: true
+    value: "https://cdn.ampproject.org/lts/v0.js"
+    dispatch_key: NAME_VALUE_DISPATCH
+  }
+  cdata: {
+    whitespace_only: true
+  }
+  # TODO(b/167681900): update spec_url to cover these script release versions
+  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#required-markup"
+}
+tags: {
+  html_format: AMP
+  enabled_by: "transformed"
+  tag_name: "SCRIPT"
+  spec_name: "amphtml module engine script"
+  descriptive_name: "amphtml module engine script"
+  mandatory_alternatives: "amphtml engine script"
+  unique: true
+  mandatory_parent: "HEAD"
+  satisfies: "amphtml module engine script"
+  requires: "amphtml nomodule engine script"
+  attr_lists: "nonce-attr"
+  attr_lists: "amphtml-module-engine-attrs"
+  attrs: {
+    name: "src"
+    mandatory: true
+    value: "https://cdn.ampproject.org/v0.mjs"
+    dispatch_key: NAME_VALUE_DISPATCH
+  }
+  cdata: {
+    whitespace_only: true
+  }
+  # TODO(b/167681900): update spec_url to cover these script release versions
+  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#required-markup"
+}
+tags: {
+  html_format: AMP
+  enabled_by: "transformed"
+  tag_name: "SCRIPT"
+  spec_name: "amphtml nomodule engine script"
+  descriptive_name: "amphtml nomodule engine script"
+  mandatory_alternatives: "amphtml engine script"
+  unique: true
+  mandatory_parent: "HEAD"
+  satisfies: "amphtml nomodule engine script"
+  requires: "amphtml module engine script"
+  attr_lists: "nonce-attr"
+  attr_lists: "amphtml-nomodule-engine-attrs"
+  attrs: {
+    name: "src"
+    mandatory: true
+    value: "https://cdn.ampproject.org/v0.js"
+    dispatch_key: NAME_VALUE_DISPATCH
+  }
+  cdata: {
+    whitespace_only: true
+  }
+  # TODO(b/167681900): update spec_url to cover these script release versions
+  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#required-markup"
+}
 tags: {
   html_format: AMP
   enabled_by: "transformed"
@@ -7756,7 +7896,7 @@ tags: {  # amp-story-player
   attr_lists: "common-extension-attrs"
   spec_url: "https://amp.dev/documentation/components/amp-story-player/"
 }
-tags: {  # <amp-story-player>
+tags: {
   html_format: AMP
   tag_name: "AMP-STORY-PLAYER"
   requires_extension: "amp-story-player"

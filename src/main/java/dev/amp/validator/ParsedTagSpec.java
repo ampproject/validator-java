@@ -388,7 +388,7 @@ public class ParsedTagSpec {
     private void populateAttrSpec(@Nonnull final String name, @Nonnull final String value,
                                   @Nonnull final ParsedAttrSpecs parsedAttrSpecs,
                                   @Nonnull final ValidatorProtos.AttrSpec attrSpec) {
-        final ParsedAttrSpec attr = parsedAttrSpecs.getParsedAttrSpec(name, value, attrSpec);
+        final ParsedAttrSpec attr = parsedAttrSpecs.getParsedAttrSpec(spec.getTagName(), name, value, attrSpec);
         if (attr != null) {
             final ValidatorProtos.AttrSpec spec = attr.getSpec();
             if (spec.hasMandatory()) {

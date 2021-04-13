@@ -78,7 +78,7 @@ public abstract class SelectorVisitor implements RuleVisitor {
         final TokenStream tokenStream = new TokenStream(qualifiedRule.getPrelude());
         tokenStream.consume();
 
-        SelectorsGroup maybeSelector;
+        Selector maybeSelector;
         try {
             maybeSelector = parseASelectorsGroup(tokenStream);
         } catch (final SelectorException selectorException) {
@@ -86,7 +86,9 @@ public abstract class SelectorVisitor implements RuleVisitor {
             return;
         }
 
-        final ArrayDeque<Selector> toVisit = maybeSelector.getElements();
+        ArrayDeque<Selector> selectorQueue = new ArrayDeque<>();
+        selectorQueue.push(maybeSelector);
+        final ArrayDeque<Selector> toVisit = selectorQueue;
 
         while (!toVisit.isEmpty()) {
 
@@ -106,8 +108,10 @@ public abstract class SelectorVisitor implements RuleVisitor {
      *
      * @param tokenStream to work with
      * @return selectors group from top of stream
+     * @throws CssValidationException CssValidationException
+     * @throws SelectorException SelectorException
      */
-    public static SelectorsGroup parseASelectorsGroup(@Nonnull final TokenStream tokenStream) throws CssValidationException, SelectorException {
+    public static Selector parseASelectorsGroup(@Nonnull final TokenStream tokenStream) throws CssValidationException, SelectorException {
         if (!isSimpleSelectorSequenceStart(tokenStream.current())) {
             final List<String> params = new ArrayList<>();
             params.add("style");
@@ -148,10 +152,7 @@ public abstract class SelectorVisitor implements RuleVisitor {
                 throw new SelectorException(errorToken);
             }
             if (elements.size() == 1) {
-                if (elements.getFirst() instanceof SelectorsGroup) {
-                    return (SelectorsGroup) elements.getFirst();
-                }
-                throw new CssValidationException("Expected SelectorsGroup as first element of Selectors collection.");
+                return elements.getFirst();
             }
             return (SelectorsGroup) copyPosTo(start, new SelectorsGroup(elements));
         }
@@ -172,14 +173,16 @@ public abstract class SelectorVisitor implements RuleVisitor {
     /**
      *
      * @param attrSelector
+     * @throws CssValidationException CssValidationException
      */
-    public abstract void visitAttrSelector(@Nonnull AttrSelector attrSelector);
+    public abstract void visitAttrSelector(@Nonnull AttrSelector attrSelector) throws CssValidationException;
 
     /**
      *
      * @param pseudoSelector
+     * @throws CssValidationException CssValidationException
      */
-    public abstract void visitPseudoSelector(@Nonnull PseudoSelector pseudoSelector);
+    public abstract void visitPseudoSelector(@Nonnull PseudoSelector pseudoSelector) throws CssValidationException;
 
     /**
      *
