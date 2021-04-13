@@ -827,8 +827,9 @@ public class ParsedValidatorRules {
      * @param context          the Context.
      * @param validationResult the ValidationResult.
      */
-    public void maybeEmitAlsoRequiresTagValidationErrors(@Nonnull final Context context,
-                                                         @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult) {        for (final int tagSpecId : context.getTagspecsValidated().keySet()) {
+    public void maybeEmitRequiresOrExcludesValidationErrors(@Nonnull final Context context,
+                                                            @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult) {
+        for (final int tagSpecId : context.getTagspecsValidated().keySet()) {
             final ParsedTagSpec parsedTagSpec = this.getByTagSpecId(tagSpecId);
             // Skip TagSpecs that aren't used for these type identifiers.
             if (!parsedTagSpec.isUsedForTypeIdentifiers(

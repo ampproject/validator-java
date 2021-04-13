@@ -109,7 +109,7 @@ public class ParsedTagSpec {
                 continue;
             }
 
-            ParsedAttrSpec parsedAttrSpec = parsedAttrSpecs.getParsedAttrSpec(attrName, "", attrSpecKey);
+            ParsedAttrSpec parsedAttrSpec = parsedAttrSpecs.getParsedAttrSpec(tagSpec.getTagName(), attrName, "", attrSpecKey);
 
             final ValidatorProtos.AttrSpec attrSpec = parsedAttrSpec.getSpec();
             if (attrSpec.hasDispatchKey()) {
