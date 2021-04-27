@@ -253,6 +253,9 @@ public class Canonicalizer {
 
         while (!(CssTokenUtil.getTokenType(tokenStream.next()) == TokenType.SEMICOLON
                         || CssTokenUtil.getTokenType(tokenStream.next()) == TokenType.EOF_TOKEN)) {
+            while (CssTokenUtil.getTokenType(tokenStream.next()) == TokenType.WHITESPACE) {
+                tokenStream.consume();
+            }
             tokenStream.consume();
             if (!consumeAComponentValue(tokenStream, decl.getValue(), /*depth*/0)) {
                 final List<String> params = new ArrayList<>();

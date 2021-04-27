@@ -52,6 +52,7 @@ public final class CssTokenUtil {
 
     static {
         KIND_TO_TOKENTYPE = new HashMap<>();
+        KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.NUMBER, TokenType.NUMBER);
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.S, TokenType.WHITESPACE);
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.EOF, TokenType.EOF_TOKEN);
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.ATKEYWORD, TokenType.AT_KEYWORD);

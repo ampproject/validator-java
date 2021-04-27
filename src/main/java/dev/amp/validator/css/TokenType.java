@@ -108,5 +108,7 @@ public enum TokenType {
     /** SUBSTRING_MATCH */
     SUBSTRING_MATCH,
     /** DASH_MATCH */
-    DASH_MATCH;
+    DASH_MATCH,
+    /** NUMBER */
+    NUMBER;
 }

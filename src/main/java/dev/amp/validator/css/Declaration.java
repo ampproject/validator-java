@@ -86,10 +86,19 @@ public class Declaration extends Rule {
         if (CssTokenUtil.getTokenType(this.value.get(0)) == TokenType.IDENT) {
             return this.value.get(0).toString();
         }
+
+        if (CssTokenUtil.getTokenType(this.value.get(0)) == TokenType.NUMBER) {
+            return this.value.get(0).image;
+        }
+
         if (this.value.size() >= 2
-                && (CssTokenUtil.getTokenType(this.value.get(0)) == TokenType.WHITESPACE)
-                && CssTokenUtil.getTokenType(this.value.get(1)) == TokenType.IDENT) {
-            return this.value.get(1).toString();
+                && (CssTokenUtil.getTokenType(this.value.get(0)) == TokenType.WHITESPACE)) {
+            if (CssTokenUtil.getTokenType(this.value.get(1)) == TokenType.IDENT) {
+                return this.value.get(1).toString();
+            }
+            if (CssTokenUtil.getTokenType(this.value.get(1)) == TokenType.NUMBER) {
+                return this.value.get(1).image;
+            }
         }
         return "";
     }
