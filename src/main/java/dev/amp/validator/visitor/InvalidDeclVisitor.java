@@ -4,6 +4,7 @@ import dev.amp.validator.Context;
 import dev.amp.validator.ValidatorProtos;
 import dev.amp.validator.css.Declaration;
 import dev.amp.validator.css.ParsedDocCssSpec;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class InvalidDeclVisitor implements RuleVisitor {
                         context.getLineCol().getColumnNumber() + declaration.getCol(),
                         params,
                         this.spec.getSpec().getSpecUrl(), this.result);
-            } else if (!cssDeclaration.hasValueRegexCasei()) {
+            } else if (StringUtils.isNotBlank(cssDeclaration.getValueRegexCasei())) {
                 final Pattern valueRegex = this.context.getRules().getFullMatchCaseiRegex((cssDeclaration.getValueRegexCasei()));
                 if (!valueRegex.matcher(firstIdent).matches()) {
                     List<String> params = new ArrayList<>();

@@ -1,0 +1,176 @@
+<!doctype html>
+<html amp4email data-css-strict>
+<head>
+    <meta charset="utf-8">
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
+    <script async custom-element="amp-bind" src="https://cdn.ampproject.org/v0/amp-bind-0.1.js"></script>
+    <style amp4email-boilerplate>body{visibility:hidden}</style>
+    <style amp-custom>
+        .board {
+            display: grid;
+            grid-template-columns: 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69%;
+        }
+        .tray {
+            display: grid;
+            grid-template-columns: 7% 7% 5px 7% 5px 7% 5px 7% 5px 7% 5px 7% 5px 7% 7%;
+            text-align: center;
+            justify-content:center;
+        }
+        .cell {
+            background: #ECDBB0;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:4vw;
+            padding-bottom:100%;
+        }
+        .traycell {
+            background: #ECDBB0;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            display:flex;
+            font-size:4vw;
+            align-items:center;
+            justify-content:center;
+            position:relative;
+        }
+        .letter {
+            background: #ECDBB0;
+            justify-content:center;
+            display:flex;
+            position: absolute;
+            left:25%;
+            top:1px;
+        }
+        .score {
+            background: #ECDBB0;
+            justify-content:center;
+            font-size:2vw;
+            position:absolute;
+            bottom:1px;
+            right:2px;
+        }
+        .lettersel {
+            background: #DBECB0;
+            justify-content:center;
+            display:flex;
+            position: absolute;
+            left:25%;
+            top:1px;
+        }
+        .scoresel {
+            background: #DBECB0;
+            justify-content:center;
+            font-size:2vw;
+            position:absolute;
+            bottom:1px;
+            right:2px;
+        }
+        .sel {
+            background: #DBECB0;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:5vw;
+        }
+        .traysel {
+            background: #DBECB0;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:4vw;
+            position:relative;
+        }
+        .startcell {
+            background: #E18A73;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+        }
+        .fill {
+            background: white;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:4vw;
+            padding-top:12%;
+            padding-bottom:12%;
+        }
+        .new {
+            background: #CFE2F3;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:4vw;
+            padding-top:12%;
+            padding-bottom:12%;
+        }
+        .mine {
+            background: #CFa2a3;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:5vw;
+            padding-top:12%;
+            padding-bottom:12%;
+        }
+        .word {
+            color: #CD3C3C;
+            background: #ECDBB0;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:3.25vw;
+        }
+        .lett {
+            color: #161F8B;
+            background: #ECDBB0;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:3.25vw;
+        }
+        .cent {
+            border-width: 1px;
+            padding-bottom:100%;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            justify-content:center;
+            font-size: 4vw;
+        }
+    </style>
+</head>
+<body>
+</body>
+</html>
