@@ -100,8 +100,6 @@ public class ParsedTagSpec {
         if (!tagSpec.hasExplicitAttrsOnly() && !this.isReferencePoint) {
             this.mergeAttrs(tagSpec, parsedAttrSpecs.getGlobalAttrs(), parsedAttrSpecs);
         }
-
-        this.dispatchKeys = new ArrayList<>();
     }
 
     /**
@@ -336,7 +334,7 @@ public class ParsedTagSpec {
             } else {
                 populateAttrSpec(name, "", parsedAttrSpecs, attrSpec);
             }
-            
+
             parsedAttrSpecs.getParsedAttrSpec(tagSpec.getTagName(), name, "", attrSpec);
             if (attrSpec.hasDispatchKey()) {
                 final String mandatoryParent =
