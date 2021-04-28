@@ -118,12 +118,6 @@ public class ParsedValidatorRules {
                 this.tagSpecIdsToTrack.put(otherTag, true);
             }
 
-            final ParsedTagSpec parsed = new ParsedTagSpec(
-                    this.parsedAttrSpecs,
-                    shouldRecordTagspecValidated(tag, tagSpecId, this.tagSpecIdsToTrack),
-                    tag, tagSpecId);
-            this.parsedTagSpecById.put(tagSpecId, parsed);
-
             if (!tag.getTagName().equals("$REFERENCE_POINT")) {
                 if (!(tagSpecByTagName.containsKey(tag.getTagName()))) {
                     this.tagSpecByTagName.put(tag.getTagName(), new TagSpecDispatch());
@@ -289,9 +283,26 @@ public class ParsedValidatorRules {
      *
      * @param id tag spec id.
      * @return returns the ParsedTagSpec.
+     * @throws TagValidationException
      */
-    public ParsedTagSpec getByTagSpecId(final int id) {
-        return this.parsedTagSpecById.get(id);
+    public ParsedTagSpec getByTagSpecId(final int id) throws TagValidationException {
+        ParsedTagSpec parsed = this.parsedTagSpecById.get(id);
+        if (parsed != null) {
+            return parsed;
+        }
+        ValidatorProtos.TagSpec tag = this.ampValidatorManager.getRules().getTags(id);
+        if (tag == null) {
+            throw new TagValidationException("TagSpec is null for tag spec id " + id);
+        }
+        if (!isTagSpecCorrectHtmlFormat(tag)) {
+            throw new TagValidationException("TagSpec is invalid htmlformat for tag spec id " + id);
+        }
+        parsed = new ParsedTagSpec(
+                this.parsedAttrSpecs,
+                TagSpecUtils.shouldRecordTagspecValidated(tag, id, this.tagSpecIdsToTrack), tag,
+                id);
+        this.parsedTagSpecById.put(id, parsed);
+        return parsed;
     }
 
     /**
@@ -826,9 +837,11 @@ public class ParsedValidatorRules {
      *
      * @param context          the Context.
      * @param validationResult the ValidationResult.
+     * @throws TagValidationException
      */
     public void maybeEmitRequiresOrExcludesValidationErrors(@Nonnull final Context context,
-                                                            @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult) {
+                                                            @Nonnull final ValidatorProtos.ValidationResult.Builder validationResult)
+            throws TagValidationException {
         for (final int tagSpecId : context.getTagspecsValidated().keySet()) {
             final ParsedTagSpec parsedTagSpec = this.getByTagSpecId(tagSpecId);
             // Skip TagSpecs that aren't used for these type identifiers.

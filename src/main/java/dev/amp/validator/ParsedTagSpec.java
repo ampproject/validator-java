@@ -67,6 +67,7 @@ public class ParsedTagSpec {
         this.mandatoryAnyofs = new HashSet<>();
         this.mandatoryOneofs = new HashSet<>();
         this.implicitAttrspecs = new ArrayList<>();
+        this.dispatchKeys = new ArrayList<>();
         this.containsUrl = false;
 
         // Collect the attr spec ids for a given |tagspec|.
@@ -85,49 +86,19 @@ public class ParsedTagSpec {
         // (1) layout attrs (except when explicitAttrsOnly is true).
         if (!tagSpec.hasExplicitAttrsOnly() && tagSpec.getAmpLayout() != null
                 && !this.isReferencePoint) {
-            this.mergeAttrs(parsedAttrSpecs.getAmpLayoutAttrs(), parsedAttrSpecs);
+            this.mergeAttrs(tagSpec, parsedAttrSpecs.getAmpLayoutAttrs(), parsedAttrSpecs);
         }
         // (2) attributes specified within |tagSpec|.
-        this.mergeAttrs(tagSpec.getAttrsList(), parsedAttrSpecs);
+        this.mergeAttrs(tagSpec, tagSpec.getAttrsList(), parsedAttrSpecs);
 
         // (3) attributes specified via reference to an attr_list.
         for (final String attrLists : tagSpec.getAttrListsList()) {
-            this.mergeAttrs(parsedAttrSpecs.getAttrListByName(attrLists), parsedAttrSpecs);
+            this.mergeAttrs(tagSpec, parsedAttrSpecs.getAttrListByName(attrLists), parsedAttrSpecs);
         }
         // (4) attributes specified in the global_attr list (except when
         // explicitAttrsOnly is true).
         if (!tagSpec.hasExplicitAttrsOnly() && !this.isReferencePoint) {
-            this.mergeAttrs(parsedAttrSpecs.getGlobalAttrs(), parsedAttrSpecs);
-        }
-
-        this.dispatchKeys = new ArrayList<>();
-        for (final String attrName : this.attrsByName.keySet()) {
-            final ValidatorProtos.AttrSpec attrSpecKey = this.attrsByName.get(attrName);
-            // negative attr ids are simple attrs (only name set).
-            if (attrSpecKey == null || (attrSpecKey.getName() != null
-                    && attrSpecKey.getAllFields().size() == 1)) {
-                continue;
-            }
-
-            ParsedAttrSpec parsedAttrSpec = parsedAttrSpecs.getParsedAttrSpec(tagSpec.getTagName(), attrName, "", attrSpecKey);
-
-            final ValidatorProtos.AttrSpec attrSpec = parsedAttrSpec.getSpec();
-            if (attrSpec.hasDispatchKey()) {
-                final String mandatoryParent =
-                        tagSpec.hasMandatoryParent() ? tagSpec.getMandatoryParent() : "";
-                if (attrSpec.getValueList().size() > 0) {
-                    this.dispatchKeys.add(makeDispatchKey(
-                            attrSpec.getDispatchKey(), attrName, attrSpec.getValue(0).toLowerCase(),
-                            mandatoryParent));
-                } else if (attrSpec.getValueCaseiList().size() > 0) {
-                    this.dispatchKeys.add(makeDispatchKey(
-                            attrSpec.getDispatchKey(), attrName, attrSpec.getValueCasei(0),
-                            mandatoryParent));
-                } else {
-                    this.dispatchKeys.add(makeDispatchKey(
-                            attrSpec.getDispatchKey(), attrName, "", mandatoryParent));
-                }
-            }
+            this.mergeAttrs(tagSpec, parsedAttrSpecs.getGlobalAttrs(), parsedAttrSpecs);
         }
     }
 
@@ -338,10 +309,12 @@ public class ParsedTagSpec {
     /**
      * Merges the list of attrs into attrsByName, avoiding to merge in attrs
      * with names that are already in attrsByName.
+     * @param tagSpec tagSpec to merge.
      * @param attrs the list of attr specs.
      * @param parsedAttrSpecs the ParsedAttrSpec object.
      */
-    private void mergeAttrs(final List<ValidatorProtos.AttrSpec> attrs, final ParsedAttrSpecs parsedAttrSpecs) {
+    private void mergeAttrs(final ValidatorProtos.TagSpec tagSpec, final List<ValidatorProtos.AttrSpec> attrs,
+                            final ParsedAttrSpecs parsedAttrSpecs) {
         for (ValidatorProtos.AttrSpec attrSpec : attrs) {
             final String name = attrSpec.getName();
             if (attrsByName.containsKey(name)) {
@@ -360,6 +333,24 @@ public class ParsedTagSpec {
                 }
             } else {
                 populateAttrSpec(name, "", parsedAttrSpecs, attrSpec);
+            }
+
+            parsedAttrSpecs.getParsedAttrSpec(tagSpec.getTagName(), name, "", attrSpec);
+            if (attrSpec.hasDispatchKey()) {
+                final String mandatoryParent =
+                        tagSpec.hasMandatoryParent() ? tagSpec.getMandatoryParent() : "";
+                if (attrSpec.getValueList().size() > 0) {
+                    this.dispatchKeys.add(makeDispatchKey(
+                            attrSpec.getDispatchKey(), name, attrSpec.getValue(0).toLowerCase(),
+                            mandatoryParent));
+                } else if (attrSpec.getValueCaseiList().size() > 0) {
+                    this.dispatchKeys.add(makeDispatchKey(
+                            attrSpec.getDispatchKey(), name, attrSpec.getValueCasei(0),
+                            mandatoryParent));
+                } else {
+                    this.dispatchKeys.add(makeDispatchKey(
+                            attrSpec.getDispatchKey(), name, "", mandatoryParent));
+                }
             }
         }
     }
