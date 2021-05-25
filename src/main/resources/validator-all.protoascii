@@ -26,7 +26,7 @@ min_validator_revision_required: 475
 # newer versions of the spec file. This is currently a Google internal
 # mechanism, validator.js does not use this facility. However, any
 # change to this file (validator-main.js) requires updating this revision id.
-spec_file_revision: 1165
+spec_file_revision: 1188
 
 styles_spec_url: "https://amp.dev/documentation/guides-and-tutorials/develop/style_and_layout/style_pages/"
 script_spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/validation-workflow/validation_errors/#custom-javascript-is-not-allowed"
@@ -2613,6 +2613,7 @@ attr_lists: {
   }
   attrs: { name: "checked" }
   attrs: { name: "disabled" }
+  attrs: { name: "form" }
   attrs: { name: "height" }
   attrs: {
     disabled_by: "amp4email"
@@ -2621,10 +2622,6 @@ attr_lists: {
   attrs: {
     disabled_by: "amp4email"
     name: "list"
-  }
-  attrs: {
-    disabled_by: "amp4email"
-    name: "enterkeyhint"
   }
   attrs: {
     disabled_by: "amp4email"
@@ -3370,11 +3367,30 @@ tags: {
     }
   }
 }
+# Enables early styling on fast failure to load v0.js or v0.mjs. See GitHub #22543.
+tags: {
+  html_format: AMP
+  enabled_by: "transformed"
+  tag_name: "SCRIPT"
+  spec_name: "script amp-onerror (v0.js or v0.mjs)"
+  descriptive_name: "script amp-onerror"
+  unique: true
+  mandatory_parent: "HEAD"
+  attrs: {
+    name: "amp-onerror"
+    value: ""
+    mandatory: true
+    dispatch_key: NAME_VALUE_DISPATCH
+  }
+  cdata: {
+    mandatory_cdata: "[].slice.call(document.querySelectorAll(\"script[src*='/v0.js'],script[src*='/v0.mjs']\")).forEach(function(s){s.onerror=function(){document.querySelector('style[amp-boilerplate]').textContent=''}})"
+  }
+}
 # Enables early styling on fast failure to load v0.js. See GitHub #22543.
 tags: {
   html_format: AMP
   tag_name: "SCRIPT"
-  spec_name: "script amp-onerror"
+  spec_name: "script amp-onerror (v0.js)"
   descriptive_name: "script amp-onerror"
   unique: true
   mandatory_parent: "HEAD"
@@ -3813,11 +3829,13 @@ tags: {
   mandatory_parent: "amp-img (transformed)"
   attrs: { name: "alt" }
   attrs: { name: "attribution" }
+  attrs: { name: "height" }
   attrs: { name: "object-fit" }
   attrs: { name: "object-position" }
   attrs: { name: "referrerpolicy" }
   attrs: { name: "sizes" }
   attrs: { name: "title" }
+  attrs: { name: "width" }
   attr_lists: "mandatory-src-or-srcset"
   # SSR requires these explicit attributes
   attrs: {
@@ -7899,7 +7917,6 @@ tags: {  # <amp-image-lightbox>
     supported_layouts: NODISPLAY
   }
 }
-
 #
 # Copyright 2018 The AMP HTML Authors. All Rights Reserved.
 #
@@ -8846,7 +8863,6 @@ tags: {  # <amp-pan-zoom>
     supported_layouts: RESPONSIVE
   }
 }
-
 #
 # Copyright 2018 The AMP HTML Authors. All Rights Reserved.
 #
@@ -9580,12 +9596,27 @@ tags: {
 tags: {  # amp-vimeo
   html_format: AMP
   tag_name: "SCRIPT"
+  satisfies: "amp-vimeo 0.1"
+  excludes: "amp-vimeo 1.0"
   extension_spec: {
     name: "amp-vimeo"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     requires_usage: EXEMPTED
     deprecated_allow_duplicates: true
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # amp-vimeo 1.0
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-vimeo 1.0"
+  excludes: "amp-vimeo 0.1"
+  extension_spec: {
+    name: "amp-vimeo"
+    version_name: "v1.0"
+    version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -11424,11 +11455,26 @@ tags: {
 # limitations under the license.
 #
 
-tags: {  # amp-lightbox
+tags: {  # amp-lightbox 1.0
   html_format: AMP
   tag_name: "SCRIPT"
+  satisfies: "amp-lightbox 1.0"
+  excludes: "amp-lightbox 0.1"
   extension_spec: {
     name: "amp-lightbox"
+    version_name: "v1.0"
+    version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # amp-lightbox 0.1 and latest
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-lightbox 0.1"
+  excludes: "amp-lightbox 1.0"
+  extension_spec: {
+    name: "amp-lightbox"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     requires_usage: EXEMPTED
@@ -11442,6 +11488,7 @@ tags: {  # amp-lightbox
   spec_name: "SCRIPT[custom-element=amp-lightbox] (AMP4ADS)"
   extension_spec: {
     name: "amp-lightbox"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
   }
@@ -11453,6 +11500,7 @@ tags: {  # amp-lightbox
   spec_name: "SCRIPT[custom-element=amp-lightbox] (AMP4EMAIL)"
   extension_spec: {
     name: "amp-lightbox"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
   }
@@ -11466,7 +11514,14 @@ tags: {  # <amp-lightbox>
   tag_name: "AMP-LIGHTBOX"
   requires_extension: "amp-lightbox"
   attrs: {
-    name: "animate-in"
+    name: "animate-in" # 0.1 only
+    value_casei: "fade-in"
+    value_casei: "fly-in-bottom"
+    value_casei: "fly-in-top"
+  }
+  attrs: {
+    disabled_by: "amp4email"
+    name: "animation" # 1.0 only
     value_casei: "fade-in"
     value_casei: "fly-in-bottom"
     value_casei: "fly-in-top"
@@ -11474,7 +11529,7 @@ tags: {  # <amp-lightbox>
   attrs: { name: "controls" }
   attrs: { name: "from" }
   attrs: {
-    name: "scrollable"
+    name: "scrollable" # 0.1 only
     disabled_by: "amp4email"
   }
   # <amp-bind>
@@ -12227,12 +12282,28 @@ tags: {  # <amp-hulu>
 # See the License for the specific language governing permissions and
 # limitations under the license.
 #
-tags: {  # amp-accordion
+
+tags: {  # amp-accordion for websites
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-accordion 1.0"
+  excludes: "amp-accordion 0.1"
+  extension_spec: {
+    name: "amp-accordion"
+    version_name: "v1.0"
+    version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # amp-accordion for ads
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "SCRIPT"
+  satisfies: "amp-accordion 0.1"
+  excludes: "amp-accordion 1.0"
   extension_spec: {
     name: "amp-accordion"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     requires_usage: EXEMPTED
@@ -12292,8 +12363,15 @@ tags: {  # <amp-accordion> > <section>
   }
   attrs: { name: "expanded" value: "" }
   # amp-bind
-  attrs: {
+  attrs: { # binding to this attribute in 1.0 performs no action (see #33493)
     name: "[data-expand]"
+  }
+  # amp-bind
+  attrs: {
+    # this attribute is used in 1.0 only
+    # this is disabled in AMP4EMAIL which only uses 0.1
+    disabled_by: "amp4email"
+    name: "[expanded]"
   }
   child_tags: {
     mandatory_num_child_tags: 2
@@ -12321,12 +12399,27 @@ tags: {  # <amp-accordion> > <section>
 # See the License for the specific language governing permissions and
 # limitations under the license.
 #
-tags: {
+tags: {  # amp-selector 1.0
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-selector 1.0"
+  excludes: "amp-selector 0.1"
+  extension_spec: {
+    name: "amp-selector"
+    version_name: "v1.0"
+    version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # amp-selector 0.1 and latest
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "SCRIPT"
+  satisfies: "amp-selector 0.1"
+  excludes: "amp-selector 1.0"
   extension_spec: {
     name: "amp-selector"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     requires_usage: EXEMPTED
@@ -12341,6 +12434,7 @@ tags: {
   extension_spec: {
     name: "amp-selector"
     # AMP4EMAIL doesn't allow version: "latest".
+    version_name: "v0.1"
     version: "0.1"
     requires_usage: EXEMPTED
   }
@@ -12509,18 +12603,30 @@ tags: {  # amp-geo (json)
 # limitations under the license.
 #
 
-tags: {  # amp-video
+tags: {  # amp-video 1.0
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-video 1.0"
+  excludes: "amp-video 0.1"
+  extension_spec: {
+    name: "amp-video"
+    version_name: "v1.0"
+    version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+
+tags: {  # amp-video 0.1
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "SCRIPT"
-  # Typically the extension_spec takes care of this, but we have
-  # a unique situation where we need to refer to this earlier in
-  # the rules processing for the also_requires_tag_warning below.
-  spec_name: "amp-video extension script"
+  satisfies: "amp-video 0.1"
+  excludes: "amp-video 1.0"
   extension_spec: {
     name: "amp-video"
     version: "0.1"
     version: "latest"
+    version_name: "v0.1"
     requires_usage: NONE
   }
   attr_lists: "common-extension-attrs"
@@ -12606,10 +12712,7 @@ tags: {  # <amp-video> not in amp-story.
   tag_name: "AMP-VIDEO"
   # There is an alternate spec for amp-video in amp-story.
   disallowed_ancestor: "AMP-STORY"
-  # Typically we'd require the extension j/s, but for historical reasons
-  # many pages don't have it, so it ends up late loaded and we warn, instead
-  # of making this a validation error.
-  also_requires_tag_warning: "amp-video extension script"
+  requires_extension: "amp-video"
   attrs: { name: "poster" }
   attr_lists: "extended-amp-global"
   attr_lists: "amp-video-common"
@@ -12632,7 +12735,7 @@ tags: {  # <amp-video> in amp-story-page-attachment (same rules as regular AMPHT
   tag_name: "AMP-VIDEO"
   spec_name: "amp-story >> amp-story-page-attachment >> amp-video"
   mandatory_ancestor: "AMP-STORY-PAGE-ATTACHMENT"
-  also_requires_tag_warning: "amp-video extension script"
+  requires_extension: "amp-video"
   attrs: { name: "poster" }
   attr_lists: "extended-amp-global"
   attr_lists: "amp-video-common"
@@ -12676,6 +12779,11 @@ tags: {  # <amp-video> in amp-story
     name: "poster"
     mandatory: true
   }
+  attrs: {
+    name: "cache"
+    requires_extension: "amp-cache-url"
+    value: "google"
+  }
   attr_lists: "extended-amp-global"
   attr_lists: "amp-video-common"
   spec_url: "https://amp.dev/documentation/components/amp-video/"
@@ -12707,8 +12815,24 @@ tags: {  # <amp-video> in amp-story
 tags: {  # amp-video-iframe
   html_format: AMP  # Iframes not allowed in ads.
   tag_name: "SCRIPT"
+  satisfies: "amp-video-iframe 1.0"
+  excludes: "amp-video-iframe 0.1"
   extension_spec: {
     name: "amp-video-iframe"
+    version_name: "v1.0"
+    version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+
+tags: {  # amp-video-iframe
+  html_format: AMP  # Iframes not allowed in ads.
+  tag_name: "SCRIPT"
+  satisfies: "amp-video-iframe 0.1"
+  excludes: "amp-video-iframe 1.0"
+  extension_spec: {
+    name: "amp-video-iframe"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
   }
@@ -13081,12 +13205,27 @@ tags: {  # <amp-brightcove>
 # limitations under the license.
 #
 
-tags: {  # amp-fit-text
+tags: {  # amp-fit-text 1.0
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-fit-text 1.0"
+  excludes: "amp-fit-text 0.1"
+  extension_spec: {
+    name: "amp-fit-text"
+    version_name: "v1.0"
+    version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # amp-fit-text 0.1 and latest
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "SCRIPT"
+  satisfies: "amp-fit-text 0.1"
+  excludes: "amp-fit-text 1.0"
   extension_spec: {
     name: "amp-fit-text"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     requires_usage: EXEMPTED
@@ -13101,6 +13240,7 @@ tags: {  # amp-fit-text (AMP4EMAIL)
   extension_spec: {
     name: "amp-fit-text"
     # AMP4EMAIL doesn't allow version: "latest".
+    version_name: "v0.1"
     version: "0.1"
     requires_usage: EXEMPTED
     deprecated_allow_duplicates: true
@@ -13657,21 +13797,23 @@ tags: {  # <amp-nexxtv-player>
     value: "static"
   }
   attrs: {
-    name: "data-origin"
-    value_url: {
-      protocol: "https"
-      protocol: "http"
-      allow_empty: true
-    }
-  }
-  attrs: {
     name: "data-streamtype"
     value: "album"
     value: "audio"
+    value: "audioalbum"
+    value: "collection"
     value: "live"
     value: "playlist"
     value: "playlist-marked"
+    value: "radio"
+    value: "set"
     value: "video"
+  }
+  attrs: {
+    name: "data-exit-mode"
+    value: "load"
+    value: "loop"
+    value: "replay"
   }
   attr_lists: "extended-amp-global"
   amp_layout: {
@@ -14593,14 +14735,22 @@ tags: {  # <amp-story-page-attachment> with href
   mandatory_ancestor: "AMP-STORY-PAGE"
   mandatory_last_child: true
   attrs: {
-    name: "layout"
-    mandatory: true
-    value: "nodisplay"
+    name: "cta-accent-color"
   }
   attrs: {
-    name: "theme"
-    value: "dark"
-    value: "light"
+    name: "cta-accent-element"
+    value: "background"
+    value: "text"
+  }
+  attrs: {
+    name: "cta-image"
+    value_url: {
+      protocol: "http"
+      protocol: "https"
+    }
+  }
+  attrs: {
+    name: "cta-text"
   }
   attrs: {
     name: "href"
@@ -14611,12 +14761,18 @@ tags: {  # <amp-story-page-attachment> with href
     }
   }
   attrs: {
-    name: "cta-image"
-    value_url: {
-      # protocol: "http"  # TODO(honeybaderdontcare): readd once transformers in prod
-      protocol: "https"
-      allow_relative: false  # TODO(honeybaderdontcare): remove once transformers in prod
-    }
+    name: "layout"
+    mandatory: true
+    value: "nodisplay"
+  }
+  attrs: {
+    name: "theme"
+    value: "custom"
+    value: "dark"
+    value: "light"
+  }
+  attrs: {
+    name: "title"
   }
   child_tags: {
     mandatory_num_child_tags: 0
@@ -14630,19 +14786,23 @@ tags: {  # <amp-story-page-attachment> with no href
   descendant_tag_list: "amp-story-page-attachment-allowed-descendants"
   mandatory_last_child: true
   attrs: {
+    name: "cta-text"
+  }
+  attrs: {
+    name: "title"
+  }
+  attrs: {
     name: "cta-image"
     value_url: {
-      # protocol: "http"  # TODO(honeybaderdontcare): readd once transformers in prod
+      protocol: "http"
       protocol: "https"
-      allow_relative: false  # TODO(honeybaderdontcare): remove once transformers in prod
     }
   }
   attrs: {
     name: "cta-image-2"
     value_url: {
-      # protocol: "http"  # TODO(honeybaderdontcare): readd once transformers in prod
+      protocol: "http"
       protocol: "https"
-      allow_relative: false  # TODO(honeybaderdontcare): remove once transformers in prod
     }
   }
   attrs: {
@@ -14654,6 +14814,56 @@ tags: {  # <amp-story-page-attachment> with no href
     name: "theme"
     value: "dark"
     value: "light"
+  }
+}
+tags: {  # Same validation rules as `<amp-story-page-attachment> with href`
+  html_format: AMP
+  tag_name: "AMP-STORY-PAGE-OUTLINK"
+  spec_name: "amp-story-page-outlink"
+  mandatory_ancestor: "AMP-STORY-PAGE"
+  mandatory_last_child: true
+  attrs: {
+    name: "cta-accent-color"
+  }
+  attrs: {
+    name: "cta-accent-element"
+    value: "background"
+    value: "text"
+  }
+  attrs: {
+    name: "cta-image"
+    value_url: {
+      protocol: "http"
+      protocol: "https"
+    }
+  }
+  attrs: {
+    name: "cta-text"
+  }
+  attrs: {
+    name: "href"
+    mandatory: true
+    value_url: {
+      protocol: "http"
+      protocol: "https"
+    }
+  }
+  attrs: {
+    name: "layout"
+    mandatory: true
+    value: "nodisplay"
+  }
+  attrs: {
+    name: "theme"
+    value: "custom"
+    value: "dark"
+    value: "light"
+  }
+  attrs: {
+    name: "title"
+  }
+  child_tags: {
+    mandatory_num_child_tags: 0
   }
 }
 tags: {  # <amp-story-animation> <script>
@@ -16155,9 +16365,11 @@ descendant_tag_list {
   tag: "B"
   tag: "BR"
   tag: "BUTTON"
+  tag: "CIRCLE"
   tag: "COL"
   tag: "COLGROUP"
   tag: "DIV"
+  tag: "ELLIPSE"
   tag: "EM"
   tag: "FIELDSET"
   tag: "FORM"
@@ -16171,12 +16383,16 @@ descendant_tag_list {
   tag: "INPUT"
   tag: "LABEL"
   tag: "LI"
+  tag: "LINE"
   tag: "MARK"
   tag: "NAV"
   tag: "OL"
   tag: "OPTION"
   tag: "P"
   tag: "PATH"
+  tag: "POLYGON"
+  tag: "POLYLINE"
+  tag: "RECT"
   tag: "SECTION"
   tag: "SELECT"
   tag: "SPAN"
@@ -16697,6 +16913,10 @@ tags: {  # <amp-script>
     name: "nodom"
     value: ""
   }
+  attrs: {
+    name: "sandboxed"
+    value: ""
+  }
   attrs: { name: "sandbox" }
   attrs: {
     name: "script"
@@ -16874,6 +17094,31 @@ tags: {  # <amp-position-observer>
   amp_layout {
     supported_layouts: NODISPLAY
   }
+}
+#
+# Copyright 2021 The AMP HTML Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS-IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the license.
+#
+
+tags: {  # amp-cache-url
+  html_format: AMP
+  tag_name: "SCRIPT"
+  extension_spec: {
+    name: "amp-cache-url"
+    version: "0.1"
+  }
+  attr_lists: "common-extension-attrs"
 }
 #
 # Copyright 2018 The AMP HTML Authors. All Rights Reserved.
@@ -17314,7 +17559,7 @@ tags: {  # <amp-inline-gallery-thumbnails>
       also_requires_attr: "aspect-ratio-width"
     }
   }
-  attrs: { 
+  attrs: {
     name: "aspect-ratio-width" # 0.1 only
     # Non-zero number
     value_regex: "\\d+(\\.\\d+)?"
@@ -17323,7 +17568,7 @@ tags: {  # <amp-inline-gallery-thumbnails>
       also_requires_attr: "aspect-ratio-height"
     }
   }
-  attrs: { 
+  attrs: {
     name: "aspect-ratio" # 1.0 only
     # Non-zero number
     value_regex: "\\d+(\\.\\d+)?"
@@ -17715,11 +17960,27 @@ tags: {  # <amp-timeago>
 # limitations under the license.
 #
 
-tags: {  # amp-youtube
+tags: {  # amp-youtube 1.0
   html_format: AMP
   tag_name: "SCRIPT"
+  satisfies: "amp-youtube 1.0"
+  excludes: "amp-youtube 0.1"
   extension_spec: {
     name: "amp-youtube"
+    version_name: "v1.0"
+    version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+
+tags: {  # amp-youtube 0.1 and latest
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-youtube 0.1"
+  excludes: "amp-youtube 1.0"
+  extension_spec: {
+    name: "amp-youtube"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     requires_usage: EXEMPTED
@@ -17727,6 +17988,7 @@ tags: {  # amp-youtube
   }
   attr_lists: "common-extension-attrs"
 }
+
 tags: {  # <amp-youtube>
   html_format: AMP
   tag_name: "AMP-YOUTUBE"
@@ -17945,6 +18207,74 @@ tags: {  # <amp-next-page type="adsense">
     unique: true
   }
   spec_url: "https://amp.dev/documentation/components/amp-next-page/"
+}
+#
+# Copyright 2021 The AMP HTML Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS-IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the license.
+#
+
+tags: {  # amp-iframely
+  html_format: AMP
+  tag_name: "SCRIPT"
+  extension_spec: {
+    name: "amp-iframely"
+    version: "0.1"
+    version: "latest"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # <amp-iframely>
+  html_format: AMP
+  tag_name: "AMP-IFRAMELY"
+  requires_extension: "amp-iframely"
+  # either data-id
+  attrs: {  # iframely generated ID of a widget
+    name: "data-id"
+    mandatory_oneof: "['data-id', 'data-url']"
+  }
+  attrs: { # iframe url to build widget from
+    name: "data-url"
+    mandatory_oneof: "['data-id', 'data-url']"
+    trigger: {
+      also_requires_attr: "data-key"
+    }
+  }
+  attrs: { name: "data-key" } # iframely key hash
+
+  # optional attributes
+  attrs: { name: "data-img" value: "" }
+  attrs: {
+    name: "data-border"
+    value_regex: "(\\d+)"
+  }
+  attrs: {
+    name: "data-domain"
+    value_regex: "^((?:[^\\.\\/]+\\.)?iframe\\.ly|if\\-cdn\\.com|iframely\\.net|oembed\\.vice\\.com|iframe\\.nbcnews\\.com)$"
+  }
+  attrs: { name: "resizable" value: "" }
+  # data-* attributes are converted into options
+  # for building iframely widget from url
+  attr_lists: "extended-amp-global"
+  spec_url: "https://amp.dev/documentation/components/amp-iframely"
+  amp_layout: {
+    supported_layouts: FILL
+    supported_layouts: FIXED
+    supported_layouts: FIXED_HEIGHT
+    supported_layouts: FLEX_ITEM
+    supported_layouts: RESPONSIVE
+    supported_layouts: INTRINSIC
+  }
 }
 #
 # Copyright 2018 The AMP HTML Authors. All Rights Reserved.
@@ -18425,7 +18755,6 @@ tags: {  # <amp-google-assistant-inline-suggestion-bar>
     supported_layouts: RESPONSIVE
   }
 }
-
 #
 # Copyright 2018 The AMP HTML Authors. All Rights Reserved.
 #
@@ -18470,7 +18799,6 @@ tags: {  # <amp-form> <amp-recaptcha-input>
     supported_layouts: NODISPLAY
   }
 }
-
 #
 # Copyright 2017 The AMP HTML Authors. All Rights Reserved.
 #
@@ -18523,11 +18851,26 @@ tags: {  # <amp-gwd-animation>
 # limitations under the license.
 #
 
-tags: {  # amp-instagram
+tags: {  # amp-instagram 1.0
   html_format: AMP
   tag_name: "SCRIPT"
+  satisfies: "amp-instagram 1.0"
+  excludes: "amp-instagram 0.1"
   extension_spec: {
     name: "amp-instagram"
+    version_name: "v1.0"
+    version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # amp-instagram 0.1 and latest
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-instagram 0.1"
+  excludes: "amp-instagram 1.0"
+  extension_spec: {
+    name: "amp-instagram"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     requires_usage: EXEMPTED
@@ -18616,7 +18959,6 @@ tags: {  # <amp-skimlinks>
     supported_layouts: NODISPLAY
   }
 }
-
 #
 # Copyright 2020 The AMP HTML Authors. All Rights Reserved.
 #
