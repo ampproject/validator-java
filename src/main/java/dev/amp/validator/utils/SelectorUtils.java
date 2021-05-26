@@ -104,7 +104,7 @@ public final class SelectorUtils {
      * @return if this is a delim char
      */
     public static boolean isDelim(@Nonnull final com.steadystate.css.parser.Token token, @Nonnull final String delimChar) {
-        return getTokenType(token) == TokenType.DELIM && (token.image).equals(delimChar);
+        return getTokenType(token) == TokenType.DELIM && (token.image.trim()).equals(delimChar);
     }
 
     /**
