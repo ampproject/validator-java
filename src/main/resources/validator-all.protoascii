@@ -22,10 +22,7 @@
 # (validator-main.protoascii, etc) are always released together.
 min_validator_revision_required: 475
 
-# The spec file revision allows the validator engine to distinguish
-# newer versions of the spec file. This is currently a Google internal
-# mechanism, validator.js does not use this facility. However, any
-# change to this file (validator-main.js) requires updating this revision id.
+# DEPRECATED: This value is no longer updated.
 spec_file_revision: 1188
 
 styles_spec_url: "https://amp.dev/documentation/guides-and-tutorials/develop/style_and_layout/style_pages/"
@@ -2613,7 +2610,6 @@ attr_lists: {
   }
   attrs: { name: "checked" }
   attrs: { name: "disabled" }
-  attrs: { name: "form" }
   attrs: { name: "height" }
   attrs: {
     disabled_by: "amp4email"
@@ -3383,9 +3379,14 @@ tags: {
     dispatch_key: NAME_VALUE_DISPATCH
   }
   cdata: {
-    mandatory_cdata: "[].slice.call(document.querySelectorAll(\"script[src*='/v0.js'],script[src*='/v0.mjs']\")).forEach(function(s){s.onerror=function(){document.querySelector('style[amp-boilerplate]').textContent=''}})"
+    # Only valid if contents are exactly either of these:
+    # [].slice.call(document.querySelectorAll("script[src*='/v0.js'],script[src*='/v0.mjs']")).forEach(function(s){s.onerror=function(){document.querySelector('style[amp-boilerplate]').textContent=''}})
+    # document.querySelector("script[src*='/v0.js']").onerror=function(){document.querySelector('style[amp-boilerplate]').textContent=''}
+    cdata_regex: "\\[]\\.slice\\.call\\(document\\.querySelectorAll\\(\"script\\[src\\*='\\/v0\\.js'],script\\[src\\*='\\/v0\\.mjs']\"\\)\\)\\.forEach\\(function\\(s\\){s\\.onerror=function\\(\\){document\\.querySelector\\('style\\[amp-boilerplate]'\\)\\.textContent=''}}\\)|"
+                 "document\\.querySelector\\(\"script\\[src\\*='\\/v0\\.js']\"\\)\\.onerror=function\\(\\){document\\.querySelector\\('style\\[amp-boilerplate]'\\)\\.textContent=''}"
   }
 }
+
 # Enables early styling on fast failure to load v0.js. See GitHub #22543.
 tags: {
   html_format: AMP
@@ -5111,100 +5112,101 @@ error_specificity { code: WARNING_EXTENSION_DEPRECATED_VERSION specificity: 17 }
 error_specificity { code: NON_LTS_SCRIPT_AFTER_LTS specificity: 18 }
 error_specificity { code: LTS_SCRIPT_AFTER_NON_LTS specificity: 19 }
 error_specificity { code: INCORRECT_SCRIPT_RELEASE_VERSION specificity: 20 }
-error_specificity { code: DISALLOWED_TAG specificity: 21 }
-error_specificity { code: DISALLOWED_ATTR specificity: 22 }
-error_specificity { code: INVALID_ATTR_VALUE specificity: 23 }
-error_specificity { code: DUPLICATE_ATTRIBUTE specificity: 24 }
-error_specificity { code: ATTR_VALUE_REQUIRED_BY_LAYOUT specificity: 25 }
-error_specificity { code: MANDATORY_ATTR_MISSING specificity: 26 }
-error_specificity { code: MANDATORY_ONEOF_ATTR_MISSING specificity: 27 }
-error_specificity { code: MANDATORY_ANYOF_ATTR_MISSING specificity: 28 }
-error_specificity { code: ATTR_REQUIRED_BUT_MISSING specificity: 29 }
-error_specificity { code: DUPLICATE_UNIQUE_TAG specificity: 30 }
-error_specificity { code: DUPLICATE_UNIQUE_TAG_WARNING specificity: 31 }
-error_specificity { code: STYLESHEET_TOO_LONG specificity: 32 }
-error_specificity { code: STYLESHEET_AND_INLINE_STYLE_TOO_LONG specificity: 33 }
-error_specificity { code: INLINE_STYLE_TOO_LONG specificity: 34 }
-error_specificity { code: INLINE_SCRIPT_TOO_LONG specificity: 35 }
-error_specificity { code: CSS_SYNTAX_INVALID_AT_RULE specificity: 36 }
+error_specificity { code: DISALLOWED_AMP_DOMAIN specificity: 21 }
+error_specificity { code: DISALLOWED_TAG specificity: 22 }
+error_specificity { code: DISALLOWED_ATTR specificity: 23 }
+error_specificity { code: INVALID_ATTR_VALUE specificity: 24 }
+error_specificity { code: DUPLICATE_ATTRIBUTE specificity: 25 }
+error_specificity { code: ATTR_VALUE_REQUIRED_BY_LAYOUT specificity: 26 }
+error_specificity { code: MANDATORY_ATTR_MISSING specificity: 27 }
+error_specificity { code: MANDATORY_ONEOF_ATTR_MISSING specificity: 28 }
+error_specificity { code: MANDATORY_ANYOF_ATTR_MISSING specificity: 29 }
+error_specificity { code: ATTR_REQUIRED_BUT_MISSING specificity: 30 }
+error_specificity { code: DUPLICATE_UNIQUE_TAG specificity: 31 }
+error_specificity { code: DUPLICATE_UNIQUE_TAG_WARNING specificity: 32 }
+error_specificity { code: STYLESHEET_TOO_LONG specificity: 33 }
+error_specificity { code: STYLESHEET_AND_INLINE_STYLE_TOO_LONG specificity: 34 }
+error_specificity { code: INLINE_STYLE_TOO_LONG specificity: 35 }
+error_specificity { code: INLINE_SCRIPT_TOO_LONG specificity: 36 }
+error_specificity { code: CSS_SYNTAX_INVALID_AT_RULE specificity: 37 }
 error_specificity {
-  code: MANDATORY_PROPERTY_MISSING_FROM_ATTR_VALUE specificity: 37
+  code: MANDATORY_PROPERTY_MISSING_FROM_ATTR_VALUE specificity: 38
 }
-error_specificity { code: INVALID_PROPERTY_VALUE_IN_ATTR_VALUE specificity: 38 }
-error_specificity { code: DISALLOWED_PROPERTY_IN_ATTR_VALUE specificity: 39 }
-error_specificity { code: MUTUALLY_EXCLUSIVE_ATTRS specificity: 40 }
-error_specificity { code: UNESCAPED_TEMPLATE_IN_ATTR_VALUE specificity: 41 }
-error_specificity { code: TEMPLATE_PARTIAL_IN_ATTR_VALUE specificity: 42 }
-error_specificity { code: TEMPLATE_IN_ATTR_NAME specificity: 43 }
+error_specificity { code: INVALID_PROPERTY_VALUE_IN_ATTR_VALUE specificity: 39 }
+error_specificity { code: DISALLOWED_PROPERTY_IN_ATTR_VALUE specificity: 40 }
+error_specificity { code: MUTUALLY_EXCLUSIVE_ATTRS specificity: 41 }
+error_specificity { code: UNESCAPED_TEMPLATE_IN_ATTR_VALUE specificity: 42 }
+error_specificity { code: TEMPLATE_PARTIAL_IN_ATTR_VALUE specificity: 43 }
+error_specificity { code: TEMPLATE_IN_ATTR_NAME specificity: 44 }
 error_specificity {
-  code: INCONSISTENT_UNITS_FOR_WIDTH_AND_HEIGHT specificity: 44
+  code: INCONSISTENT_UNITS_FOR_WIDTH_AND_HEIGHT specificity: 45
 }
-error_specificity { code: MISSING_LAYOUT_ATTRIBUTES specificity: 45 }
-error_specificity { code: IMPLIED_LAYOUT_INVALID specificity: 46 }
-error_specificity { code: SPECIFIED_LAYOUT_INVALID specificity: 47 }
-error_specificity { code: ATTR_DISALLOWED_BY_IMPLIED_LAYOUT specificity: 48 }
-error_specificity { code: ATTR_DISALLOWED_BY_SPECIFIED_LAYOUT specificity: 49 }
-error_specificity { code: DUPLICATE_DIMENSION specificity: 50 }
-error_specificity { code: DISALLOWED_RELATIVE_URL specificity: 51 }
-error_specificity { code: MISSING_URL specificity: 52 }
-error_specificity { code: DISALLOWED_DOMAIN specificity: 53 }
-error_specificity { code: INVALID_URL_PROTOCOL specificity: 54 }
-error_specificity { code: INVALID_URL specificity: 55 }
-error_specificity { code: DISALLOWED_STYLE_ATTR specificity: 56 }
-error_specificity { code: CSS_SYNTAX_STRAY_TRAILING_BACKSLASH specificity: 57 }
-error_specificity { code: CSS_SYNTAX_UNTERMINATED_COMMENT specificity: 58 }
-error_specificity { code: CSS_SYNTAX_UNTERMINATED_STRING specificity: 59 }
-error_specificity { code: CSS_SYNTAX_BAD_URL specificity: 60 }
+error_specificity { code: MISSING_LAYOUT_ATTRIBUTES specificity: 46 }
+error_specificity { code: IMPLIED_LAYOUT_INVALID specificity: 47 }
+error_specificity { code: SPECIFIED_LAYOUT_INVALID specificity: 48 }
+error_specificity { code: ATTR_DISALLOWED_BY_IMPLIED_LAYOUT specificity: 49 }
+error_specificity { code: ATTR_DISALLOWED_BY_SPECIFIED_LAYOUT specificity: 50 }
+error_specificity { code: DUPLICATE_DIMENSION specificity: 51 }
+error_specificity { code: DISALLOWED_RELATIVE_URL specificity: 52 }
+error_specificity { code: MISSING_URL specificity: 53 }
+error_specificity { code: DISALLOWED_DOMAIN specificity: 54 }
+error_specificity { code: INVALID_URL_PROTOCOL specificity: 55 }
+error_specificity { code: INVALID_URL specificity: 56 }
+error_specificity { code: DISALLOWED_STYLE_ATTR specificity: 57 }
+error_specificity { code: CSS_SYNTAX_STRAY_TRAILING_BACKSLASH specificity: 58 }
+error_specificity { code: CSS_SYNTAX_UNTERMINATED_COMMENT specificity: 59 }
+error_specificity { code: CSS_SYNTAX_UNTERMINATED_STRING specificity: 60 }
+error_specificity { code: CSS_SYNTAX_BAD_URL specificity: 61 }
 error_specificity {
-  code: CSS_SYNTAX_EOF_IN_PRELUDE_OF_QUALIFIED_RULE specificity: 61
+  code: CSS_SYNTAX_EOF_IN_PRELUDE_OF_QUALIFIED_RULE specificity: 62
 }
-error_specificity { code: CSS_SYNTAX_INVALID_DECLARATION specificity: 62 }
-error_specificity { code: CSS_SYNTAX_INCOMPLETE_DECLARATION specificity: 63 }
-error_specificity { code: CSS_SYNTAX_ERROR_IN_PSEUDO_SELECTOR specificity: 64 }
-error_specificity { code: CSS_SYNTAX_MISSING_SELECTOR specificity: 65 }
-error_specificity { code: CSS_SYNTAX_NOT_A_SELECTOR_START specificity: 66 }
+error_specificity { code: CSS_SYNTAX_INVALID_DECLARATION specificity: 63 }
+error_specificity { code: CSS_SYNTAX_INCOMPLETE_DECLARATION specificity: 64 }
+error_specificity { code: CSS_SYNTAX_ERROR_IN_PSEUDO_SELECTOR specificity: 65 }
+error_specificity { code: CSS_SYNTAX_MISSING_SELECTOR specificity: 66 }
+error_specificity { code: CSS_SYNTAX_NOT_A_SELECTOR_START specificity: 67 }
 error_specificity {
-  code: CSS_SYNTAX_UNPARSED_INPUT_REMAINS_IN_SELECTOR specificity: 67
+  code: CSS_SYNTAX_UNPARSED_INPUT_REMAINS_IN_SELECTOR specificity: 68
 }
-error_specificity { code: CSS_SYNTAX_MISSING_URL specificity: 68 }
-error_specificity { code: CSS_SYNTAX_DISALLOWED_DOMAIN specificity: 69 }
-error_specificity { code: CSS_SYNTAX_INVALID_URL specificity: 70 }
-error_specificity { code: CSS_SYNTAX_INVALID_URL_PROTOCOL specificity: 71 }
-error_specificity { code: CSS_SYNTAX_DISALLOWED_RELATIVE_URL specificity: 72 }
-error_specificity { code: INCORRECT_NUM_CHILD_TAGS specificity: 73 }
-error_specificity { code: DISALLOWED_CHILD_TAG_NAME specificity: 74 }
-error_specificity { code: DISALLOWED_FIRST_CHILD_TAG_NAME specificity: 75 }
-error_specificity { code: CSS_SYNTAX_INVALID_ATTR_SELECTOR specificity: 76 }
+error_specificity { code: CSS_SYNTAX_MISSING_URL specificity: 69 }
+error_specificity { code: CSS_SYNTAX_DISALLOWED_DOMAIN specificity: 70 }
+error_specificity { code: CSS_SYNTAX_INVALID_URL specificity: 71 }
+error_specificity { code: CSS_SYNTAX_INVALID_URL_PROTOCOL specificity: 72 }
+error_specificity { code: CSS_SYNTAX_DISALLOWED_RELATIVE_URL specificity: 73 }
+error_specificity { code: INCORRECT_NUM_CHILD_TAGS specificity: 74 }
+error_specificity { code: DISALLOWED_CHILD_TAG_NAME specificity: 75 }
+error_specificity { code: DISALLOWED_FIRST_CHILD_TAG_NAME specificity: 76 }
+error_specificity { code: CSS_SYNTAX_INVALID_ATTR_SELECTOR specificity: 77 }
 error_specificity {
-  code: CHILD_TAG_DOES_NOT_SATISFY_REFERENCE_POINT specificity: 77
+  code: CHILD_TAG_DOES_NOT_SATISFY_REFERENCE_POINT specificity: 78
 }
-error_specificity { code: MANDATORY_REFERENCE_POINT_MISSING specificity: 78 }
-error_specificity { code: DUPLICATE_REFERENCE_POINT specificity: 79 }
-error_specificity { code: TAG_REFERENCE_POINT_CONFLICT specificity: 80 }
+error_specificity { code: MANDATORY_REFERENCE_POINT_MISSING specificity: 79 }
+error_specificity { code: DUPLICATE_REFERENCE_POINT specificity: 80 }
+error_specificity { code: TAG_REFERENCE_POINT_CONFLICT specificity: 81 }
 error_specificity {
   code: CHILD_TAG_DOES_NOT_SATISFY_REFERENCE_POINT_SINGULAR
-  specificity: 81
+  specificity: 82
 }
-error_specificity { code: CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE specificity: 82 }
+error_specificity { code: CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE specificity: 83 }
 error_specificity {
   code: CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE_WITH_HINT
-  specificity: 83
-}
-error_specificity {
-  code: CSS_SYNTAX_PROPERTY_DISALLOWED_WITHIN_AT_RULE
   specificity: 84
 }
 error_specificity {
-  code: CSS_SYNTAX_PROPERTY_DISALLOWED_TOGETHER_WITH
+  code: CSS_SYNTAX_PROPERTY_DISALLOWED_WITHIN_AT_RULE
   specificity: 85
 }
 error_specificity {
-  code: CSS_SYNTAX_PROPERTY_REQUIRES_QUALIFICATION
+  code: CSS_SYNTAX_PROPERTY_DISALLOWED_TOGETHER_WITH
   specificity: 86
 }
 error_specificity {
-  code: BASE_TAG_MUST_PRECEED_ALL_URLS
+  code: CSS_SYNTAX_PROPERTY_REQUIRES_QUALIFICATION
   specificity: 87
+}
+error_specificity {
+  code: BASE_TAG_MUST_PRECEED_ALL_URLS
+  specificity: 88
 }
 error_specificity { code: DISALLOWED_SCRIPT_TAG specificity: 102 }
 error_specificity { code: GENERAL_DISALLOWED_TAG specificity: 103 }
@@ -5337,6 +5339,10 @@ error_formats {
   code: INCORRECT_SCRIPT_RELEASE_VERSION
   format: "The script version for '%1' is a %2 version which mismatches "
           "with the first script on the page using the %3 version."
+}
+error_formats {
+  code: DISALLOWED_AMP_DOMAIN
+  format: "The script tag includes an invalid AMP domain in the src attribute."
 }
 error_formats {
   code: NON_LTS_SCRIPT_AFTER_LTS
@@ -6649,6 +6655,8 @@ tags: {  # <style amp-custom>, [AMP]
            feature: 'min-device-pixel-ratio'
            feature: 'max-device-pixel-ratio2'
            feature: 'min-device-pixel-ratio2'
+           feature: 'min--moz-device-pixel-ratio'
+           feature: 'max--moz-device-pixel-ratio'
          }
       }
       at_rule_spec: { name: 'page' }
@@ -8310,6 +8318,83 @@ tags: {  # <amp-story-panning-media>
   }
 }
 #
+# Copyright 2021 The AMP HTML Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS-IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the license.
+#
+
+tags: {  # amp-tiktok
+  html_format: AMP
+  tag_name: "SCRIPT"
+  extension_spec: {
+    name: "amp-tiktok"
+    version: "0.1"
+    version: "latest"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # <amp-tiktok>
+  html_format: AMP
+  tag_name: "AMP-TIKTOK"
+  spec_name: "AMP-TIKTOK"
+  requires_extension: "amp-tiktok"
+  attr_lists: "extended-amp-global"
+  attrs: {
+    name: "data-src";
+    value_regex: "\\d";
+    mandatory: true
+  }
+  spec_url: "https://amp.dev/documentation/components/amp-tiktok"
+  amp_layout: {
+    supported_layouts: FILL
+    supported_layouts: FIXED
+    supported_layouts: FIXED_HEIGHT
+    supported_layouts: FLEX_ITEM
+    supported_layouts: INTRINSIC
+    supported_layouts: NODISPLAY
+    supported_layouts: RESPONSIVE
+  }
+}
+tags: {  # <amp-tiktok>
+  html_format: AMP
+  tag_name: "AMP-TIKTOK"
+  spec_name: "AMP-TIKTOK blockquote"
+  requires_extension: "amp-tiktok"
+  attr_lists: "extended-amp-global"
+  spec_url: "https://amp.dev/documentation/components/amp-tiktok"
+  amp_layout: {
+    supported_layouts: FILL
+    supported_layouts: FIXED
+    supported_layouts: FIXED_HEIGHT
+    supported_layouts: FLEX_ITEM
+    supported_layouts: INTRINSIC
+    supported_layouts: NODISPLAY
+    supported_layouts: RESPONSIVE
+  }
+  child_tags: {
+    child_tag_name_oneof: "BLOCKQUOTE"
+    mandatory_min_num_child_tags: 1
+  }
+}
+tags: {
+  html_format: AMP
+  tag_name: "BLOCKQUOTE"
+  spec_name: "BLOCKQUOTE with TikTok"
+  attrs: { name: "align" }
+  attr_lists: "cite-attr"
+  mandatory_ancestor: "AMP-TIKTOK blockquote"
+}
+#
 # Copyright 2016 The AMP HTML Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -8375,7 +8460,12 @@ tags: {  # <amp-ad>
   }
   attrs: { name: "template" }
   attrs: { name: "type" mandatory: true }
-  attrs: { name: "sticky" value: "" }
+  attrs: {
+    name: "sticky"
+    value: ""
+    value: "top"
+    value: "bottom"
+  }
   attrs: { name: "always-serve-npa" }
   attrs: { name: "block-rtc" }
   attr_lists: "extended-amp-global"
@@ -9253,11 +9343,26 @@ tags: {  # <amp-playbuzz>
 # limitations under the license.
 #
 
-tags: {  # amp-soundcloud
+tags: {  # amp-soundcloud 1.0
   html_format: AMP
   tag_name: "SCRIPT"
+  satisfies: "amp-soundcloud 1.0"
+  excludes: "amp-soundcloud 0.1"
   extension_spec: {
     name: "amp-soundcloud"
+    version_name: "v1.0"
+    version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # amp-soundcloud 0.1 and latest
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-soundcloud 0.1"
+  excludes: "amp-soundcloud 1.0"
+  extension_spec: {
+    name: "amp-soundcloud"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     requires_usage: EXEMPTED
@@ -9664,6 +9769,7 @@ tags: {  # amp-facebook-like
   extension_spec: {
     name: "amp-facebook-like"
     version: "0.1"
+    version: "1.0"
     version: "latest"
   }
   attr_lists: "common-extension-attrs"
@@ -12781,7 +12887,6 @@ tags: {  # <amp-video> in amp-story
   }
   attrs: {
     name: "cache"
-    requires_extension: "amp-cache-url"
     value: "google"
   }
   attr_lists: "extended-amp-global"
@@ -14038,6 +14143,7 @@ tags: {  # <amp-story-page>
     child_tag_name_oneof: "AMP-STORY-CTA-LAYER"
     child_tag_name_oneof: "AMP-STORY-GRID-LAYER"
     child_tag_name_oneof: "AMP-STORY-PAGE-ATTACHMENT"
+    child_tag_name_oneof: "AMP-STORY-PAGE-OUTLINK"
     mandatory_min_num_child_tags: 1
   }
 }
@@ -14728,27 +14834,14 @@ descendant_tag_list: {
   tag: "VKERN"
   tag: "WBR"
 }
-tags: {  # <amp-story-page-attachment> with href
+# <amp-story-page-attachment> with href.
+# Legacy version of <amp-story-page-outlink>.
+tags: {
   html_format: AMP
   tag_name: "AMP-STORY-PAGE-ATTACHMENT"
   spec_name: "amp-story-page-attachment[href]"
   mandatory_ancestor: "AMP-STORY-PAGE"
   mandatory_last_child: true
-  attrs: {
-    name: "cta-accent-color"
-  }
-  attrs: {
-    name: "cta-accent-element"
-    value: "background"
-    value: "text"
-  }
-  attrs: {
-    name: "cta-image"
-    value_url: {
-      protocol: "http"
-      protocol: "https"
-    }
-  }
   attrs: {
     name: "cta-text"
   }
@@ -14767,7 +14860,6 @@ tags: {  # <amp-story-page-attachment> with href
   }
   attrs: {
     name: "theme"
-    value: "custom"
     value: "dark"
     value: "light"
   }
@@ -14816,7 +14908,7 @@ tags: {  # <amp-story-page-attachment> with no href
     value: "light"
   }
 }
-tags: {  # Same validation rules as `<amp-story-page-attachment> with href`
+tags: {
   html_format: AMP
   tag_name: "AMP-STORY-PAGE-OUTLINK"
   spec_name: "amp-story-page-outlink"
@@ -14838,17 +14930,6 @@ tags: {  # Same validation rules as `<amp-story-page-attachment> with href`
     }
   }
   attrs: {
-    name: "cta-text"
-  }
-  attrs: {
-    name: "href"
-    mandatory: true
-    value_url: {
-      protocol: "http"
-      protocol: "https"
-    }
-  }
-  attrs: {
     name: "layout"
     mandatory: true
     value: "nodisplay"
@@ -14859,11 +14940,9 @@ tags: {  # Same validation rules as `<amp-story-page-attachment> with href`
     value: "dark"
     value: "light"
   }
-  attrs: {
-    name: "title"
-  }
   child_tags: {
-    mandatory_num_child_tags: 0
+    mandatory_num_child_tags: 1
+    child_tag_name_oneof: "A"
   }
 }
 tags: {  # <amp-story-animation> <script>
@@ -16058,6 +16137,80 @@ tags: {  # amp-mraid
   }
 }
 #
+# Copyright 2021 The AMP HTML Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS-IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the license.
+#
+
+tags: {  # amp-render
+  html_format: AMP
+  tag_name: "SCRIPT"
+  extension_spec: {
+    name: "amp-render"
+    version: "1.0"
+    version: "latest"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # <amp-render>
+  html_format: AMP
+  tag_name: "AMP-RENDER"
+  requires_extension: "amp-render"
+  attrs: {
+    name: "binding"
+    value: "always"
+    value: "never" # alternative to "no" introduced in https://github.com/ampproject/amphtml/pull/34643
+    value: "no"
+    value: "refresh"
+  }
+  attrs: { name: "credentials" }
+  attrs: {
+    name: "data-amp-bind-src"
+    mandatory_anyof: "['src','[src]','data-amp-bind-src']"
+  }
+  attrs: { name: "key" }
+  attrs: {
+    name: "src"
+    mandatory_anyof: "['src','[src]','data-amp-bind-src']"
+    value_url: {
+      protocol: "amp-script"
+      protocol: "amp-state"
+      protocol: "https"
+    }
+    disallowed_value_regex: "__amp_source_origin"
+  }
+  attrs: {
+    name: "template"
+    value_oneof_set: TEMPLATE_IDS
+  }
+  attrs: { name: "xssi-prefix" }
+  attrs: {
+    name: "[src]"
+    mandatory_anyof: "['src','[src]','data-amp-bind-src']"
+  }
+  attr_lists: "extended-amp-global"
+  spec_url: "https://amp.dev/documentation/components/amp-render/"
+  amp_layout: {
+    supported_layouts: CONTAINER
+    supported_layouts: FILL
+    supported_layouts: FIXED
+    supported_layouts: FIXED_HEIGHT
+    supported_layouts: FLEX_ITEM
+    supported_layouts: NODISPLAY
+    supported_layouts: RESPONSIVE
+  }
+}
+#
 # Copyright 2017 The AMP HTML Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17117,6 +17270,7 @@ tags: {  # amp-cache-url
   extension_spec: {
     name: "amp-cache-url"
     version: "0.1"
+    requires_usage: NONE
   }
   attr_lists: "common-extension-attrs"
 }
@@ -17186,11 +17340,26 @@ tags: {  # <amp-yotpo>
 # limitations under the license.
 #
 
-tags: {  # amp-twitter
+tags: {  # amp-twitter 1.0
   html_format: AMP
   tag_name: "SCRIPT"
+  satisfies: "amp-twitter 1.0"
+  excludes: "amp-twitter 0.1"
   extension_spec: {
     name: "amp-twitter"
+    version_name: "v1.0"
+    version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # amp-twitter 0.1 and latest
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-twitter 0.1"
+  excludes: "amp-twitter 1.0"
+  extension_spec: {
+    name: "amp-twitter"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     requires_usage: EXEMPTED

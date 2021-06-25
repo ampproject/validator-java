@@ -598,6 +598,10 @@ public final class TagSpecUtils {
                 // i-amphtml-layout-size-defined
                 validInternalClasses.add(getLayoutSizeDefinedClass());
             }
+            if (isLayoutAwaitingSize(layout)) {
+                // i-amphtml-layout-awaiting-size
+                validInternalClasses.add(getLayoutAwaitingSizeClass());
+            }
             final String [] classes = classAttr.split("[\\s+]");
             for (String classValue : classes) {
                 if (classValue.startsWith("i-amphtml-")
@@ -665,6 +669,21 @@ public final class TagSpecUtils {
      */
     public static String getLayoutSizeDefinedClass() {
         return "i-amphtml-layout-size-defined";
+    }
+
+    /**
+     * @return the layout awaiting size
+     */
+    public static String getLayoutAwaitingSizeClass() {
+        return "i-amphtml-layout-awaiting-size";
+    }
+
+    /**
+     * @param layout the layout to check
+     * @return true iff it is a LayoutAwaitingSize
+     */
+    public static boolean isLayoutAwaitingSize(@Nonnull final ValidatorProtos.AmpLayout.Layout layout) {
+        return layout == ValidatorProtos.AmpLayout.Layout.FLUID;
     }
 
     /**

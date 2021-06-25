@@ -124,6 +124,15 @@ public class ParsedHtmlTag {
     }
 
     /**
+     * Tests if this is an AMP Cache domain.
+     * @param src the source to check
+     * @return true iff is an amp cache domain
+     */
+    public boolean isAmpCacheDomain(@Nonnull final String src) {
+        return src.startsWith("https://cdn.ampproject.org/");
+    }
+
+    /**
      * Returns the value of a given attribute name. If it does not exist then
      * returns null.
      *
@@ -145,20 +154,19 @@ public class ParsedHtmlTag {
         if (src == null) {
             return false;
         }
-        return this.isAsyncScriptTag() && !this.isExtensionScript()
-                && src.startsWith("https://cdn.ampproject.org/")
+        return this.isAmpCacheDomain(src) && this.isAsyncScriptTag(src) && !this.isExtensionScript()
                 && (src.endsWith("/v0.js") || src.endsWith("/v0.mjs")
                 || src.endsWith("/v0.mjs?f=sxg"));
     }
 
     /**
      * Tests if this is an async script tag.
-     *
+     * @param src the source
      * @return true iff this is an async script tag.
      */
-    private boolean isAsyncScriptTag() {
+    private boolean isAsyncScriptTag(final String src) {
         return "SCRIPT".equals(this.upperName()) && this.attrsByKey().containsKey("async")
-                && this.attrsByKey().containsKey("src");
+                && src != null;
     }
 
     /**
@@ -178,7 +186,7 @@ public class ParsedHtmlTag {
         if (src == null) {
             return false;
         }
-        return this.isAsyncScriptTag() && type.equals("module")
+        return this.isAsyncScriptTag(src) && type.equals("module")
                 && MODULE_LTS_SCRIPT_SRC_REGEX.matcher(src).find();
     }
 
@@ -195,8 +203,8 @@ public class ParsedHtmlTag {
         if (src == null) {
             return false;
         }
-        return this.isAsyncScriptTag() && this.attrsByKey().containsKey("nomodule")
-                && NOMODULE_LTS_SCRIPT_SRC_REGEX.matcher(src).find();
+        return this.isAsyncScriptTag(src) && this.attrsByKey().containsKey("nomodule")
+                && this.isAmpCacheDomain(src) && NOMODULE_LTS_SCRIPT_SRC_REGEX.matcher(src).find();
     }
 
     /**
@@ -217,8 +225,8 @@ public class ParsedHtmlTag {
             return false;
         }
 
-        return this.isAsyncScriptTag() && type.equals("module")
-                && MODULE_SCRIPT_SRC_REGEX.matcher(src).find();
+        return this.isAsyncScriptTag(src) && type.equals("module")
+                && this.isAmpCacheDomain(src) && MODULE_SCRIPT_SRC_REGEX.matcher(src).find();
     }
 
     /**
@@ -235,8 +243,8 @@ public class ParsedHtmlTag {
             return false;
         }
 
-        return this.isAsyncScriptTag() && this.attrsByKey().containsKey("nomodule")
-                && NOMODULE_SCRIPT_SRC_REGEX.matcher(src).find();
+        return this.isAsyncScriptTag(src) && this.attrsByKey().containsKey("nomodule")
+                && this.isAmpCacheDomain(src) && NOMODULE_SCRIPT_SRC_REGEX.matcher(src).find();
     }
 
     /**
@@ -252,7 +260,8 @@ public class ParsedHtmlTag {
         if (src == null) {
             return false;
         }
-        return this.isAsyncScriptTag() && LTS_SCRIPT_SRC_REGEX.matcher(src).find();
+        return this.isAsyncScriptTag(src) && this.isAmpCacheDomain(src)
+                && LTS_SCRIPT_SRC_REGEX.matcher(src).find();
     }
 
     /**
@@ -307,7 +316,7 @@ public class ParsedHtmlTag {
             Pattern.CASE_INSENSITIVE);
 
     private static final Pattern LTS_SCRIPT_SRC_REGEX = Pattern.compile(
-            "^https:\\/\\/cdn\\.ampproject\\.org\\/lts\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.js$",
+            "/lts\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.js$",
             Pattern.CASE_INSENSITIVE);
 
 }
