@@ -41,6 +41,25 @@ public class AMPHtmlParserTest {
   }
 
   @Test
+  public void testLatency() {
+    try {
+      String inputHtml =
+              readFile(
+                      "test-cases/misc/complexPass.html");
+      final int maxNode = 10000;
+      final long startTime = System.currentTimeMillis();
+      for (int i = 0; i < 1000; i++) {
+        ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
+      }
+      long elapsedTime = System.currentTimeMillis() - startTime;
+      System.out.println("Elapsed: " + elapsedTime + "ms");
+      Assert.assertTrue(elapsedTime < 15000);
+    } catch (final IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  @Test
   public void testAmpTimeAgo() {
     try {
       String inputHtml =

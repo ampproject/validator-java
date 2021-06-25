@@ -1,0 +1,1107 @@
+<!doctype html>
+<html amp4email data-css-strict>
+<head>
+    <meta charset="utf-8">
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
+    <script async custom-element="amp-bind" src="https://cdn.ampproject.org/v0/amp-bind-0.1.js"></script>
+    <style amp4email-boilerplate>body{visibility:hidden}</style>
+    <style amp-custom>
+        .board {
+            display: grid;
+            grid-template-columns: 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69% 7.69%;
+        }
+        .tray {
+            display: grid;
+            grid-template-columns: 7% 7% 5px 7% 5px 7% 5px 7% 5px 7% 5px 7% 5px 7% 7%;
+            text-align: center;
+            justify-content:center;
+        }
+        .cell {
+            background: #ECDBB0;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:4vw;
+            padding-bottom:100%;
+        }
+        .traycell {
+            background: #ECDBB0;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            display:flex;
+            font-size:4vw;
+            align-items:center;
+            justify-content:center;
+            position:relative;
+        }
+        .letter {
+            background: #ECDBB0;
+            justify-content:center;
+            display:flex;
+            position: absolute;
+            left:25%;
+            top:1px;
+        }
+        .score {
+            background: #ECDBB0;
+            justify-content:center;
+            font-size:2vw;
+            position:absolute;
+            bottom:1px;
+            right:2px;
+        }
+        .lettersel {
+            background: #DBECB0;
+            justify-content:center;
+            display:flex;
+            position: absolute;
+            left:25%;
+            top:1px;
+        }
+        .scoresel {
+            background: #DBECB0;
+            justify-content:center;
+            font-size:2vw;
+            position:absolute;
+            bottom:1px;
+            right:2px;
+        }
+        .sel {
+            background: #DBECB0;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:5vw;
+        }
+        .traysel {
+            background: #DBECB0;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:4vw;
+            position:relative;
+        }
+        .startcell {
+            background: #E18A73;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+        }
+        .fill {
+            background: white;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:4vw;
+            padding-top:12%;
+            padding-bottom:12%;
+        }
+        .new {
+            background: #CFE2F3;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:4vw;
+            padding-top:12%;
+            padding-bottom:12%;
+        }
+        .mine {
+            background: #CFa2a3;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:5vw;
+            padding-top:12%;
+            padding-bottom:12%;
+        }
+        .word {
+            color: #CD3C3C;
+            background: #ECDBB0;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:3.25vw;
+        }
+        .lett {
+            color: #161F8B;
+            background: #ECDBB0;
+            border-style: solid;
+            border-color: #DFB882;
+            border-width: 1px;
+            align-items:center;
+            justify-content:center;
+            display:flex;
+            font-size:3.25vw;
+        }
+        .cent {
+            border-width: 1px;
+            padding-bottom:100%;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            justify-content:center;
+            font-size: 4vw;
+        }
+    </style>
+</head>
+<body>
+<amp-state id="gs">
+    <script type="application/json">
+        {
+            "r1c1": {
+                "l": "word",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r1c2": {
+                "l": "cell",
+                "c": ""
+            },
+            "r1c3": {
+                "l": "cell",
+                "c": ""
+            },
+            "r1c4": {
+                "l": "cell",
+                "c": ""
+            },
+            "r1c5": {
+                "l": "cell",
+                "c": ""
+            },
+            "r1c6": {
+                "l": "cell",
+                "c": ""
+            },
+            "r1c7": {
+                "l": "word",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r1c8": {
+                "l": "cell",
+                "c": ""
+            },
+            "r1c9": {
+                "l": "cell",
+                "c": ""
+            },
+            "r1c10": {
+                "l": "cell",
+                "c": ""
+            },
+            "r1c11": {
+                "l": "cell",
+                "c": ""
+            },
+            "r1c12": {
+                "l": "cell",
+                "c": ""
+            },
+            "r1c13": {
+                "l": "word",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r2c1": {
+                "l": "cell",
+                "c": ""
+            },
+            "r2c2": {
+                "l": "word",
+                "c": "\u25cf\u25cf"
+            },
+            "r2c3": {
+                "l": "cell",
+                "c": ""
+            },
+            "r2c4": {
+                "l": "cell",
+                "c": ""
+            },
+            "r2c5": {
+                "l": "lett",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r2c6": {
+                "l": "cell",
+                "c": ""
+            },
+            "r2c7": {
+                "l": "cell",
+                "c": ""
+            },
+            "r2c8": {
+                "l": "cell",
+                "c": ""
+            },
+            "r2c9": {
+                "l": "lett",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r2c10": {
+                "l": "cell",
+                "c": ""
+            },
+            "r2c11": {
+                "l": "cell",
+                "c": ""
+            },
+            "r2c12": {
+                "l": "word",
+                "c": "\u25cf\u25cf"
+            },
+            "r2c13": {
+                "l": "cell",
+                "c": ""
+            },
+            "r3c1": {
+                "l": "cell",
+                "c": ""
+            },
+            "r3c2": {
+                "l": "cell",
+                "c": ""
+            },
+            "r3c3": {
+                "l": "word",
+                "c": "\u25cf\u25cf"
+            },
+            "r3c4": {
+                "l": "cell",
+                "c": ""
+            },
+            "r3c5": {
+                "l": "cell",
+                "c": ""
+            },
+            "r3c6": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r3c7": {
+                "l": "cell",
+                "c": ""
+            },
+            "r3c8": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r3c9": {
+                "l": "cell",
+                "c": ""
+            },
+            "r3c10": {
+                "l": "cell",
+                "c": ""
+            },
+            "r3c11": {
+                "l": "word",
+                "c": "\u25cf\u25cf"
+            },
+            "r3c12": {
+                "l": "cell",
+                "c": ""
+            },
+            "r3c13": {
+                "l": "cell",
+                "c": ""
+            },
+            "r4c1": {
+                "l": "cell",
+                "c": ""
+            },
+            "r4c2": {
+                "l": "cell",
+                "c": ""
+            },
+            "r4c3": {
+                "l": "cell",
+                "c": ""
+            },
+            "r4c4": {
+                "l": "word",
+                "c": "\u25cf\u25cf"
+            },
+            "r4c5": {
+                "l": "cell",
+                "c": ""
+            },
+            "r4c6": {
+                "l": "cell",
+                "c": ""
+            },
+            "r4c7": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r4c8": {
+                "l": "cell",
+                "c": ""
+            },
+            "r4c9": {
+                "l": "cell",
+                "c": ""
+            },
+            "r4c10": {
+                "l": "word",
+                "c": "\u25cf\u25cf"
+            },
+            "r4c11": {
+                "l": "cell",
+                "c": ""
+            },
+            "r4c12": {
+                "l": "cell",
+                "c": ""
+            },
+            "r4c13": {
+                "l": "cell",
+                "c": ""
+            },
+            "r5c1": {
+                "l": "cell",
+                "c": ""
+            },
+            "r5c2": {
+                "l": "lett",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r5c3": {
+                "l": "cell",
+                "c": ""
+            },
+            "r5c4": {
+                "l": "cell",
+                "c": ""
+            },
+            "r5c5": {
+                "l": "lett",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r5c6": {
+                "l": "cell",
+                "c": ""
+            },
+            "r5c7": {
+                "l": "cell",
+                "c": ""
+            },
+            "r5c8": {
+                "l": "cell",
+                "c": ""
+            },
+            "r5c9": {
+                "l": "lett",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r5c10": {
+                "l": "cell",
+                "c": ""
+            },
+            "r5c11": {
+                "l": "cell",
+                "c": ""
+            },
+            "r5c12": {
+                "l": "lett",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r5c13": {
+                "l": "cell",
+                "c": ""
+            },
+            "r6c1": {
+                "l": "cell",
+                "c": ""
+            },
+            "r6c2": {
+                "l": "cell",
+                "c": ""
+            },
+            "r6c3": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r6c4": {
+                "l": "cell",
+                "c": ""
+            },
+            "r6c5": {
+                "l": "cell",
+                "c": ""
+            },
+            "r6c6": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r6c7": {
+                "l": "cell",
+                "c": ""
+            },
+            "r6c8": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r6c9": {
+                "l": "cell",
+                "c": ""
+            },
+            "r6c10": {
+                "l": "cell",
+                "c": ""
+            },
+            "r6c11": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r6c12": {
+                "l": "cell",
+                "c": ""
+            },
+            "r6c13": {
+                "l": "cell",
+                "c": ""
+            },
+            "r7c1": {
+                "l": "word",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r7c2": {
+                "l": "cell",
+                "c": ""
+            },
+            "r7c3": {
+                "l": "cell",
+                "c": ""
+            },
+            "r7c4": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r7c5": {
+                "l": "cell",
+                "c": ""
+            },
+            "r7c6": {
+                "l": "cell",
+                "c": ""
+            },
+            "r7c7": {
+                "l": "startcell",
+                "c": "\u25cf\u25cf"
+            },
+            "r7c8": {
+                "l": "cell",
+                "c": ""
+            },
+            "r7c9": {
+                "l": "cell",
+                "c": ""
+            },
+            "r7c10": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r7c11": {
+                "l": "cell",
+                "c": ""
+            },
+            "r7c12": {
+                "l": "cell",
+                "c": ""
+            },
+            "r7c13": {
+                "l": "word",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r8c1": {
+                "l": "cell",
+                "c": ""
+            },
+            "r8c2": {
+                "l": "cell",
+                "c": ""
+            },
+            "r8c3": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r8c4": {
+                "l": "cell",
+                "c": ""
+            },
+            "r8c5": {
+                "l": "cell",
+                "c": ""
+            },
+            "r8c6": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r8c7": {
+                "l": "cell",
+                "c": ""
+            },
+            "r8c8": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r8c9": {
+                "l": "cell",
+                "c": ""
+            },
+            "r8c10": {
+                "l": "cell",
+                "c": ""
+            },
+            "r8c11": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r8c12": {
+                "l": "cell",
+                "c": ""
+            },
+            "r8c13": {
+                "l": "cell",
+                "c": ""
+            },
+            "r9c1": {
+                "l": "cell",
+                "c": ""
+            },
+            "r9c2": {
+                "l": "lett",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r9c3": {
+                "l": "cell",
+                "c": ""
+            },
+            "r9c4": {
+                "l": "cell",
+                "c": ""
+            },
+            "r9c5": {
+                "l": "lett",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r9c6": {
+                "l": "cell",
+                "c": ""
+            },
+            "r9c7": {
+                "l": "cell",
+                "c": ""
+            },
+            "r9c8": {
+                "l": "cell",
+                "c": ""
+            },
+            "r9c9": {
+                "l": "lett",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r9c10": {
+                "l": "cell",
+                "c": ""
+            },
+            "r9c11": {
+                "l": "cell",
+                "c": ""
+            },
+            "r9c12": {
+                "l": "lett",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r9c13": {
+                "l": "cell",
+                "c": ""
+            },
+            "r10c1": {
+                "l": "cell",
+                "c": ""
+            },
+            "r10c2": {
+                "l": "cell",
+                "c": ""
+            },
+            "r10c3": {
+                "l": "cell",
+                "c": ""
+            },
+            "r10c4": {
+                "l": "word",
+                "c": "\u25cf\u25cf"
+            },
+            "r10c5": {
+                "l": "cell",
+                "c": ""
+            },
+            "r10c6": {
+                "l": "cell",
+                "c": ""
+            },
+            "r10c7": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r10c8": {
+                "l": "cell",
+                "c": ""
+            },
+            "r10c9": {
+                "l": "cell",
+                "c": ""
+            },
+            "r10c10": {
+                "l": "word",
+                "c": "\u25cf\u25cf"
+            },
+            "r10c11": {
+                "l": "cell",
+                "c": ""
+            },
+            "r10c12": {
+                "l": "cell",
+                "c": ""
+            },
+            "r10c13": {
+                "l": "cell",
+                "c": ""
+            },
+            "r11c1": {
+                "l": "cell",
+                "c": ""
+            },
+            "r11c2": {
+                "l": "cell",
+                "c": ""
+            },
+            "r11c3": {
+                "l": "word",
+                "c": "\u25cf\u25cf"
+            },
+            "r11c4": {
+                "l": "cell",
+                "c": ""
+            },
+            "r11c5": {
+                "l": "cell",
+                "c": ""
+            },
+            "r11c6": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r11c7": {
+                "l": "cell",
+                "c": ""
+            },
+            "r11c8": {
+                "l": "lett",
+                "c": "\u25cf\u25cf"
+            },
+            "r11c9": {
+                "l": "cell",
+                "c": ""
+            },
+            "r11c10": {
+                "l": "cell",
+                "c": ""
+            },
+            "r11c11": {
+                "l": "word",
+                "c": "\u25cf\u25cf"
+            },
+            "r11c12": {
+                "l": "cell",
+                "c": ""
+            },
+            "r11c13": {
+                "l": "cell",
+                "c": ""
+            },
+            "r12c1": {
+                "l": "cell",
+                "c": ""
+            },
+            "r12c2": {
+                "l": "word",
+                "c": "\u25cf\u25cf"
+            },
+            "r12c3": {
+                "l": "cell",
+                "c": ""
+            },
+            "r12c4": {
+                "l": "cell",
+                "c": ""
+            },
+            "r12c5": {
+                "l": "lett",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r12c6": {
+                "l": "cell",
+                "c": ""
+            },
+            "r12c7": {
+                "l": "cell",
+                "c": ""
+            },
+            "r12c8": {
+                "l": "cell",
+                "c": ""
+            },
+            "r12c9": {
+                "l": "lett",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r12c10": {
+                "l": "cell",
+                "c": ""
+            },
+            "r12c11": {
+                "l": "cell",
+                "c": ""
+            },
+            "r12c12": {
+                "l": "word",
+                "c": "\u25cf\u25cf"
+            },
+            "r12c13": {
+                "l": "cell",
+                "c": ""
+            },
+            "r13c1": {
+                "l": "word",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r13c2": {
+                "l": "cell",
+                "c": ""
+            },
+            "r13c3": {
+                "l": "cell",
+                "c": ""
+            },
+            "r13c4": {
+                "l": "cell",
+                "c": ""
+            },
+            "r13c5": {
+                "l": "cell",
+                "c": ""
+            },
+            "r13c6": {
+                "l": "cell",
+                "c": ""
+            },
+            "r13c7": {
+                "l": "word",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "r13c8": {
+                "l": "cell",
+                "c": ""
+            },
+            "r13c9": {
+                "l": "cell",
+                "c": ""
+            },
+            "r13c10": {
+                "l": "cell",
+                "c": ""
+            },
+            "r13c11": {
+                "l": "cell",
+                "c": ""
+            },
+            "r13c12": {
+                "l": "cell",
+                "c": ""
+            },
+            "r13c13": {
+                "l": "word",
+                "c": "\u25cf\u25cf\u25cf"
+            },
+            "t1": {
+                "l": "traycell",
+                "c": "U"
+            },
+            "t2": {
+                "l": "traycell",
+                "c": "Y"
+            },
+            "t3": {
+                "l": "traycell",
+                "c": "T"
+            },
+            "t4": {
+                "l": "traycell",
+                "c": "G"
+            },
+            "t5": {
+                "l": "traycell",
+                "c": "O"
+            },
+            "t6": {
+                "l": "traycell",
+                "c": "L"
+            },
+            "t7": {
+                "l": "traycell",
+                "c": "M"
+            }
+        }
+    </script>
+</amp-state>
+<div>Start Playing with Glen 2</div>
+<div>It's your turn</div>
+<div class="board">
+    <div tabindex="1" role="button" class="word" [class]="curr=='r1c1'?'sel':r1c1&&[r1c1]?'mine':gs.r1c1.l" on="tap:AMP.setState({[r1c1]:played?[r1c1]:'',r1c1:played?r1c1:tile,[tile]:'r1c1',curr:curr=='r1c1'||tile?'':'r1c1',tile:''}),checkscore.submit"><div [text]="r1c1&&[r1c1]?gs[r1c1].c:gs.r1c1.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="2" role="button" class="cell" [class]="curr=='r1c2'?'sel':r1c2&&[r1c2]?'mine':gs.r1c2.l" on="tap:AMP.setState({[r1c2]:played?[r1c2]:'',r1c2:played?r1c2:tile,[tile]:'r1c2',curr:curr=='r1c2'||tile?'':'r1c2',tile:''}),checkscore.submit"><div [text]="r1c2&&[r1c2]?gs[r1c2].c:gs.r1c2.c"></div></div>
+    <div tabindex="3" role="button" class="cell" [class]="curr=='r1c3'?'sel':r1c3&&[r1c3]?'mine':gs.r1c3.l" on="tap:AMP.setState({[r1c3]:played?[r1c3]:'',r1c3:played?r1c3:tile,[tile]:'r1c3',curr:curr=='r1c3'||tile?'':'r1c3',tile:''}),checkscore.submit"><div [text]="r1c3&&[r1c3]?gs[r1c3].c:gs.r1c3.c"></div></div>
+    <div tabindex="4" role="button" class="cell" [class]="curr=='r1c4'?'sel':r1c4&&[r1c4]?'mine':gs.r1c4.l" on="tap:AMP.setState({[r1c4]:played?[r1c4]:'',r1c4:played?r1c4:tile,[tile]:'r1c4',curr:curr=='r1c4'||tile?'':'r1c4',tile:''}),checkscore.submit"><div [text]="r1c4&&[r1c4]?gs[r1c4].c:gs.r1c4.c"></div></div>
+    <div tabindex="5" role="button" class="cell" [class]="curr=='r1c5'?'sel':r1c5&&[r1c5]?'mine':gs.r1c5.l" on="tap:AMP.setState({[r1c5]:played?[r1c5]:'',r1c5:played?r1c5:tile,[tile]:'r1c5',curr:curr=='r1c5'||tile?'':'r1c5',tile:''}),checkscore.submit"><div [text]="r1c5&&[r1c5]?gs[r1c5].c:gs.r1c5.c"></div></div>
+    <div tabindex="6" role="button" class="cell" [class]="curr=='r1c6'?'sel':r1c6&&[r1c6]?'mine':gs.r1c6.l" on="tap:AMP.setState({[r1c6]:played?[r1c6]:'',r1c6:played?r1c6:tile,[tile]:'r1c6',curr:curr=='r1c6'||tile?'':'r1c6',tile:''}),checkscore.submit"><div [text]="r1c6&&[r1c6]?gs[r1c6].c:gs.r1c6.c"></div></div>
+    <div tabindex="7" role="button" class="word" [class]="curr=='r1c7'?'sel':r1c7&&[r1c7]?'mine':gs.r1c7.l" on="tap:AMP.setState({[r1c7]:played?[r1c7]:'',r1c7:played?r1c7:tile,[tile]:'r1c7',curr:curr=='r1c7'||tile?'':'r1c7',tile:''}),checkscore.submit"><div [text]="r1c7&&[r1c7]?gs[r1c7].c:gs.r1c7.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="8" role="button" class="cell" [class]="curr=='r1c8'?'sel':r1c8&&[r1c8]?'mine':gs.r1c8.l" on="tap:AMP.setState({[r1c8]:played?[r1c8]:'',r1c8:played?r1c8:tile,[tile]:'r1c8',curr:curr=='r1c8'||tile?'':'r1c8',tile:''}),checkscore.submit"><div [text]="r1c8&&[r1c8]?gs[r1c8].c:gs.r1c8.c"></div></div>
+    <div tabindex="9" role="button" class="cell" [class]="curr=='r1c9'?'sel':r1c9&&[r1c9]?'mine':gs.r1c9.l" on="tap:AMP.setState({[r1c9]:played?[r1c9]:'',r1c9:played?r1c9:tile,[tile]:'r1c9',curr:curr=='r1c9'||tile?'':'r1c9',tile:''}),checkscore.submit"><div [text]="r1c9&&[r1c9]?gs[r1c9].c:gs.r1c9.c"></div></div>
+    <div tabindex="10" role="button" class="cell" [class]="curr=='r1c10'?'sel':r1c10&&[r1c10]?'mine':gs.r1c10.l" on="tap:AMP.setState({[r1c10]:played?[r1c10]:'',r1c10:played?r1c10:tile,[tile]:'r1c10',curr:curr=='r1c10'||tile?'':'r1c10',tile:''}),checkscore.submit"><div [text]="r1c10&&[r1c10]?gs[r1c10].c:gs.r1c10.c"></div></div>
+    <div tabindex="11" role="button" class="cell" [class]="curr=='r1c11'?'sel':r1c11&&[r1c11]?'mine':gs.r1c11.l" on="tap:AMP.setState({[r1c11]:played?[r1c11]:'',r1c11:played?r1c11:tile,[tile]:'r1c11',curr:curr=='r1c11'||tile?'':'r1c11',tile:''}),checkscore.submit"><div [text]="r1c11&&[r1c11]?gs[r1c11].c:gs.r1c11.c"></div></div>
+    <div tabindex="12" role="button" class="cell" [class]="curr=='r1c12'?'sel':r1c12&&[r1c12]?'mine':gs.r1c12.l" on="tap:AMP.setState({[r1c12]:played?[r1c12]:'',r1c12:played?r1c12:tile,[tile]:'r1c12',curr:curr=='r1c12'||tile?'':'r1c12',tile:''}),checkscore.submit"><div [text]="r1c12&&[r1c12]?gs[r1c12].c:gs.r1c12.c"></div></div>
+    <div tabindex="13" role="button" class="word" [class]="curr=='r1c13'?'sel':r1c13&&[r1c13]?'mine':gs.r1c13.l" on="tap:AMP.setState({[r1c13]:played?[r1c13]:'',r1c13:played?r1c13:tile,[tile]:'r1c13',curr:curr=='r1c13'||tile?'':'r1c13',tile:''}),checkscore.submit"><div [text]="r1c13&&[r1c13]?gs[r1c13].c:gs.r1c13.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="14" role="button" class="cell" [class]="curr=='r2c1'?'sel':r2c1&&[r2c1]?'mine':gs.r2c1.l" on="tap:AMP.setState({[r2c1]:played?[r2c1]:'',r2c1:played?r2c1:tile,[tile]:'r2c1',curr:curr=='r2c1'||tile?'':'r2c1',tile:''}),checkscore.submit"><div [text]="r2c1&&[r2c1]?gs[r2c1].c:gs.r2c1.c"></div></div>
+    <div tabindex="15" role="button" class="word" [class]="curr=='r2c2'?'sel':r2c2&&[r2c2]?'mine':gs.r2c2.l" on="tap:AMP.setState({[r2c2]:played?[r2c2]:'',r2c2:played?r2c2:tile,[tile]:'r2c2',curr:curr=='r2c2'||tile?'':'r2c2',tile:''}),checkscore.submit"><div [text]="r2c2&&[r2c2]?gs[r2c2].c:gs.r2c2.c">&#9679;&#9679;</div></div>
+    <div tabindex="16" role="button" class="cell" [class]="curr=='r2c3'?'sel':r2c3&&[r2c3]?'mine':gs.r2c3.l" on="tap:AMP.setState({[r2c3]:played?[r2c3]:'',r2c3:played?r2c3:tile,[tile]:'r2c3',curr:curr=='r2c3'||tile?'':'r2c3',tile:''}),checkscore.submit"><div [text]="r2c3&&[r2c3]?gs[r2c3].c:gs.r2c3.c"></div></div>
+    <div tabindex="17" role="button" class="cell" [class]="curr=='r2c4'?'sel':r2c4&&[r2c4]?'mine':gs.r2c4.l" on="tap:AMP.setState({[r2c4]:played?[r2c4]:'',r2c4:played?r2c4:tile,[tile]:'r2c4',curr:curr=='r2c4'||tile?'':'r2c4',tile:''}),checkscore.submit"><div [text]="r2c4&&[r2c4]?gs[r2c4].c:gs.r2c4.c"></div></div>
+    <div tabindex="18" role="button" class="lett" [class]="curr=='r2c5'?'sel':r2c5&&[r2c5]?'mine':gs.r2c5.l" on="tap:AMP.setState({[r2c5]:played?[r2c5]:'',r2c5:played?r2c5:tile,[tile]:'r2c5',curr:curr=='r2c5'||tile?'':'r2c5',tile:''}),checkscore.submit"><div [text]="r2c5&&[r2c5]?gs[r2c5].c:gs.r2c5.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="19" role="button" class="cell" [class]="curr=='r2c6'?'sel':r2c6&&[r2c6]?'mine':gs.r2c6.l" on="tap:AMP.setState({[r2c6]:played?[r2c6]:'',r2c6:played?r2c6:tile,[tile]:'r2c6',curr:curr=='r2c6'||tile?'':'r2c6',tile:''}),checkscore.submit"><div [text]="r2c6&&[r2c6]?gs[r2c6].c:gs.r2c6.c"></div></div>
+    <div tabindex="20" role="button" class="cell" [class]="curr=='r2c7'?'sel':r2c7&&[r2c7]?'mine':gs.r2c7.l" on="tap:AMP.setState({[r2c7]:played?[r2c7]:'',r2c7:played?r2c7:tile,[tile]:'r2c7',curr:curr=='r2c7'||tile?'':'r2c7',tile:''}),checkscore.submit"><div [text]="r2c7&&[r2c7]?gs[r2c7].c:gs.r2c7.c"></div></div>
+    <div tabindex="21" role="button" class="cell" [class]="curr=='r2c8'?'sel':r2c8&&[r2c8]?'mine':gs.r2c8.l" on="tap:AMP.setState({[r2c8]:played?[r2c8]:'',r2c8:played?r2c8:tile,[tile]:'r2c8',curr:curr=='r2c8'||tile?'':'r2c8',tile:''}),checkscore.submit"><div [text]="r2c8&&[r2c8]?gs[r2c8].c:gs.r2c8.c"></div></div>
+    <div tabindex="22" role="button" class="lett" [class]="curr=='r2c9'?'sel':r2c9&&[r2c9]?'mine':gs.r2c9.l" on="tap:AMP.setState({[r2c9]:played?[r2c9]:'',r2c9:played?r2c9:tile,[tile]:'r2c9',curr:curr=='r2c9'||tile?'':'r2c9',tile:''}),checkscore.submit"><div [text]="r2c9&&[r2c9]?gs[r2c9].c:gs.r2c9.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="23" role="button" class="cell" [class]="curr=='r2c10'?'sel':r2c10&&[r2c10]?'mine':gs.r2c10.l" on="tap:AMP.setState({[r2c10]:played?[r2c10]:'',r2c10:played?r2c10:tile,[tile]:'r2c10',curr:curr=='r2c10'||tile?'':'r2c10',tile:''}),checkscore.submit"><div [text]="r2c10&&[r2c10]?gs[r2c10].c:gs.r2c10.c"></div></div>
+    <div tabindex="24" role="button" class="cell" [class]="curr=='r2c11'?'sel':r2c11&&[r2c11]?'mine':gs.r2c11.l" on="tap:AMP.setState({[r2c11]:played?[r2c11]:'',r2c11:played?r2c11:tile,[tile]:'r2c11',curr:curr=='r2c11'||tile?'':'r2c11',tile:''}),checkscore.submit"><div [text]="r2c11&&[r2c11]?gs[r2c11].c:gs.r2c11.c"></div></div>
+    <div tabindex="25" role="button" class="word" [class]="curr=='r2c12'?'sel':r2c12&&[r2c12]?'mine':gs.r2c12.l" on="tap:AMP.setState({[r2c12]:played?[r2c12]:'',r2c12:played?r2c12:tile,[tile]:'r2c12',curr:curr=='r2c12'||tile?'':'r2c12',tile:''}),checkscore.submit"><div [text]="r2c12&&[r2c12]?gs[r2c12].c:gs.r2c12.c">&#9679;&#9679;</div></div>
+    <div tabindex="26" role="button" class="cell" [class]="curr=='r2c13'?'sel':r2c13&&[r2c13]?'mine':gs.r2c13.l" on="tap:AMP.setState({[r2c13]:played?[r2c13]:'',r2c13:played?r2c13:tile,[tile]:'r2c13',curr:curr=='r2c13'||tile?'':'r2c13',tile:''}),checkscore.submit"><div [text]="r2c13&&[r2c13]?gs[r2c13].c:gs.r2c13.c"></div></div>
+    <div tabindex="27" role="button" class="cell" [class]="curr=='r3c1'?'sel':r3c1&&[r3c1]?'mine':gs.r3c1.l" on="tap:AMP.setState({[r3c1]:played?[r3c1]:'',r3c1:played?r3c1:tile,[tile]:'r3c1',curr:curr=='r3c1'||tile?'':'r3c1',tile:''}),checkscore.submit"><div [text]="r3c1&&[r3c1]?gs[r3c1].c:gs.r3c1.c"></div></div>
+    <div tabindex="28" role="button" class="cell" [class]="curr=='r3c2'?'sel':r3c2&&[r3c2]?'mine':gs.r3c2.l" on="tap:AMP.setState({[r3c2]:played?[r3c2]:'',r3c2:played?r3c2:tile,[tile]:'r3c2',curr:curr=='r3c2'||tile?'':'r3c2',tile:''}),checkscore.submit"><div [text]="r3c2&&[r3c2]?gs[r3c2].c:gs.r3c2.c"></div></div>
+    <div tabindex="29" role="button" class="word" [class]="curr=='r3c3'?'sel':r3c3&&[r3c3]?'mine':gs.r3c3.l" on="tap:AMP.setState({[r3c3]:played?[r3c3]:'',r3c3:played?r3c3:tile,[tile]:'r3c3',curr:curr=='r3c3'||tile?'':'r3c3',tile:''}),checkscore.submit"><div [text]="r3c3&&[r3c3]?gs[r3c3].c:gs.r3c3.c">&#9679;&#9679;</div></div>
+    <div tabindex="30" role="button" class="cell" [class]="curr=='r3c4'?'sel':r3c4&&[r3c4]?'mine':gs.r3c4.l" on="tap:AMP.setState({[r3c4]:played?[r3c4]:'',r3c4:played?r3c4:tile,[tile]:'r3c4',curr:curr=='r3c4'||tile?'':'r3c4',tile:''}),checkscore.submit"><div [text]="r3c4&&[r3c4]?gs[r3c4].c:gs.r3c4.c"></div></div>
+    <div tabindex="31" role="button" class="cell" [class]="curr=='r3c5'?'sel':r3c5&&[r3c5]?'mine':gs.r3c5.l" on="tap:AMP.setState({[r3c5]:played?[r3c5]:'',r3c5:played?r3c5:tile,[tile]:'r3c5',curr:curr=='r3c5'||tile?'':'r3c5',tile:''}),checkscore.submit"><div [text]="r3c5&&[r3c5]?gs[r3c5].c:gs.r3c5.c"></div></div>
+    <div tabindex="32" role="button" class="lett" [class]="curr=='r3c6'?'sel':r3c6&&[r3c6]?'mine':gs.r3c6.l" on="tap:AMP.setState({[r3c6]:played?[r3c6]:'',r3c6:played?r3c6:tile,[tile]:'r3c6',curr:curr=='r3c6'||tile?'':'r3c6',tile:''}),checkscore.submit"><div [text]="r3c6&&[r3c6]?gs[r3c6].c:gs.r3c6.c">&#9679;&#9679;</div></div>
+    <div tabindex="33" role="button" class="cell" [class]="curr=='r3c7'?'sel':r3c7&&[r3c7]?'mine':gs.r3c7.l" on="tap:AMP.setState({[r3c7]:played?[r3c7]:'',r3c7:played?r3c7:tile,[tile]:'r3c7',curr:curr=='r3c7'||tile?'':'r3c7',tile:''}),checkscore.submit"><div [text]="r3c7&&[r3c7]?gs[r3c7].c:gs.r3c7.c"></div></div>
+    <div tabindex="34" role="button" class="lett" [class]="curr=='r3c8'?'sel':r3c8&&[r3c8]?'mine':gs.r3c8.l" on="tap:AMP.setState({[r3c8]:played?[r3c8]:'',r3c8:played?r3c8:tile,[tile]:'r3c8',curr:curr=='r3c8'||tile?'':'r3c8',tile:''}),checkscore.submit"><div [text]="r3c8&&[r3c8]?gs[r3c8].c:gs.r3c8.c">&#9679;&#9679;</div></div>
+    <div tabindex="35" role="button" class="cell" [class]="curr=='r3c9'?'sel':r3c9&&[r3c9]?'mine':gs.r3c9.l" on="tap:AMP.setState({[r3c9]:played?[r3c9]:'',r3c9:played?r3c9:tile,[tile]:'r3c9',curr:curr=='r3c9'||tile?'':'r3c9',tile:''}),checkscore.submit"><div [text]="r3c9&&[r3c9]?gs[r3c9].c:gs.r3c9.c"></div></div>
+    <div tabindex="36" role="button" class="cell" [class]="curr=='r3c10'?'sel':r3c10&&[r3c10]?'mine':gs.r3c10.l" on="tap:AMP.setState({[r3c10]:played?[r3c10]:'',r3c10:played?r3c10:tile,[tile]:'r3c10',curr:curr=='r3c10'||tile?'':'r3c10',tile:''}),checkscore.submit"><div [text]="r3c10&&[r3c10]?gs[r3c10].c:gs.r3c10.c"></div></div>
+    <div tabindex="37" role="button" class="word" [class]="curr=='r3c11'?'sel':r3c11&&[r3c11]?'mine':gs.r3c11.l" on="tap:AMP.setState({[r3c11]:played?[r3c11]:'',r3c11:played?r3c11:tile,[tile]:'r3c11',curr:curr=='r3c11'||tile?'':'r3c11',tile:''}),checkscore.submit"><div [text]="r3c11&&[r3c11]?gs[r3c11].c:gs.r3c11.c">&#9679;&#9679;</div></div>
+    <div tabindex="38" role="button" class="cell" [class]="curr=='r3c12'?'sel':r3c12&&[r3c12]?'mine':gs.r3c12.l" on="tap:AMP.setState({[r3c12]:played?[r3c12]:'',r3c12:played?r3c12:tile,[tile]:'r3c12',curr:curr=='r3c12'||tile?'':'r3c12',tile:''}),checkscore.submit"><div [text]="r3c12&&[r3c12]?gs[r3c12].c:gs.r3c12.c"></div></div>
+    <div tabindex="39" role="button" class="cell" [class]="curr=='r3c13'?'sel':r3c13&&[r3c13]?'mine':gs.r3c13.l" on="tap:AMP.setState({[r3c13]:played?[r3c13]:'',r3c13:played?r3c13:tile,[tile]:'r3c13',curr:curr=='r3c13'||tile?'':'r3c13',tile:''}),checkscore.submit"><div [text]="r3c13&&[r3c13]?gs[r3c13].c:gs.r3c13.c"></div></div>
+    <div tabindex="40" role="button" class="cell" [class]="curr=='r4c1'?'sel':r4c1&&[r4c1]?'mine':gs.r4c1.l" on="tap:AMP.setState({[r4c1]:played?[r4c1]:'',r4c1:played?r4c1:tile,[tile]:'r4c1',curr:curr=='r4c1'||tile?'':'r4c1',tile:''}),checkscore.submit"><div [text]="r4c1&&[r4c1]?gs[r4c1].c:gs.r4c1.c"></div></div>
+    <div tabindex="41" role="button" class="cell" [class]="curr=='r4c2'?'sel':r4c2&&[r4c2]?'mine':gs.r4c2.l" on="tap:AMP.setState({[r4c2]:played?[r4c2]:'',r4c2:played?r4c2:tile,[tile]:'r4c2',curr:curr=='r4c2'||tile?'':'r4c2',tile:''}),checkscore.submit"><div [text]="r4c2&&[r4c2]?gs[r4c2].c:gs.r4c2.c"></div></div>
+    <div tabindex="42" role="button" class="cell" [class]="curr=='r4c3'?'sel':r4c3&&[r4c3]?'mine':gs.r4c3.l" on="tap:AMP.setState({[r4c3]:played?[r4c3]:'',r4c3:played?r4c3:tile,[tile]:'r4c3',curr:curr=='r4c3'||tile?'':'r4c3',tile:''}),checkscore.submit"><div [text]="r4c3&&[r4c3]?gs[r4c3].c:gs.r4c3.c"></div></div>
+    <div tabindex="43" role="button" class="word" [class]="curr=='r4c4'?'sel':r4c4&&[r4c4]?'mine':gs.r4c4.l" on="tap:AMP.setState({[r4c4]:played?[r4c4]:'',r4c4:played?r4c4:tile,[tile]:'r4c4',curr:curr=='r4c4'||tile?'':'r4c4',tile:''}),checkscore.submit"><div [text]="r4c4&&[r4c4]?gs[r4c4].c:gs.r4c4.c">&#9679;&#9679;</div></div>
+    <div tabindex="44" role="button" class="cell" [class]="curr=='r4c5'?'sel':r4c5&&[r4c5]?'mine':gs.r4c5.l" on="tap:AMP.setState({[r4c5]:played?[r4c5]:'',r4c5:played?r4c5:tile,[tile]:'r4c5',curr:curr=='r4c5'||tile?'':'r4c5',tile:''}),checkscore.submit"><div [text]="r4c5&&[r4c5]?gs[r4c5].c:gs.r4c5.c"></div></div>
+    <div tabindex="45" role="button" class="cell" [class]="curr=='r4c6'?'sel':r4c6&&[r4c6]?'mine':gs.r4c6.l" on="tap:AMP.setState({[r4c6]:played?[r4c6]:'',r4c6:played?r4c6:tile,[tile]:'r4c6',curr:curr=='r4c6'||tile?'':'r4c6',tile:''}),checkscore.submit"><div [text]="r4c6&&[r4c6]?gs[r4c6].c:gs.r4c6.c"></div></div>
+    <div tabindex="46" role="button" class="lett" [class]="curr=='r4c7'?'sel':r4c7&&[r4c7]?'mine':gs.r4c7.l" on="tap:AMP.setState({[r4c7]:played?[r4c7]:'',r4c7:played?r4c7:tile,[tile]:'r4c7',curr:curr=='r4c7'||tile?'':'r4c7',tile:''}),checkscore.submit"><div [text]="r4c7&&[r4c7]?gs[r4c7].c:gs.r4c7.c">&#9679;&#9679;</div></div>
+    <div tabindex="47" role="button" class="cell" [class]="curr=='r4c8'?'sel':r4c8&&[r4c8]?'mine':gs.r4c8.l" on="tap:AMP.setState({[r4c8]:played?[r4c8]:'',r4c8:played?r4c8:tile,[tile]:'r4c8',curr:curr=='r4c8'||tile?'':'r4c8',tile:''}),checkscore.submit"><div [text]="r4c8&&[r4c8]?gs[r4c8].c:gs.r4c8.c"></div></div>
+    <div tabindex="48" role="button" class="cell" [class]="curr=='r4c9'?'sel':r4c9&&[r4c9]?'mine':gs.r4c9.l" on="tap:AMP.setState({[r4c9]:played?[r4c9]:'',r4c9:played?r4c9:tile,[tile]:'r4c9',curr:curr=='r4c9'||tile?'':'r4c9',tile:''}),checkscore.submit"><div [text]="r4c9&&[r4c9]?gs[r4c9].c:gs.r4c9.c"></div></div>
+    <div tabindex="49" role="button" class="word" [class]="curr=='r4c10'?'sel':r4c10&&[r4c10]?'mine':gs.r4c10.l" on="tap:AMP.setState({[r4c10]:played?[r4c10]:'',r4c10:played?r4c10:tile,[tile]:'r4c10',curr:curr=='r4c10'||tile?'':'r4c10',tile:''}),checkscore.submit"><div [text]="r4c10&&[r4c10]?gs[r4c10].c:gs.r4c10.c">&#9679;&#9679;</div></div>
+    <div tabindex="50" role="button" class="cell" [class]="curr=='r4c11'?'sel':r4c11&&[r4c11]?'mine':gs.r4c11.l" on="tap:AMP.setState({[r4c11]:played?[r4c11]:'',r4c11:played?r4c11:tile,[tile]:'r4c11',curr:curr=='r4c11'||tile?'':'r4c11',tile:''}),checkscore.submit"><div [text]="r4c11&&[r4c11]?gs[r4c11].c:gs.r4c11.c"></div></div>
+    <div tabindex="51" role="button" class="cell" [class]="curr=='r4c12'?'sel':r4c12&&[r4c12]?'mine':gs.r4c12.l" on="tap:AMP.setState({[r4c12]:played?[r4c12]:'',r4c12:played?r4c12:tile,[tile]:'r4c12',curr:curr=='r4c12'||tile?'':'r4c12',tile:''}),checkscore.submit"><div [text]="r4c12&&[r4c12]?gs[r4c12].c:gs.r4c12.c"></div></div>
+    <div tabindex="52" role="button" class="cell" [class]="curr=='r4c13'?'sel':r4c13&&[r4c13]?'mine':gs.r4c13.l" on="tap:AMP.setState({[r4c13]:played?[r4c13]:'',r4c13:played?r4c13:tile,[tile]:'r4c13',curr:curr=='r4c13'||tile?'':'r4c13',tile:''}),checkscore.submit"><div [text]="r4c13&&[r4c13]?gs[r4c13].c:gs.r4c13.c"></div></div>
+    <div tabindex="53" role="button" class="cell" [class]="curr=='r5c1'?'sel':r5c1&&[r5c1]?'mine':gs.r5c1.l" on="tap:AMP.setState({[r5c1]:played?[r5c1]:'',r5c1:played?r5c1:tile,[tile]:'r5c1',curr:curr=='r5c1'||tile?'':'r5c1',tile:''}),checkscore.submit"><div [text]="r5c1&&[r5c1]?gs[r5c1].c:gs.r5c1.c"></div></div>
+    <div tabindex="54" role="button" class="lett" [class]="curr=='r5c2'?'sel':r5c2&&[r5c2]?'mine':gs.r5c2.l" on="tap:AMP.setState({[r5c2]:played?[r5c2]:'',r5c2:played?r5c2:tile,[tile]:'r5c2',curr:curr=='r5c2'||tile?'':'r5c2',tile:''}),checkscore.submit"><div [text]="r5c2&&[r5c2]?gs[r5c2].c:gs.r5c2.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="55" role="button" class="cell" [class]="curr=='r5c3'?'sel':r5c3&&[r5c3]?'mine':gs.r5c3.l" on="tap:AMP.setState({[r5c3]:played?[r5c3]:'',r5c3:played?r5c3:tile,[tile]:'r5c3',curr:curr=='r5c3'||tile?'':'r5c3',tile:''}),checkscore.submit"><div [text]="r5c3&&[r5c3]?gs[r5c3].c:gs.r5c3.c"></div></div>
+    <div tabindex="56" role="button" class="cell" [class]="curr=='r5c4'?'sel':r5c4&&[r5c4]?'mine':gs.r5c4.l" on="tap:AMP.setState({[r5c4]:played?[r5c4]:'',r5c4:played?r5c4:tile,[tile]:'r5c4',curr:curr=='r5c4'||tile?'':'r5c4',tile:''}),checkscore.submit"><div [text]="r5c4&&[r5c4]?gs[r5c4].c:gs.r5c4.c"></div></div>
+    <div tabindex="57" role="button" class="lett" [class]="curr=='r5c5'?'sel':r5c5&&[r5c5]?'mine':gs.r5c5.l" on="tap:AMP.setState({[r5c5]:played?[r5c5]:'',r5c5:played?r5c5:tile,[tile]:'r5c5',curr:curr=='r5c5'||tile?'':'r5c5',tile:''}),checkscore.submit"><div [text]="r5c5&&[r5c5]?gs[r5c5].c:gs.r5c5.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="58" role="button" class="cell" [class]="curr=='r5c6'?'sel':r5c6&&[r5c6]?'mine':gs.r5c6.l" on="tap:AMP.setState({[r5c6]:played?[r5c6]:'',r5c6:played?r5c6:tile,[tile]:'r5c6',curr:curr=='r5c6'||tile?'':'r5c6',tile:''}),checkscore.submit"><div [text]="r5c6&&[r5c6]?gs[r5c6].c:gs.r5c6.c"></div></div>
+    <div tabindex="59" role="button" class="cell" [class]="curr=='r5c7'?'sel':r5c7&&[r5c7]?'mine':gs.r5c7.l" on="tap:AMP.setState({[r5c7]:played?[r5c7]:'',r5c7:played?r5c7:tile,[tile]:'r5c7',curr:curr=='r5c7'||tile?'':'r5c7',tile:''}),checkscore.submit"><div [text]="r5c7&&[r5c7]?gs[r5c7].c:gs.r5c7.c"></div></div>
+    <div tabindex="60" role="button" class="cell" [class]="curr=='r5c8'?'sel':r5c8&&[r5c8]?'mine':gs.r5c8.l" on="tap:AMP.setState({[r5c8]:played?[r5c8]:'',r5c8:played?r5c8:tile,[tile]:'r5c8',curr:curr=='r5c8'||tile?'':'r5c8',tile:''}),checkscore.submit"><div [text]="r5c8&&[r5c8]?gs[r5c8].c:gs.r5c8.c"></div></div>
+    <div tabindex="61" role="button" class="lett" [class]="curr=='r5c9'?'sel':r5c9&&[r5c9]?'mine':gs.r5c9.l" on="tap:AMP.setState({[r5c9]:played?[r5c9]:'',r5c9:played?r5c9:tile,[tile]:'r5c9',curr:curr=='r5c9'||tile?'':'r5c9',tile:''}),checkscore.submit"><div [text]="r5c9&&[r5c9]?gs[r5c9].c:gs.r5c9.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="62" role="button" class="cell" [class]="curr=='r5c10'?'sel':r5c10&&[r5c10]?'mine':gs.r5c10.l" on="tap:AMP.setState({[r5c10]:played?[r5c10]:'',r5c10:played?r5c10:tile,[tile]:'r5c10',curr:curr=='r5c10'||tile?'':'r5c10',tile:''}),checkscore.submit"><div [text]="r5c10&&[r5c10]?gs[r5c10].c:gs.r5c10.c"></div></div>
+    <div tabindex="63" role="button" class="cell" [class]="curr=='r5c11'?'sel':r5c11&&[r5c11]?'mine':gs.r5c11.l" on="tap:AMP.setState({[r5c11]:played?[r5c11]:'',r5c11:played?r5c11:tile,[tile]:'r5c11',curr:curr=='r5c11'||tile?'':'r5c11',tile:''}),checkscore.submit"><div [text]="r5c11&&[r5c11]?gs[r5c11].c:gs.r5c11.c"></div></div>
+    <div tabindex="64" role="button" class="lett" [class]="curr=='r5c12'?'sel':r5c12&&[r5c12]?'mine':gs.r5c12.l" on="tap:AMP.setState({[r5c12]:played?[r5c12]:'',r5c12:played?r5c12:tile,[tile]:'r5c12',curr:curr=='r5c12'||tile?'':'r5c12',tile:''}),checkscore.submit"><div [text]="r5c12&&[r5c12]?gs[r5c12].c:gs.r5c12.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="65" role="button" class="cell" [class]="curr=='r5c13'?'sel':r5c13&&[r5c13]?'mine':gs.r5c13.l" on="tap:AMP.setState({[r5c13]:played?[r5c13]:'',r5c13:played?r5c13:tile,[tile]:'r5c13',curr:curr=='r5c13'||tile?'':'r5c13',tile:''}),checkscore.submit"><div [text]="r5c13&&[r5c13]?gs[r5c13].c:gs.r5c13.c"></div></div>
+    <div tabindex="66" role="button" class="cell" [class]="curr=='r6c1'?'sel':r6c1&&[r6c1]?'mine':gs.r6c1.l" on="tap:AMP.setState({[r6c1]:played?[r6c1]:'',r6c1:played?r6c1:tile,[tile]:'r6c1',curr:curr=='r6c1'||tile?'':'r6c1',tile:''}),checkscore.submit"><div [text]="r6c1&&[r6c1]?gs[r6c1].c:gs.r6c1.c"></div></div>
+    <div tabindex="67" role="button" class="cell" [class]="curr=='r6c2'?'sel':r6c2&&[r6c2]?'mine':gs.r6c2.l" on="tap:AMP.setState({[r6c2]:played?[r6c2]:'',r6c2:played?r6c2:tile,[tile]:'r6c2',curr:curr=='r6c2'||tile?'':'r6c2',tile:''}),checkscore.submit"><div [text]="r6c2&&[r6c2]?gs[r6c2].c:gs.r6c2.c"></div></div>
+    <div tabindex="68" role="button" class="lett" [class]="curr=='r6c3'?'sel':r6c3&&[r6c3]?'mine':gs.r6c3.l" on="tap:AMP.setState({[r6c3]:played?[r6c3]:'',r6c3:played?r6c3:tile,[tile]:'r6c3',curr:curr=='r6c3'||tile?'':'r6c3',tile:''}),checkscore.submit"><div [text]="r6c3&&[r6c3]?gs[r6c3].c:gs.r6c3.c">&#9679;&#9679;</div></div>
+    <div tabindex="69" role="button" class="cell" [class]="curr=='r6c4'?'sel':r6c4&&[r6c4]?'mine':gs.r6c4.l" on="tap:AMP.setState({[r6c4]:played?[r6c4]:'',r6c4:played?r6c4:tile,[tile]:'r6c4',curr:curr=='r6c4'||tile?'':'r6c4',tile:''}),checkscore.submit"><div [text]="r6c4&&[r6c4]?gs[r6c4].c:gs.r6c4.c"></div></div>
+    <div tabindex="70" role="button" class="cell" [class]="curr=='r6c5'?'sel':r6c5&&[r6c5]?'mine':gs.r6c5.l" on="tap:AMP.setState({[r6c5]:played?[r6c5]:'',r6c5:played?r6c5:tile,[tile]:'r6c5',curr:curr=='r6c5'||tile?'':'r6c5',tile:''}),checkscore.submit"><div [text]="r6c5&&[r6c5]?gs[r6c5].c:gs.r6c5.c"></div></div>
+    <div tabindex="71" role="button" class="lett" [class]="curr=='r6c6'?'sel':r6c6&&[r6c6]?'mine':gs.r6c6.l" on="tap:AMP.setState({[r6c6]:played?[r6c6]:'',r6c6:played?r6c6:tile,[tile]:'r6c6',curr:curr=='r6c6'||tile?'':'r6c6',tile:''}),checkscore.submit"><div [text]="r6c6&&[r6c6]?gs[r6c6].c:gs.r6c6.c">&#9679;&#9679;</div></div>
+    <div tabindex="72" role="button" class="cell" [class]="curr=='r6c7'?'sel':r6c7&&[r6c7]?'mine':gs.r6c7.l" on="tap:AMP.setState({[r6c7]:played?[r6c7]:'',r6c7:played?r6c7:tile,[tile]:'r6c7',curr:curr=='r6c7'||tile?'':'r6c7',tile:''}),checkscore.submit"><div [text]="r6c7&&[r6c7]?gs[r6c7].c:gs.r6c7.c"></div></div>
+    <div tabindex="73" role="button" class="lett" [class]="curr=='r6c8'?'sel':r6c8&&[r6c8]?'mine':gs.r6c8.l" on="tap:AMP.setState({[r6c8]:played?[r6c8]:'',r6c8:played?r6c8:tile,[tile]:'r6c8',curr:curr=='r6c8'||tile?'':'r6c8',tile:''}),checkscore.submit"><div [text]="r6c8&&[r6c8]?gs[r6c8].c:gs.r6c8.c">&#9679;&#9679;</div></div>
+    <div tabindex="74" role="button" class="cell" [class]="curr=='r6c9'?'sel':r6c9&&[r6c9]?'mine':gs.r6c9.l" on="tap:AMP.setState({[r6c9]:played?[r6c9]:'',r6c9:played?r6c9:tile,[tile]:'r6c9',curr:curr=='r6c9'||tile?'':'r6c9',tile:''}),checkscore.submit"><div [text]="r6c9&&[r6c9]?gs[r6c9].c:gs.r6c9.c"></div></div>
+    <div tabindex="75" role="button" class="cell" [class]="curr=='r6c10'?'sel':r6c10&&[r6c10]?'mine':gs.r6c10.l" on="tap:AMP.setState({[r6c10]:played?[r6c10]:'',r6c10:played?r6c10:tile,[tile]:'r6c10',curr:curr=='r6c10'||tile?'':'r6c10',tile:''}),checkscore.submit"><div [text]="r6c10&&[r6c10]?gs[r6c10].c:gs.r6c10.c"></div></div>
+    <div tabindex="76" role="button" class="lett" [class]="curr=='r6c11'?'sel':r6c11&&[r6c11]?'mine':gs.r6c11.l" on="tap:AMP.setState({[r6c11]:played?[r6c11]:'',r6c11:played?r6c11:tile,[tile]:'r6c11',curr:curr=='r6c11'||tile?'':'r6c11',tile:''}),checkscore.submit"><div [text]="r6c11&&[r6c11]?gs[r6c11].c:gs.r6c11.c">&#9679;&#9679;</div></div>
+    <div tabindex="77" role="button" class="cell" [class]="curr=='r6c12'?'sel':r6c12&&[r6c12]?'mine':gs.r6c12.l" on="tap:AMP.setState({[r6c12]:played?[r6c12]:'',r6c12:played?r6c12:tile,[tile]:'r6c12',curr:curr=='r6c12'||tile?'':'r6c12',tile:''}),checkscore.submit"><div [text]="r6c12&&[r6c12]?gs[r6c12].c:gs.r6c12.c"></div></div>
+    <div tabindex="78" role="button" class="cell" [class]="curr=='r6c13'?'sel':r6c13&&[r6c13]?'mine':gs.r6c13.l" on="tap:AMP.setState({[r6c13]:played?[r6c13]:'',r6c13:played?r6c13:tile,[tile]:'r6c13',curr:curr=='r6c13'||tile?'':'r6c13',tile:''}),checkscore.submit"><div [text]="r6c13&&[r6c13]?gs[r6c13].c:gs.r6c13.c"></div></div>
+    <div tabindex="79" role="button" class="word" [class]="curr=='r7c1'?'sel':r7c1&&[r7c1]?'mine':gs.r7c1.l" on="tap:AMP.setState({[r7c1]:played?[r7c1]:'',r7c1:played?r7c1:tile,[tile]:'r7c1',curr:curr=='r7c1'||tile?'':'r7c1',tile:''}),checkscore.submit"><div [text]="r7c1&&[r7c1]?gs[r7c1].c:gs.r7c1.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="80" role="button" class="cell" [class]="curr=='r7c2'?'sel':r7c2&&[r7c2]?'mine':gs.r7c2.l" on="tap:AMP.setState({[r7c2]:played?[r7c2]:'',r7c2:played?r7c2:tile,[tile]:'r7c2',curr:curr=='r7c2'||tile?'':'r7c2',tile:''}),checkscore.submit"><div [text]="r7c2&&[r7c2]?gs[r7c2].c:gs.r7c2.c"></div></div>
+    <div tabindex="81" role="button" class="cell" [class]="curr=='r7c3'?'sel':r7c3&&[r7c3]?'mine':gs.r7c3.l" on="tap:AMP.setState({[r7c3]:played?[r7c3]:'',r7c3:played?r7c3:tile,[tile]:'r7c3',curr:curr=='r7c3'||tile?'':'r7c3',tile:''}),checkscore.submit"><div [text]="r7c3&&[r7c3]?gs[r7c3].c:gs.r7c3.c"></div></div>
+    <div tabindex="82" role="button" class="lett" [class]="curr=='r7c4'?'sel':r7c4&&[r7c4]?'mine':gs.r7c4.l" on="tap:AMP.setState({[r7c4]:played?[r7c4]:'',r7c4:played?r7c4:tile,[tile]:'r7c4',curr:curr=='r7c4'||tile?'':'r7c4',tile:''}),checkscore.submit"><div [text]="r7c4&&[r7c4]?gs[r7c4].c:gs.r7c4.c">&#9679;&#9679;</div></div>
+    <div tabindex="83" role="button" class="cell" [class]="curr=='r7c5'?'sel':r7c5&&[r7c5]?'mine':gs.r7c5.l" on="tap:AMP.setState({[r7c5]:played?[r7c5]:'',r7c5:played?r7c5:tile,[tile]:'r7c5',curr:curr=='r7c5'||tile?'':'r7c5',tile:''}),checkscore.submit"><div [text]="r7c5&&[r7c5]?gs[r7c5].c:gs.r7c5.c"></div></div>
+    <div tabindex="84" role="button" class="cell" [class]="curr=='r7c6'?'sel':r7c6&&[r7c6]?'mine':gs.r7c6.l" on="tap:AMP.setState({[r7c6]:played?[r7c6]:'',r7c6:played?r7c6:tile,[tile]:'r7c6',curr:curr=='r7c6'||tile?'':'r7c6',tile:''}),checkscore.submit"><div [text]="r7c6&&[r7c6]?gs[r7c6].c:gs.r7c6.c"></div></div>
+    <div tabindex="85" role="button" class="startcell" [class]="curr=='r7c7'?'sel':r7c7&&[r7c7]?'mine':gs.r7c7.l" on="tap:AMP.setState({[r7c7]:played?[r7c7]:'',r7c7:played?r7c7:tile,[tile]:'r7c7',curr:curr=='r7c7'||tile?'':'r7c7',tile:''}),checkscore.submit"><div [text]="r7c7&&[r7c7]?gs[r7c7].c:gs.r7c7.c">&#9679;&#9679;</div></div>
+    <div tabindex="86" role="button" class="cell" [class]="curr=='r7c8'?'sel':r7c8&&[r7c8]?'mine':gs.r7c8.l" on="tap:AMP.setState({[r7c8]:played?[r7c8]:'',r7c8:played?r7c8:tile,[tile]:'r7c8',curr:curr=='r7c8'||tile?'':'r7c8',tile:''}),checkscore.submit"><div [text]="r7c8&&[r7c8]?gs[r7c8].c:gs.r7c8.c"></div></div>
+    <div tabindex="87" role="button" class="cell" [class]="curr=='r7c9'?'sel':r7c9&&[r7c9]?'mine':gs.r7c9.l" on="tap:AMP.setState({[r7c9]:played?[r7c9]:'',r7c9:played?r7c9:tile,[tile]:'r7c9',curr:curr=='r7c9'||tile?'':'r7c9',tile:''}),checkscore.submit"><div [text]="r7c9&&[r7c9]?gs[r7c9].c:gs.r7c9.c"></div></div>
+    <div tabindex="88" role="button" class="lett" [class]="curr=='r7c10'?'sel':r7c10&&[r7c10]?'mine':gs.r7c10.l" on="tap:AMP.setState({[r7c10]:played?[r7c10]:'',r7c10:played?r7c10:tile,[tile]:'r7c10',curr:curr=='r7c10'||tile?'':'r7c10',tile:''}),checkscore.submit"><div [text]="r7c10&&[r7c10]?gs[r7c10].c:gs.r7c10.c">&#9679;&#9679;</div></div>
+    <div tabindex="89" role="button" class="cell" [class]="curr=='r7c11'?'sel':r7c11&&[r7c11]?'mine':gs.r7c11.l" on="tap:AMP.setState({[r7c11]:played?[r7c11]:'',r7c11:played?r7c11:tile,[tile]:'r7c11',curr:curr=='r7c11'||tile?'':'r7c11',tile:''}),checkscore.submit"><div [text]="r7c11&&[r7c11]?gs[r7c11].c:gs.r7c11.c"></div></div>
+    <div tabindex="90" role="button" class="cell" [class]="curr=='r7c12'?'sel':r7c12&&[r7c12]?'mine':gs.r7c12.l" on="tap:AMP.setState({[r7c12]:played?[r7c12]:'',r7c12:played?r7c12:tile,[tile]:'r7c12',curr:curr=='r7c12'||tile?'':'r7c12',tile:''}),checkscore.submit"><div [text]="r7c12&&[r7c12]?gs[r7c12].c:gs.r7c12.c"></div></div>
+    <div tabindex="91" role="button" class="word" [class]="curr=='r7c13'?'sel':r7c13&&[r7c13]?'mine':gs.r7c13.l" on="tap:AMP.setState({[r7c13]:played?[r7c13]:'',r7c13:played?r7c13:tile,[tile]:'r7c13',curr:curr=='r7c13'||tile?'':'r7c13',tile:''}),checkscore.submit"><div [text]="r7c13&&[r7c13]?gs[r7c13].c:gs.r7c13.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="92" role="button" class="cell" [class]="curr=='r8c1'?'sel':r8c1&&[r8c1]?'mine':gs.r8c1.l" on="tap:AMP.setState({[r8c1]:played?[r8c1]:'',r8c1:played?r8c1:tile,[tile]:'r8c1',curr:curr=='r8c1'||tile?'':'r8c1',tile:''}),checkscore.submit"><div [text]="r8c1&&[r8c1]?gs[r8c1].c:gs.r8c1.c"></div></div>
+    <div tabindex="93" role="button" class="cell" [class]="curr=='r8c2'?'sel':r8c2&&[r8c2]?'mine':gs.r8c2.l" on="tap:AMP.setState({[r8c2]:played?[r8c2]:'',r8c2:played?r8c2:tile,[tile]:'r8c2',curr:curr=='r8c2'||tile?'':'r8c2',tile:''}),checkscore.submit"><div [text]="r8c2&&[r8c2]?gs[r8c2].c:gs.r8c2.c"></div></div>
+    <div tabindex="94" role="button" class="lett" [class]="curr=='r8c3'?'sel':r8c3&&[r8c3]?'mine':gs.r8c3.l" on="tap:AMP.setState({[r8c3]:played?[r8c3]:'',r8c3:played?r8c3:tile,[tile]:'r8c3',curr:curr=='r8c3'||tile?'':'r8c3',tile:''}),checkscore.submit"><div [text]="r8c3&&[r8c3]?gs[r8c3].c:gs.r8c3.c">&#9679;&#9679;</div></div>
+    <div tabindex="95" role="button" class="cell" [class]="curr=='r8c4'?'sel':r8c4&&[r8c4]?'mine':gs.r8c4.l" on="tap:AMP.setState({[r8c4]:played?[r8c4]:'',r8c4:played?r8c4:tile,[tile]:'r8c4',curr:curr=='r8c4'||tile?'':'r8c4',tile:''}),checkscore.submit"><div [text]="r8c4&&[r8c4]?gs[r8c4].c:gs.r8c4.c"></div></div>
+    <div tabindex="96" role="button" class="cell" [class]="curr=='r8c5'?'sel':r8c5&&[r8c5]?'mine':gs.r8c5.l" on="tap:AMP.setState({[r8c5]:played?[r8c5]:'',r8c5:played?r8c5:tile,[tile]:'r8c5',curr:curr=='r8c5'||tile?'':'r8c5',tile:''}),checkscore.submit"><div [text]="r8c5&&[r8c5]?gs[r8c5].c:gs.r8c5.c"></div></div>
+    <div tabindex="97" role="button" class="lett" [class]="curr=='r8c6'?'sel':r8c6&&[r8c6]?'mine':gs.r8c6.l" on="tap:AMP.setState({[r8c6]:played?[r8c6]:'',r8c6:played?r8c6:tile,[tile]:'r8c6',curr:curr=='r8c6'||tile?'':'r8c6',tile:''}),checkscore.submit"><div [text]="r8c6&&[r8c6]?gs[r8c6].c:gs.r8c6.c">&#9679;&#9679;</div></div>
+    <div tabindex="98" role="button" class="cell" [class]="curr=='r8c7'?'sel':r8c7&&[r8c7]?'mine':gs.r8c7.l" on="tap:AMP.setState({[r8c7]:played?[r8c7]:'',r8c7:played?r8c7:tile,[tile]:'r8c7',curr:curr=='r8c7'||tile?'':'r8c7',tile:''}),checkscore.submit"><div [text]="r8c7&&[r8c7]?gs[r8c7].c:gs.r8c7.c"></div></div>
+    <div tabindex="99" role="button" class="lett" [class]="curr=='r8c8'?'sel':r8c8&&[r8c8]?'mine':gs.r8c8.l" on="tap:AMP.setState({[r8c8]:played?[r8c8]:'',r8c8:played?r8c8:tile,[tile]:'r8c8',curr:curr=='r8c8'||tile?'':'r8c8',tile:''}),checkscore.submit"><div [text]="r8c8&&[r8c8]?gs[r8c8].c:gs.r8c8.c">&#9679;&#9679;</div></div>
+    <div tabindex="100" role="button" class="cell" [class]="curr=='r8c9'?'sel':r8c9&&[r8c9]?'mine':gs.r8c9.l" on="tap:AMP.setState({[r8c9]:played?[r8c9]:'',r8c9:played?r8c9:tile,[tile]:'r8c9',curr:curr=='r8c9'||tile?'':'r8c9',tile:''}),checkscore.submit"><div [text]="r8c9&&[r8c9]?gs[r8c9].c:gs.r8c9.c"></div></div>
+    <div tabindex="101" role="button" class="cell" [class]="curr=='r8c10'?'sel':r8c10&&[r8c10]?'mine':gs.r8c10.l" on="tap:AMP.setState({[r8c10]:played?[r8c10]:'',r8c10:played?r8c10:tile,[tile]:'r8c10',curr:curr=='r8c10'||tile?'':'r8c10',tile:''}),checkscore.submit"><div [text]="r8c10&&[r8c10]?gs[r8c10].c:gs.r8c10.c"></div></div>
+    <div tabindex="102" role="button" class="lett" [class]="curr=='r8c11'?'sel':r8c11&&[r8c11]?'mine':gs.r8c11.l" on="tap:AMP.setState({[r8c11]:played?[r8c11]:'',r8c11:played?r8c11:tile,[tile]:'r8c11',curr:curr=='r8c11'||tile?'':'r8c11',tile:''}),checkscore.submit"><div [text]="r8c11&&[r8c11]?gs[r8c11].c:gs.r8c11.c">&#9679;&#9679;</div></div>
+    <div tabindex="103" role="button" class="cell" [class]="curr=='r8c12'?'sel':r8c12&&[r8c12]?'mine':gs.r8c12.l" on="tap:AMP.setState({[r8c12]:played?[r8c12]:'',r8c12:played?r8c12:tile,[tile]:'r8c12',curr:curr=='r8c12'||tile?'':'r8c12',tile:''}),checkscore.submit"><div [text]="r8c12&&[r8c12]?gs[r8c12].c:gs.r8c12.c"></div></div>
+    <div tabindex="104" role="button" class="cell" [class]="curr=='r8c13'?'sel':r8c13&&[r8c13]?'mine':gs.r8c13.l" on="tap:AMP.setState({[r8c13]:played?[r8c13]:'',r8c13:played?r8c13:tile,[tile]:'r8c13',curr:curr=='r8c13'||tile?'':'r8c13',tile:''}),checkscore.submit"><div [text]="r8c13&&[r8c13]?gs[r8c13].c:gs.r8c13.c"></div></div>
+    <div tabindex="105" role="button" class="cell" [class]="curr=='r9c1'?'sel':r9c1&&[r9c1]?'mine':gs.r9c1.l" on="tap:AMP.setState({[r9c1]:played?[r9c1]:'',r9c1:played?r9c1:tile,[tile]:'r9c1',curr:curr=='r9c1'||tile?'':'r9c1',tile:''}),checkscore.submit"><div [text]="r9c1&&[r9c1]?gs[r9c1].c:gs.r9c1.c"></div></div>
+    <div tabindex="106" role="button" class="lett" [class]="curr=='r9c2'?'sel':r9c2&&[r9c2]?'mine':gs.r9c2.l" on="tap:AMP.setState({[r9c2]:played?[r9c2]:'',r9c2:played?r9c2:tile,[tile]:'r9c2',curr:curr=='r9c2'||tile?'':'r9c2',tile:''}),checkscore.submit"><div [text]="r9c2&&[r9c2]?gs[r9c2].c:gs.r9c2.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="107" role="button" class="cell" [class]="curr=='r9c3'?'sel':r9c3&&[r9c3]?'mine':gs.r9c3.l" on="tap:AMP.setState({[r9c3]:played?[r9c3]:'',r9c3:played?r9c3:tile,[tile]:'r9c3',curr:curr=='r9c3'||tile?'':'r9c3',tile:''}),checkscore.submit"><div [text]="r9c3&&[r9c3]?gs[r9c3].c:gs.r9c3.c"></div></div>
+    <div tabindex="108" role="button" class="cell" [class]="curr=='r9c4'?'sel':r9c4&&[r9c4]?'mine':gs.r9c4.l" on="tap:AMP.setState({[r9c4]:played?[r9c4]:'',r9c4:played?r9c4:tile,[tile]:'r9c4',curr:curr=='r9c4'||tile?'':'r9c4',tile:''}),checkscore.submit"><div [text]="r9c4&&[r9c4]?gs[r9c4].c:gs.r9c4.c"></div></div>
+    <div tabindex="109" role="button" class="lett" [class]="curr=='r9c5'?'sel':r9c5&&[r9c5]?'mine':gs.r9c5.l" on="tap:AMP.setState({[r9c5]:played?[r9c5]:'',r9c5:played?r9c5:tile,[tile]:'r9c5',curr:curr=='r9c5'||tile?'':'r9c5',tile:''}),checkscore.submit"><div [text]="r9c5&&[r9c5]?gs[r9c5].c:gs.r9c5.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="110" role="button" class="cell" [class]="curr=='r9c6'?'sel':r9c6&&[r9c6]?'mine':gs.r9c6.l" on="tap:AMP.setState({[r9c6]:played?[r9c6]:'',r9c6:played?r9c6:tile,[tile]:'r9c6',curr:curr=='r9c6'||tile?'':'r9c6',tile:''}),checkscore.submit"><div [text]="r9c6&&[r9c6]?gs[r9c6].c:gs.r9c6.c"></div></div>
+    <div tabindex="111" role="button" class="cell" [class]="curr=='r9c7'?'sel':r9c7&&[r9c7]?'mine':gs.r9c7.l" on="tap:AMP.setState({[r9c7]:played?[r9c7]:'',r9c7:played?r9c7:tile,[tile]:'r9c7',curr:curr=='r9c7'||tile?'':'r9c7',tile:''}),checkscore.submit"><div [text]="r9c7&&[r9c7]?gs[r9c7].c:gs.r9c7.c"></div></div>
+    <div tabindex="112" role="button" class="cell" [class]="curr=='r9c8'?'sel':r9c8&&[r9c8]?'mine':gs.r9c8.l" on="tap:AMP.setState({[r9c8]:played?[r9c8]:'',r9c8:played?r9c8:tile,[tile]:'r9c8',curr:curr=='r9c8'||tile?'':'r9c8',tile:''}),checkscore.submit"><div [text]="r9c8&&[r9c8]?gs[r9c8].c:gs.r9c8.c"></div></div>
+    <div tabindex="113" role="button" class="lett" [class]="curr=='r9c9'?'sel':r9c9&&[r9c9]?'mine':gs.r9c9.l" on="tap:AMP.setState({[r9c9]:played?[r9c9]:'',r9c9:played?r9c9:tile,[tile]:'r9c9',curr:curr=='r9c9'||tile?'':'r9c9',tile:''}),checkscore.submit"><div [text]="r9c9&&[r9c9]?gs[r9c9].c:gs.r9c9.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="114" role="button" class="cell" [class]="curr=='r9c10'?'sel':r9c10&&[r9c10]?'mine':gs.r9c10.l" on="tap:AMP.setState({[r9c10]:played?[r9c10]:'',r9c10:played?r9c10:tile,[tile]:'r9c10',curr:curr=='r9c10'||tile?'':'r9c10',tile:''}),checkscore.submit"><div [text]="r9c10&&[r9c10]?gs[r9c10].c:gs.r9c10.c"></div></div>
+    <div tabindex="115" role="button" class="cell" [class]="curr=='r9c11'?'sel':r9c11&&[r9c11]?'mine':gs.r9c11.l" on="tap:AMP.setState({[r9c11]:played?[r9c11]:'',r9c11:played?r9c11:tile,[tile]:'r9c11',curr:curr=='r9c11'||tile?'':'r9c11',tile:''}),checkscore.submit"><div [text]="r9c11&&[r9c11]?gs[r9c11].c:gs.r9c11.c"></div></div>
+    <div tabindex="116" role="button" class="lett" [class]="curr=='r9c12'?'sel':r9c12&&[r9c12]?'mine':gs.r9c12.l" on="tap:AMP.setState({[r9c12]:played?[r9c12]:'',r9c12:played?r9c12:tile,[tile]:'r9c12',curr:curr=='r9c12'||tile?'':'r9c12',tile:''}),checkscore.submit"><div [text]="r9c12&&[r9c12]?gs[r9c12].c:gs.r9c12.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="117" role="button" class="cell" [class]="curr=='r9c13'?'sel':r9c13&&[r9c13]?'mine':gs.r9c13.l" on="tap:AMP.setState({[r9c13]:played?[r9c13]:'',r9c13:played?r9c13:tile,[tile]:'r9c13',curr:curr=='r9c13'||tile?'':'r9c13',tile:''}),checkscore.submit"><div [text]="r9c13&&[r9c13]?gs[r9c13].c:gs.r9c13.c"></div></div>
+    <div tabindex="118" role="button" class="cell" [class]="curr=='r10c1'?'sel':r10c1&&[r10c1]?'mine':gs.r10c1.l" on="tap:AMP.setState({[r10c1]:played?[r10c1]:'',r10c1:played?r10c1:tile,[tile]:'r10c1',curr:curr=='r10c1'||tile?'':'r10c1',tile:''}),checkscore.submit"><div [text]="r10c1&&[r10c1]?gs[r10c1].c:gs.r10c1.c"></div></div>
+    <div tabindex="119" role="button" class="cell" [class]="curr=='r10c2'?'sel':r10c2&&[r10c2]?'mine':gs.r10c2.l" on="tap:AMP.setState({[r10c2]:played?[r10c2]:'',r10c2:played?r10c2:tile,[tile]:'r10c2',curr:curr=='r10c2'||tile?'':'r10c2',tile:''}),checkscore.submit"><div [text]="r10c2&&[r10c2]?gs[r10c2].c:gs.r10c2.c"></div></div>
+    <div tabindex="120" role="button" class="cell" [class]="curr=='r10c3'?'sel':r10c3&&[r10c3]?'mine':gs.r10c3.l" on="tap:AMP.setState({[r10c3]:played?[r10c3]:'',r10c3:played?r10c3:tile,[tile]:'r10c3',curr:curr=='r10c3'||tile?'':'r10c3',tile:''}),checkscore.submit"><div [text]="r10c3&&[r10c3]?gs[r10c3].c:gs.r10c3.c"></div></div>
+    <div tabindex="121" role="button" class="word" [class]="curr=='r10c4'?'sel':r10c4&&[r10c4]?'mine':gs.r10c4.l" on="tap:AMP.setState({[r10c4]:played?[r10c4]:'',r10c4:played?r10c4:tile,[tile]:'r10c4',curr:curr=='r10c4'||tile?'':'r10c4',tile:''}),checkscore.submit"><div [text]="r10c4&&[r10c4]?gs[r10c4].c:gs.r10c4.c">&#9679;&#9679;</div></div>
+    <div tabindex="122" role="button" class="cell" [class]="curr=='r10c5'?'sel':r10c5&&[r10c5]?'mine':gs.r10c5.l" on="tap:AMP.setState({[r10c5]:played?[r10c5]:'',r10c5:played?r10c5:tile,[tile]:'r10c5',curr:curr=='r10c5'||tile?'':'r10c5',tile:''}),checkscore.submit"><div [text]="r10c5&&[r10c5]?gs[r10c5].c:gs.r10c5.c"></div></div>
+    <div tabindex="123" role="button" class="cell" [class]="curr=='r10c6'?'sel':r10c6&&[r10c6]?'mine':gs.r10c6.l" on="tap:AMP.setState({[r10c6]:played?[r10c6]:'',r10c6:played?r10c6:tile,[tile]:'r10c6',curr:curr=='r10c6'||tile?'':'r10c6',tile:''}),checkscore.submit"><div [text]="r10c6&&[r10c6]?gs[r10c6].c:gs.r10c6.c"></div></div>
+    <div tabindex="124" role="button" class="lett" [class]="curr=='r10c7'?'sel':r10c7&&[r10c7]?'mine':gs.r10c7.l" on="tap:AMP.setState({[r10c7]:played?[r10c7]:'',r10c7:played?r10c7:tile,[tile]:'r10c7',curr:curr=='r10c7'||tile?'':'r10c7',tile:''}),checkscore.submit"><div [text]="r10c7&&[r10c7]?gs[r10c7].c:gs.r10c7.c">&#9679;&#9679;</div></div>
+    <div tabindex="125" role="button" class="cell" [class]="curr=='r10c8'?'sel':r10c8&&[r10c8]?'mine':gs.r10c8.l" on="tap:AMP.setState({[r10c8]:played?[r10c8]:'',r10c8:played?r10c8:tile,[tile]:'r10c8',curr:curr=='r10c8'||tile?'':'r10c8',tile:''}),checkscore.submit"><div [text]="r10c8&&[r10c8]?gs[r10c8].c:gs.r10c8.c"></div></div>
+    <div tabindex="126" role="button" class="cell" [class]="curr=='r10c9'?'sel':r10c9&&[r10c9]?'mine':gs.r10c9.l" on="tap:AMP.setState({[r10c9]:played?[r10c9]:'',r10c9:played?r10c9:tile,[tile]:'r10c9',curr:curr=='r10c9'||tile?'':'r10c9',tile:''}),checkscore.submit"><div [text]="r10c9&&[r10c9]?gs[r10c9].c:gs.r10c9.c"></div></div>
+    <div tabindex="127" role="button" class="word" [class]="curr=='r10c10'?'sel':r10c10&&[r10c10]?'mine':gs.r10c10.l" on="tap:AMP.setState({[r10c10]:played?[r10c10]:'',r10c10:played?r10c10:tile,[tile]:'r10c10',curr:curr=='r10c10'||tile?'':'r10c10',tile:''}),checkscore.submit"><div [text]="r10c10&&[r10c10]?gs[r10c10].c:gs.r10c10.c">&#9679;&#9679;</div></div>
+    <div tabindex="128" role="button" class="cell" [class]="curr=='r10c11'?'sel':r10c11&&[r10c11]?'mine':gs.r10c11.l" on="tap:AMP.setState({[r10c11]:played?[r10c11]:'',r10c11:played?r10c11:tile,[tile]:'r10c11',curr:curr=='r10c11'||tile?'':'r10c11',tile:''}),checkscore.submit"><div [text]="r10c11&&[r10c11]?gs[r10c11].c:gs.r10c11.c"></div></div>
+    <div tabindex="129" role="button" class="cell" [class]="curr=='r10c12'?'sel':r10c12&&[r10c12]?'mine':gs.r10c12.l" on="tap:AMP.setState({[r10c12]:played?[r10c12]:'',r10c12:played?r10c12:tile,[tile]:'r10c12',curr:curr=='r10c12'||tile?'':'r10c12',tile:''}),checkscore.submit"><div [text]="r10c12&&[r10c12]?gs[r10c12].c:gs.r10c12.c"></div></div>
+    <div tabindex="130" role="button" class="cell" [class]="curr=='r10c13'?'sel':r10c13&&[r10c13]?'mine':gs.r10c13.l" on="tap:AMP.setState({[r10c13]:played?[r10c13]:'',r10c13:played?r10c13:tile,[tile]:'r10c13',curr:curr=='r10c13'||tile?'':'r10c13',tile:''}),checkscore.submit"><div [text]="r10c13&&[r10c13]?gs[r10c13].c:gs.r10c13.c"></div></div>
+    <div tabindex="131" role="button" class="cell" [class]="curr=='r11c1'?'sel':r11c1&&[r11c1]?'mine':gs.r11c1.l" on="tap:AMP.setState({[r11c1]:played?[r11c1]:'',r11c1:played?r11c1:tile,[tile]:'r11c1',curr:curr=='r11c1'||tile?'':'r11c1',tile:''}),checkscore.submit"><div [text]="r11c1&&[r11c1]?gs[r11c1].c:gs.r11c1.c"></div></div>
+    <div tabindex="132" role="button" class="cell" [class]="curr=='r11c2'?'sel':r11c2&&[r11c2]?'mine':gs.r11c2.l" on="tap:AMP.setState({[r11c2]:played?[r11c2]:'',r11c2:played?r11c2:tile,[tile]:'r11c2',curr:curr=='r11c2'||tile?'':'r11c2',tile:''}),checkscore.submit"><div [text]="r11c2&&[r11c2]?gs[r11c2].c:gs.r11c2.c"></div></div>
+    <div tabindex="133" role="button" class="word" [class]="curr=='r11c3'?'sel':r11c3&&[r11c3]?'mine':gs.r11c3.l" on="tap:AMP.setState({[r11c3]:played?[r11c3]:'',r11c3:played?r11c3:tile,[tile]:'r11c3',curr:curr=='r11c3'||tile?'':'r11c3',tile:''}),checkscore.submit"><div [text]="r11c3&&[r11c3]?gs[r11c3].c:gs.r11c3.c">&#9679;&#9679;</div></div>
+    <div tabindex="134" role="button" class="cell" [class]="curr=='r11c4'?'sel':r11c4&&[r11c4]?'mine':gs.r11c4.l" on="tap:AMP.setState({[r11c4]:played?[r11c4]:'',r11c4:played?r11c4:tile,[tile]:'r11c4',curr:curr=='r11c4'||tile?'':'r11c4',tile:''}),checkscore.submit"><div [text]="r11c4&&[r11c4]?gs[r11c4].c:gs.r11c4.c"></div></div>
+    <div tabindex="135" role="button" class="cell" [class]="curr=='r11c5'?'sel':r11c5&&[r11c5]?'mine':gs.r11c5.l" on="tap:AMP.setState({[r11c5]:played?[r11c5]:'',r11c5:played?r11c5:tile,[tile]:'r11c5',curr:curr=='r11c5'||tile?'':'r11c5',tile:''}),checkscore.submit"><div [text]="r11c5&&[r11c5]?gs[r11c5].c:gs.r11c5.c"></div></div>
+    <div tabindex="136" role="button" class="lett" [class]="curr=='r11c6'?'sel':r11c6&&[r11c6]?'mine':gs.r11c6.l" on="tap:AMP.setState({[r11c6]:played?[r11c6]:'',r11c6:played?r11c6:tile,[tile]:'r11c6',curr:curr=='r11c6'||tile?'':'r11c6',tile:''}),checkscore.submit"><div [text]="r11c6&&[r11c6]?gs[r11c6].c:gs.r11c6.c">&#9679;&#9679;</div></div>
+    <div tabindex="137" role="button" class="cell" [class]="curr=='r11c7'?'sel':r11c7&&[r11c7]?'mine':gs.r11c7.l" on="tap:AMP.setState({[r11c7]:played?[r11c7]:'',r11c7:played?r11c7:tile,[tile]:'r11c7',curr:curr=='r11c7'||tile?'':'r11c7',tile:''}),checkscore.submit"><div [text]="r11c7&&[r11c7]?gs[r11c7].c:gs.r11c7.c"></div></div>
+    <div tabindex="138" role="button" class="lett" [class]="curr=='r11c8'?'sel':r11c8&&[r11c8]?'mine':gs.r11c8.l" on="tap:AMP.setState({[r11c8]:played?[r11c8]:'',r11c8:played?r11c8:tile,[tile]:'r11c8',curr:curr=='r11c8'||tile?'':'r11c8',tile:''}),checkscore.submit"><div [text]="r11c8&&[r11c8]?gs[r11c8].c:gs.r11c8.c">&#9679;&#9679;</div></div>
+    <div tabindex="139" role="button" class="cell" [class]="curr=='r11c9'?'sel':r11c9&&[r11c9]?'mine':gs.r11c9.l" on="tap:AMP.setState({[r11c9]:played?[r11c9]:'',r11c9:played?r11c9:tile,[tile]:'r11c9',curr:curr=='r11c9'||tile?'':'r11c9',tile:''}),checkscore.submit"><div [text]="r11c9&&[r11c9]?gs[r11c9].c:gs.r11c9.c"></div></div>
+    <div tabindex="140" role="button" class="cell" [class]="curr=='r11c10'?'sel':r11c10&&[r11c10]?'mine':gs.r11c10.l" on="tap:AMP.setState({[r11c10]:played?[r11c10]:'',r11c10:played?r11c10:tile,[tile]:'r11c10',curr:curr=='r11c10'||tile?'':'r11c10',tile:''}),checkscore.submit"><div [text]="r11c10&&[r11c10]?gs[r11c10].c:gs.r11c10.c"></div></div>
+    <div tabindex="141" role="button" class="word" [class]="curr=='r11c11'?'sel':r11c11&&[r11c11]?'mine':gs.r11c11.l" on="tap:AMP.setState({[r11c11]:played?[r11c11]:'',r11c11:played?r11c11:tile,[tile]:'r11c11',curr:curr=='r11c11'||tile?'':'r11c11',tile:''}),checkscore.submit"><div [text]="r11c11&&[r11c11]?gs[r11c11].c:gs.r11c11.c">&#9679;&#9679;</div></div>
+    <div tabindex="142" role="button" class="cell" [class]="curr=='r11c12'?'sel':r11c12&&[r11c12]?'mine':gs.r11c12.l" on="tap:AMP.setState({[r11c12]:played?[r11c12]:'',r11c12:played?r11c12:tile,[tile]:'r11c12',curr:curr=='r11c12'||tile?'':'r11c12',tile:''}),checkscore.submit"><div [text]="r11c12&&[r11c12]?gs[r11c12].c:gs.r11c12.c"></div></div>
+    <div tabindex="143" role="button" class="cell" [class]="curr=='r11c13'?'sel':r11c13&&[r11c13]?'mine':gs.r11c13.l" on="tap:AMP.setState({[r11c13]:played?[r11c13]:'',r11c13:played?r11c13:tile,[tile]:'r11c13',curr:curr=='r11c13'||tile?'':'r11c13',tile:''}),checkscore.submit"><div [text]="r11c13&&[r11c13]?gs[r11c13].c:gs.r11c13.c"></div></div>
+    <div tabindex="144" role="button" class="cell" [class]="curr=='r12c1'?'sel':r12c1&&[r12c1]?'mine':gs.r12c1.l" on="tap:AMP.setState({[r12c1]:played?[r12c1]:'',r12c1:played?r12c1:tile,[tile]:'r12c1',curr:curr=='r12c1'||tile?'':'r12c1',tile:''}),checkscore.submit"><div [text]="r12c1&&[r12c1]?gs[r12c1].c:gs.r12c1.c"></div></div>
+    <div tabindex="145" role="button" class="word" [class]="curr=='r12c2'?'sel':r12c2&&[r12c2]?'mine':gs.r12c2.l" on="tap:AMP.setState({[r12c2]:played?[r12c2]:'',r12c2:played?r12c2:tile,[tile]:'r12c2',curr:curr=='r12c2'||tile?'':'r12c2',tile:''}),checkscore.submit"><div [text]="r12c2&&[r12c2]?gs[r12c2].c:gs.r12c2.c">&#9679;&#9679;</div></div>
+    <div tabindex="146" role="button" class="cell" [class]="curr=='r12c3'?'sel':r12c3&&[r12c3]?'mine':gs.r12c3.l" on="tap:AMP.setState({[r12c3]:played?[r12c3]:'',r12c3:played?r12c3:tile,[tile]:'r12c3',curr:curr=='r12c3'||tile?'':'r12c3',tile:''}),checkscore.submit"><div [text]="r12c3&&[r12c3]?gs[r12c3].c:gs.r12c3.c"></div></div>
+    <div tabindex="147" role="button" class="cell" [class]="curr=='r12c4'?'sel':r12c4&&[r12c4]?'mine':gs.r12c4.l" on="tap:AMP.setState({[r12c4]:played?[r12c4]:'',r12c4:played?r12c4:tile,[tile]:'r12c4',curr:curr=='r12c4'||tile?'':'r12c4',tile:''}),checkscore.submit"><div [text]="r12c4&&[r12c4]?gs[r12c4].c:gs.r12c4.c"></div></div>
+    <div tabindex="148" role="button" class="lett" [class]="curr=='r12c5'?'sel':r12c5&&[r12c5]?'mine':gs.r12c5.l" on="tap:AMP.setState({[r12c5]:played?[r12c5]:'',r12c5:played?r12c5:tile,[tile]:'r12c5',curr:curr=='r12c5'||tile?'':'r12c5',tile:''}),checkscore.submit"><div [text]="r12c5&&[r12c5]?gs[r12c5].c:gs.r12c5.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="149" role="button" class="cell" [class]="curr=='r12c6'?'sel':r12c6&&[r12c6]?'mine':gs.r12c6.l" on="tap:AMP.setState({[r12c6]:played?[r12c6]:'',r12c6:played?r12c6:tile,[tile]:'r12c6',curr:curr=='r12c6'||tile?'':'r12c6',tile:''}),checkscore.submit"><div [text]="r12c6&&[r12c6]?gs[r12c6].c:gs.r12c6.c"></div></div>
+    <div tabindex="150" role="button" class="cell" [class]="curr=='r12c7'?'sel':r12c7&&[r12c7]?'mine':gs.r12c7.l" on="tap:AMP.setState({[r12c7]:played?[r12c7]:'',r12c7:played?r12c7:tile,[tile]:'r12c7',curr:curr=='r12c7'||tile?'':'r12c7',tile:''}),checkscore.submit"><div [text]="r12c7&&[r12c7]?gs[r12c7].c:gs.r12c7.c"></div></div>
+    <div tabindex="151" role="button" class="cell" [class]="curr=='r12c8'?'sel':r12c8&&[r12c8]?'mine':gs.r12c8.l" on="tap:AMP.setState({[r12c8]:played?[r12c8]:'',r12c8:played?r12c8:tile,[tile]:'r12c8',curr:curr=='r12c8'||tile?'':'r12c8',tile:''}),checkscore.submit"><div [text]="r12c8&&[r12c8]?gs[r12c8].c:gs.r12c8.c"></div></div>
+    <div tabindex="152" role="button" class="lett" [class]="curr=='r12c9'?'sel':r12c9&&[r12c9]?'mine':gs.r12c9.l" on="tap:AMP.setState({[r12c9]:played?[r12c9]:'',r12c9:played?r12c9:tile,[tile]:'r12c9',curr:curr=='r12c9'||tile?'':'r12c9',tile:''}),checkscore.submit"><div [text]="r12c9&&[r12c9]?gs[r12c9].c:gs.r12c9.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="153" role="button" class="cell" [class]="curr=='r12c10'?'sel':r12c10&&[r12c10]?'mine':gs.r12c10.l" on="tap:AMP.setState({[r12c10]:played?[r12c10]:'',r12c10:played?r12c10:tile,[tile]:'r12c10',curr:curr=='r12c10'||tile?'':'r12c10',tile:''}),checkscore.submit"><div [text]="r12c10&&[r12c10]?gs[r12c10].c:gs.r12c10.c"></div></div>
+    <div tabindex="154" role="button" class="cell" [class]="curr=='r12c11'?'sel':r12c11&&[r12c11]?'mine':gs.r12c11.l" on="tap:AMP.setState({[r12c11]:played?[r12c11]:'',r12c11:played?r12c11:tile,[tile]:'r12c11',curr:curr=='r12c11'||tile?'':'r12c11',tile:''}),checkscore.submit"><div [text]="r12c11&&[r12c11]?gs[r12c11].c:gs.r12c11.c"></div></div>
+    <div tabindex="155" role="button" class="word" [class]="curr=='r12c12'?'sel':r12c12&&[r12c12]?'mine':gs.r12c12.l" on="tap:AMP.setState({[r12c12]:played?[r12c12]:'',r12c12:played?r12c12:tile,[tile]:'r12c12',curr:curr=='r12c12'||tile?'':'r12c12',tile:''}),checkscore.submit"><div [text]="r12c12&&[r12c12]?gs[r12c12].c:gs.r12c12.c">&#9679;&#9679;</div></div>
+    <div tabindex="156" role="button" class="cell" [class]="curr=='r12c13'?'sel':r12c13&&[r12c13]?'mine':gs.r12c13.l" on="tap:AMP.setState({[r12c13]:played?[r12c13]:'',r12c13:played?r12c13:tile,[tile]:'r12c13',curr:curr=='r12c13'||tile?'':'r12c13',tile:''}),checkscore.submit"><div [text]="r12c13&&[r12c13]?gs[r12c13].c:gs.r12c13.c"></div></div>
+    <div tabindex="157" role="button" class="word" [class]="curr=='r13c1'?'sel':r13c1&&[r13c1]?'mine':gs.r13c1.l" on="tap:AMP.setState({[r13c1]:played?[r13c1]:'',r13c1:played?r13c1:tile,[tile]:'r13c1',curr:curr=='r13c1'||tile?'':'r13c1',tile:''}),checkscore.submit"><div [text]="r13c1&&[r13c1]?gs[r13c1].c:gs.r13c1.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="158" role="button" class="cell" [class]="curr=='r13c2'?'sel':r13c2&&[r13c2]?'mine':gs.r13c2.l" on="tap:AMP.setState({[r13c2]:played?[r13c2]:'',r13c2:played?r13c2:tile,[tile]:'r13c2',curr:curr=='r13c2'||tile?'':'r13c2',tile:''}),checkscore.submit"><div [text]="r13c2&&[r13c2]?gs[r13c2].c:gs.r13c2.c"></div></div>
+    <div tabindex="159" role="button" class="cell" [class]="curr=='r13c3'?'sel':r13c3&&[r13c3]?'mine':gs.r13c3.l" on="tap:AMP.setState({[r13c3]:played?[r13c3]:'',r13c3:played?r13c3:tile,[tile]:'r13c3',curr:curr=='r13c3'||tile?'':'r13c3',tile:''}),checkscore.submit"><div [text]="r13c3&&[r13c3]?gs[r13c3].c:gs.r13c3.c"></div></div>
+    <div tabindex="160" role="button" class="cell" [class]="curr=='r13c4'?'sel':r13c4&&[r13c4]?'mine':gs.r13c4.l" on="tap:AMP.setState({[r13c4]:played?[r13c4]:'',r13c4:played?r13c4:tile,[tile]:'r13c4',curr:curr=='r13c4'||tile?'':'r13c4',tile:''}),checkscore.submit"><div [text]="r13c4&&[r13c4]?gs[r13c4].c:gs.r13c4.c"></div></div>
+    <div tabindex="161" role="button" class="cell" [class]="curr=='r13c5'?'sel':r13c5&&[r13c5]?'mine':gs.r13c5.l" on="tap:AMP.setState({[r13c5]:played?[r13c5]:'',r13c5:played?r13c5:tile,[tile]:'r13c5',curr:curr=='r13c5'||tile?'':'r13c5',tile:''}),checkscore.submit"><div [text]="r13c5&&[r13c5]?gs[r13c5].c:gs.r13c5.c"></div></div>
+    <div tabindex="162" role="button" class="cell" [class]="curr=='r13c6'?'sel':r13c6&&[r13c6]?'mine':gs.r13c6.l" on="tap:AMP.setState({[r13c6]:played?[r13c6]:'',r13c6:played?r13c6:tile,[tile]:'r13c6',curr:curr=='r13c6'||tile?'':'r13c6',tile:''}),checkscore.submit"><div [text]="r13c6&&[r13c6]?gs[r13c6].c:gs.r13c6.c"></div></div>
+    <div tabindex="163" role="button" class="word" [class]="curr=='r13c7'?'sel':r13c7&&[r13c7]?'mine':gs.r13c7.l" on="tap:AMP.setState({[r13c7]:played?[r13c7]:'',r13c7:played?r13c7:tile,[tile]:'r13c7',curr:curr=='r13c7'||tile?'':'r13c7',tile:''}),checkscore.submit"><div [text]="r13c7&&[r13c7]?gs[r13c7].c:gs.r13c7.c">&#9679;&#9679;&#9679;</div></div>
+    <div tabindex="164" role="button" class="cell" [class]="curr=='r13c8'?'sel':r13c8&&[r13c8]?'mine':gs.r13c8.l" on="tap:AMP.setState({[r13c8]:played?[r13c8]:'',r13c8:played?r13c8:tile,[tile]:'r13c8',curr:curr=='r13c8'||tile?'':'r13c8',tile:''}),checkscore.submit"><div [text]="r13c8&&[r13c8]?gs[r13c8].c:gs.r13c8.c"></div></div>
+    <div tabindex="165" role="button" class="cell" [class]="curr=='r13c9'?'sel':r13c9&&[r13c9]?'mine':gs.r13c9.l" on="tap:AMP.setState({[r13c9]:played?[r13c9]:'',r13c9:played?r13c9:tile,[tile]:'r13c9',curr:curr=='r13c9'||tile?'':'r13c9',tile:''}),checkscore.submit"><div [text]="r13c9&&[r13c9]?gs[r13c9].c:gs.r13c9.c"></div></div>
+    <div tabindex="166" role="button" class="cell" [class]="curr=='r13c10'?'sel':r13c10&&[r13c10]?'mine':gs.r13c10.l" on="tap:AMP.setState({[r13c10]:played?[r13c10]:'',r13c10:played?r13c10:tile,[tile]:'r13c10',curr:curr=='r13c10'||tile?'':'r13c10',tile:''}),checkscore.submit"><div [text]="r13c10&&[r13c10]?gs[r13c10].c:gs.r13c10.c"></div></div>
+    <div tabindex="167" role="button" class="cell" [class]="curr=='r13c11'?'sel':r13c11&&[r13c11]?'mine':gs.r13c11.l" on="tap:AMP.setState({[r13c11]:played?[r13c11]:'',r13c11:played?r13c11:tile,[tile]:'r13c11',curr:curr=='r13c11'||tile?'':'r13c11',tile:''}),checkscore.submit"><div [text]="r13c11&&[r13c11]?gs[r13c11].c:gs.r13c11.c"></div></div>
+    <div tabindex="168" role="button" class="cell" [class]="curr=='r13c12'?'sel':r13c12&&[r13c12]?'mine':gs.r13c12.l" on="tap:AMP.setState({[r13c12]:played?[r13c12]:'',r13c12:played?r13c12:tile,[tile]:'r13c12',curr:curr=='r13c12'||tile?'':'r13c12',tile:''}),checkscore.submit"><div [text]="r13c12&&[r13c12]?gs[r13c12].c:gs.r13c12.c"></div></div>
+    <div tabindex="169" role="button" class="word" [class]="curr=='r13c13'?'sel':r13c13&&[r13c13]?'mine':gs.r13c13.l" on="tap:AMP.setState({[r13c13]:played?[r13c13]:'',r13c13:played?r13c13:tile,[tile]:'r13c13',curr:curr=='r13c13'||tile?'':'r13c13',tile:''}),checkscore.submit"><div [text]="r13c13&&[r13c13]?gs[r13c13].c:gs.r13c13.c">&#9679;&#9679;&#9679;</div></div>
+</div>
+<p>
+<div class="tray">
+    <div></div><div hidden [hidden]="t1.length<1"></div>
+    <div tabindex="170" role="button" class="traycell" [hidden]="t1.length>0" [class]="tile=='t1'?'traysel':gs.t1.l" on="tap:AMP.setState({tile:tile=='t1'||curr?'':'t1',t1:'',[curr]:'t1',t1:curr?curr:'',curr:''}),checkscore.submit"><div class="letter" [class]="tile=='t1'?'lettersel':'letter'">U</div><div class="score" [class]="tile=='t1'?'scoresel':'score'">1</div></div>
+    <div></div>
+    <div hidden [hidden]="t2.length<1"></div>
+    <div tabindex="171" role="button" class="traycell" [hidden]="t2.length>0" [class]="tile=='t2'?'traysel':gs.t2.l" on="tap:AMP.setState({tile:tile=='t2'||curr?'':'t2',t2:'',[curr]:'t2',t2:curr?curr:'',curr:''}),checkscore.submit"><div class="letter" [class]="tile=='t2'?'lettersel':'letter'">Y</div><div class="score" [class]="tile=='t2'?'scoresel':'score'">4</div></div>
+    <div></div>
+    <div hidden [hidden]="t3.length<1"></div>
+    <div tabindex="172" role="button" class="traycell" [hidden]="t3.length>0" [class]="tile=='t3'?'traysel':gs.t3.l" on="tap:AMP.setState({tile:tile=='t3'||curr?'':'t3',t3:'',[curr]:'t3',t3:curr?curr:'',curr:''}),checkscore.submit"><div class="letter" [class]="tile=='t3'?'lettersel':'letter'">T</div><div class="score" [class]="tile=='t3'?'scoresel':'score'">1</div></div>
+    <div></div>
+    <div hidden [hidden]="t4.length<1"></div>
+    <div tabindex="173" role="button" class="traycell" [hidden]="t4.length>0" [class]="tile=='t4'?'traysel':gs.t4.l" on="tap:AMP.setState({tile:tile=='t4'||curr?'':'t4',t4:'',[curr]:'t4',t4:curr?curr:'',curr:''}),checkscore.submit"><div class="letter" [class]="tile=='t4'?'lettersel':'letter'">G</div><div class="score" [class]="tile=='t4'?'scoresel':'score'">2</div></div>
+    <div></div>
+    <div hidden [hidden]="t5.length<1"></div>
+    <div tabindex="174" role="button" class="traycell" [hidden]="t5.length>0" [class]="tile=='t5'?'traysel':gs.t5.l" on="tap:AMP.setState({tile:tile=='t5'||curr?'':'t5',t5:'',[curr]:'t5',t5:curr?curr:'',curr:''}),checkscore.submit"><div class="letter" [class]="tile=='t5'?'lettersel':'letter'">O</div><div class="score" [class]="tile=='t5'?'scoresel':'score'">1</div></div>
+    <div></div>
+    <div hidden [hidden]="t6.length<1"></div>
+    <div tabindex="175" role="button" class="traycell" [hidden]="t6.length>0" [class]="tile=='t6'?'traysel':gs.t6.l" on="tap:AMP.setState({tile:tile=='t6'||curr?'':'t6',t6:'',[curr]:'t6',t6:curr?curr:'',curr:''}),checkscore.submit"><div class="letter" [class]="tile=='t6'?'lettersel':'letter'">L</div><div class="score" [class]="tile=='t6'?'scoresel':'score'">1</div></div>
+    <div></div>
+    <div hidden [hidden]="t7.length<1"></div>
+    <div tabindex="176" role="button" class="traycell" [hidden]="t7.length>0" [class]="tile=='t7'?'traysel':gs.t7.l" on="tap:AMP.setState({tile:tile=='t7'||curr?'':'t7',t7:'',[curr]:'t7',t7:curr?curr:'',curr:''}),checkscore.submit"><div class="letter" [class]="tile=='t7'?'lettersel':'letter'">M</div><div class="score" [class]="tile=='t7'?'scoresel':'score'">3</div></div>
+    <div class="cent"></div>
+</div>
+<br/>
+<div class="error" hidden [hidden]="error?played?true:false:true" [text]="error?error:''"></div>
+<div class="" hidden [hidden]="played?false:true" [text]="played?played:''"></div>
+<table border="1">
+    <tr>
+        <td>
+            <p><div>Tiles in bag: 84</div>
+            <p><div>My Score: 0</div>
+            <p><div>Opponent score: 0</div>
+            <p><div [text]="wordScore?'Word Score: '+wordScore:'Word Score:'">Word Score:</div>
+        </td>
+        <td>
+            <form id="checkscore" method="post" action-xhr="https://www2.masque.com/games/justwords/AMP/score.php" on="submit-success:AMP.setState({error:event.response.error,wordScore:played?wordScore:event.response.wordScore})">
+                <input name="played" hidden [value]="t1+'~'+gs.t1.c+'~'+t2+'~'+gs.t2.c+'~'+t3+'~'+gs.t3.c+'~'+t4+'~'+gs.t4.c+'~'+t5+'~'+gs.t5.c+'~'+t6+'~'+gs.t6.c+'~'+t7+'~'+gs.t7.c"/>
+                <input name="state" hidden value="43~0~0"/>
+            </form>
+            <form id="submitword" method="post" action-xhr="https://www2.masque.com/games/justwords/AMP/justwords.php" on="submit-success:AMP.setState({error:event.response.error,wordScore:event.response.wordScore})">
+                <input name="played" hidden [value]="t1+'~'+gs.t1.c+'~'+t2+'~'+gs.t2.c+'~'+t3+'~'+gs.t3.c+'~'+t4+'~'+gs.t4.c+'~'+t5+'~'+gs.t5.c+'~'+t6+'~'+gs.t6.c+'~'+t7+'~'+gs.t7.c"/>
+                <input name="state" hidden value="43~0~0"/>
+                <input type="submit" [hidden]="played?true:false" disabled [disabled]="error?true:false"/>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
