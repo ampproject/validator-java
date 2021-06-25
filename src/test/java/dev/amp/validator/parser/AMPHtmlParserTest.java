@@ -53,7 +53,7 @@ public class AMPHtmlParserTest {
       }
       long elapsedTime = System.currentTimeMillis() - startTime;
       System.out.println("Elapsed: " + elapsedTime + "ms");
-      Assert.assertTrue(elapsedTime < 15000);
+      Assert.assertTrue(elapsedTime < 22000);
     } catch (final IOException ex) {
       ex.printStackTrace();
     }
