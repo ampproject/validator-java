@@ -21,6 +21,10 @@
 
 package dev.amp.validator.utils;
 
+import dev.amp.validator.SrcsetParsingResult;
+
+import static dev.amp.validator.utils.ParseSrcSetUtils.parseSrcset;
+
 import org.testng.annotations.Test;
 
 /**
@@ -31,7 +35,10 @@ import org.testng.annotations.Test;
 
 public class ParseSrcSetUtilsTest {
 
-  @Test
-  public void testParseSrcset() {
-  }
+    @Test
+    public void testParseSrcset() {
+        SrcsetParsingResult a = parseSrcset("google.com/favicon.ico");
+
+
+    }
 }
