@@ -178,7 +178,7 @@ public final class AttributeSpecUtils {
             if (encounteredTag.attrs().getValue(i).equals("src")
                     && (encounteredTag.isExtensionScript()
                     || encounteredTag.isAmpRuntimeScript())) {
-                validateAmpScriptSrcAttr(encounteredTag, spec, context, result.getValidationResult());
+                validateAmpScriptSrcAttr(encounteredTag, encounteredTag.attrs().getValue(i), spec, context, result.getValidationResult());
             }
             if (!(attrsByName.containsKey(name))) {
                 // The HTML tag specifies type identifiers which are validated in
@@ -1224,8 +1224,8 @@ public final class AttributeSpecUtils {
      * @throws TagValidationException the tag validation exception.
      */
     public static boolean validateAttrInExtension(@Nonnull final ValidatorProtos.TagSpec tagSpec,
-                                                       @Nonnull final String attrName,
-                                                       @Nonnull final String attrValue)
+                                                  @Nonnull final String attrName,
+                                                  @Nonnull final String attrValue)
             throws TagValidationException {
         if (!tagSpec.hasExtensionSpec()) {
             throw new TagValidationException("Expecting extension spec not null");

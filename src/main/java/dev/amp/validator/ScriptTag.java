@@ -24,6 +24,7 @@ import dev.amp.validator.utils.ExtensionsUtils;
 import org.xml.sax.Attributes;
 
 import javax.annotation.Nonnull;
+import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 /**
@@ -44,15 +45,18 @@ public class ScriptTag {
      */
     public ScriptTag(@Nonnull final String tagName, @Nonnull final Attributes attrs) {
 
+        this.extensionName = "";
+        this.extensionVersion = "";
         this.isAmpDomain = false;
         this.isExtension = false;
         this.isRuntime = false;
+        this.hasValidPath = false;
         this.releaseVersion = ExtensionsUtils.ScriptReleaseVersion.UNKNOWN;
 
         boolean isAsync = false;
         boolean isModule = false;
         boolean isNomodule = false;
-        String path = "";
+        this.path = "";
         String src = "";
 
         if (!tagName.equals("SCRIPT")) {
@@ -63,8 +67,9 @@ public class ScriptTag {
             if (attrs.getLocalName(i).equals("async")) {
                 isAsync = true;
             } else if (
-                    (attrs.getLocalName(i).equals("custom-element")) ||
-                            (attrs.getLocalName(i).equals("custom-template") || (attrs.getLocalName(i).equals("host-service")))) {
+                    (attrs.getLocalName(i).equals("custom-element"))
+                            || (attrs.getLocalName(i).equals("custom-template")
+                            || (attrs.getLocalName(i).equals("host-service")))) {
                 this.isExtension = true;
             } else if (attrs.getLocalName(i).equals("nomodule")) {
                 isNomodule = true;
@@ -87,14 +92,23 @@ public class ScriptTag {
                 if (!this.isExtension && RUNTIME_SCRIPT_PATH_REGEX.matcher(path).find()) {
                     this.isRuntime = true;
                 }
+                // For AMP Extensions, validate path and extract name and version.
+                if (this.isExtension && EXTENSION_SCRIPT_PATH_REGEX.matcher(this.path).find()) {
+                    this.hasValidPath = true;
+                    final MatchResult reResult = EXTENSION_SCRIPT_PATH_REGEX.matcher(this.path).toMatchResult();
+                    if (reResult.groupCount() < 2) {
+                        this.extensionName = reResult.group(1);
+                        this.extensionVersion = reResult.group(2);
+                    }
+                }
 
                 // Determine the release version (LTS, module, standard, etc).
-                if ((isModule && MODULE_LTS_SCRIPT_PATH_REGEX.matcher(path).find()) ||
-                        (isNomodule && NOMODULE_LTS_SCRIPT_PATH_REGEX.matcher(path).find())) {
+                if ((isModule && MODULE_LTS_SCRIPT_PATH_REGEX.matcher(path).find())
+                        || (isNomodule && NOMODULE_LTS_SCRIPT_PATH_REGEX.matcher(path).find())) {
                     this.releaseVersion = ExtensionsUtils.ScriptReleaseVersion.MODULE_NOMODULE_LTS;
                 } else if (
-                        (isModule && MODULE_SCRIPT_PATH_REGEX.matcher(path).find()) ||
-                                (isNomodule && NO_MODULE_SCRIPT_PATH_REGEX.matcher(path).find())) {
+                        (isModule && MODULE_SCRIPT_PATH_REGEX.matcher(path).find())
+                                || (isNomodule && NO_MODULE_SCRIPT_PATH_REGEX.matcher(path).find())) {
                     this.releaseVersion = ExtensionsUtils.ScriptReleaseVersion.MODULE_NOMODULE;
                 } else if (LTS_SCRIPT_PATH_REGEX.matcher(path).find()) {
                     this.releaseVersion = ExtensionsUtils.ScriptReleaseVersion.LTS;
@@ -105,7 +119,41 @@ public class ScriptTag {
         }
     }
 
+    /**
+     * Getter for Amp Domain
+     *
+     * @return True iff isAmpDomain
+     */
+    public boolean isAmpDomain() {
+        return isAmpDomain;
+    }
+
+    /**
+     * Getter for Extension Name
+     *
+     * @return Extension Name
+     */
+    public String getExtensionName() {
+        return extensionName;
+    }
+
+    /**
+     * Getter for Extension Version
+     *
+     * @return Extension Version
+     */
+    public String getExtensionVersion() {
+        return extensionVersion;
+    }
+
+
+    private String extensionName;
+
+    private String extensionVersion;
+
     private boolean isAmpDomain;
+
+    private String path;
 
     /**
      * isExtension
@@ -118,6 +166,11 @@ public class ScriptTag {
     private boolean isRuntime;
 
     /**
+     * hasValidPath
+     */
+    private boolean hasValidPath;
+
+    /**
      * releaseVersion
      */
     @Nonnull
@@ -127,7 +180,7 @@ public class ScriptTag {
      * ampProjectDomain
      */
     @Nonnull
-    final String AMP_PROJECT_DOMAIN = "https://cdn.ampproject.org/";
+    private static final String AMP_PROJECT_DOMAIN = "https://cdn.ampproject.org/";
 
     /**
      * Runtime JavaScript:
@@ -139,7 +192,7 @@ public class ScriptTag {
      * lts/v0.mjs
      */
     @Nonnull
-    final Pattern RUNTIME_SCRIPT_PATH_REGEX =
+    private static final Pattern RUNTIME_SCRIPT_PATH_REGEX =
             Pattern.compile("^(lts\\/)?v0\\.m?js(\\?f=sxg)?$", Pattern.CASE_INSENSITIVE);
 
     /**
@@ -147,7 +200,7 @@ public class ScriptTag {
      * lts/v0/amp-ad-0.1.mjs
      */
     @Nonnull
-    final Pattern MODULE_LTS_SCRIPT_PATH_REGEX =
+    private static final Pattern MODULE_LTS_SCRIPT_PATH_REGEX =
             Pattern.compile("^lts\\/(v0|v0\\/amp-[a-z0-9-]*-[a-z0-9.]*)\\.mjs$", Pattern.CASE_INSENSITIVE);
 
     /**
@@ -156,7 +209,7 @@ public class ScriptTag {
      */
 
     @Nonnull
-    final Pattern NOMODULE_LTS_SCRIPT_PATH_REGEX =
+    private static final Pattern NOMODULE_LTS_SCRIPT_PATH_REGEX =
             Pattern.compile("lts\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.js$", Pattern.CASE_INSENSITIVE);
 
     /**
@@ -164,7 +217,7 @@ public class ScriptTag {
      * amp-ad-0.1.mjs
      */
     @Nonnull
-    final Pattern MODULE_SCRIPT_PATH_REGEX =
+    private static final Pattern MODULE_SCRIPT_PATH_REGEX =
             Pattern.compile("^(v0|v0\\/amp-[a-z0-9-]*-[a-z0-9.]*)\\.mjs$", Pattern.CASE_INSENSITIVE);
 
     /**
@@ -172,14 +225,26 @@ public class ScriptTag {
      * v0/amp-ad-0.1.js
      */
     @Nonnull
-    final Pattern NO_MODULE_SCRIPT_PATH_REGEX =
+    private static final Pattern NO_MODULE_SCRIPT_PATH_REGEX =
             Pattern.compile("(v0|v0\\/amp-[a-z0-9-]*-[a-z0-9.]*)\\.js$", Pattern.CASE_INSENSITIVE);
     /**
      * lts/v0.js
      * lts/v0/amp-ad-0.1.js
      */
     @Nonnull
-    final Pattern LTS_SCRIPT_PATH_REGEX =
+    private static final Pattern LTS_SCRIPT_PATH_REGEX =
             Pattern.compile("^lts\\/(v0|v0/amp-[a-z0-9-]*-[a-z0-9.]*)\\.js$", Pattern.CASE_INSENSITIVE);
+    /**
+     * lts/v0/amp-ad-0.1.js
+     * lts/v0/amp-ad-0.1.js?f=sxg
+     * ts/v0/amp-ad-0.1.mjs
+     * v0/amp-ad-0.1.js
+     * v0/amp-ad-0.1.js?f=sxg
+     * v0/am-ad-0.1.mjs
+     */
+    @Nonnull
+    private static final Pattern EXTENSION_SCRIPT_PATH_REGEX =
+            Pattern.compile("^(?:lts\\/)?v0\\/(amp-[a-z0-9-]*)-([a-z0-9.]*)\\.(?:m)?js(?:\\?f=sxg)?$"
+                    , Pattern.CASE_INSENSITIVE);
 
 }
