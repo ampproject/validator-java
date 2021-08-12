@@ -62,17 +62,25 @@ public final class ExtensionsUtils {
   }
 
   /**
-   * Validates that LTS is used for either all script sources or none.
-   *
+   * Validates the 'src' attribute for AMP JavaScript (Runtime and Extensions)
+   * script tags. This validates:
+   *  - the script is using an AMP domain
+   *  - the script path is valid (for extensions only, runtime uses attrSpec)
+   *  - that the same script release version is used for all script sources
    * @param tag tag
+   * @param attrValue
    * @param tagSpec the spec to check against
    * @param context global context
    * @param result  record to update
    */
-  public static void validateScriptSrcAttr(@Nonnull final ParsedHtmlTag tag, @Nonnull final ValidatorProtos.TagSpec tagSpec,
-                                           @Nonnull final Context context, @Nonnull final ValidatorProtos.ValidationResult.Builder result) {
-    if (context.getScriptReleaseVersion() == UNKNOWN) {
-      return;
+  public static void validateAmpScriptSrcAttr(@Nonnull final ParsedHtmlTag tag, @Nonnull final String attrValue,
+                                           @Nonnull final ValidatorProtos.TagSpec tagSpec, @Nonnull final Context context,
+                                           @Nonnull final ValidatorProtos.ValidationResult.Builder result) {
+    if (!tag.isAmpDomain()) {
+
+      context.addError(
+              generated.ValidationError.Code.DISALLOWED_AMP_DOMAIN,
+              context.getLineCol(), /* params */[], /* spec_url*/ '', result);
     }
     final ScriptReleaseVersion scriptReleaseVersion = getScriptReleaseVersion(tag);
     if (context.getScriptReleaseVersion() != scriptReleaseVersion) {
@@ -85,7 +93,7 @@ public final class ExtensionsUtils {
           ? ValidatorProtos.ValidationError.Code.LTS_SCRIPT_AFTER_NON_LTS
           : ValidatorProtos.ValidationError.Code.NON_LTS_SCRIPT_AFTER_LTS,
         context.getLineCol(), params,
-        "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml#required-markup",
+        "",
         result);
     }
   }

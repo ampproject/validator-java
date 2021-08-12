@@ -26,6 +26,7 @@ public class ParsedHtmlTag {
     public ParsedHtmlTag(@Nonnull final String tagName, @Nonnull final Attributes attributes) {
         this.tagName = tagName.toUpperCase();
         this.attrs = attributes;
+        this.scriptTag = new ScriptTag(this.tagName, this.attrs);
         this.attrsByKey = null;
     }
 
@@ -142,6 +143,14 @@ public class ParsedHtmlTag {
      */
     private String getAttrValueOrNull(@Nonnull final String name) {
         return this.attrsByKey().get(name);
+    }
+
+    /**
+     * Tests if this tag is a script with a src of an AMP domain.
+     * @return {boolean}
+     */
+    public boolean isAmpDomain() {
+        return this.scriptTag.isAmpDomain;
     }
 
     /**
@@ -295,6 +304,10 @@ public class ParsedHtmlTag {
     /** The attributes. */
     @Nonnull
     private final Attributes attrs;
+
+    /** The underlying script tag */
+    @Nonnull
+    private final ScriptTag scriptTag;
 
     /** Lazily allocated map from attribute name to value */
     private HashMap<String, String> attrsByKey;

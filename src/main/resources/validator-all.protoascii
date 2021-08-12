@@ -2719,7 +2719,12 @@ tags: {
   html_format: AMP
   tag_name: "INPUT"
   spec_name: "INPUT [type=file]"
-   attrs: {
+  attrs: {
+    disabled_by: "amp4email"
+    name: "capture"
+    value: ""
+  }
+  attrs: {
     disabled_by: "amp4email"
     name: "no-verify"
     value: ""
@@ -5109,104 +5114,106 @@ error_specificity { code: WARNING_TAG_REQUIRED_BY_MISSING specificity: 14 }
 error_specificity { code: EXTENSION_UNUSED specificity: 15 }
 error_specificity { code: WARNING_EXTENSION_UNUSED specificity: 16 }
 error_specificity { code: WARNING_EXTENSION_DEPRECATED_VERSION specificity: 17 }
-error_specificity { code: NON_LTS_SCRIPT_AFTER_LTS specificity: 18 }
-error_specificity { code: LTS_SCRIPT_AFTER_NON_LTS specificity: 19 }
-error_specificity { code: INCORRECT_SCRIPT_RELEASE_VERSION specificity: 20 }
-error_specificity { code: DISALLOWED_AMP_DOMAIN specificity: 21 }
-error_specificity { code: DISALLOWED_TAG specificity: 22 }
-error_specificity { code: DISALLOWED_ATTR specificity: 23 }
-error_specificity { code: INVALID_ATTR_VALUE specificity: 24 }
-error_specificity { code: DUPLICATE_ATTRIBUTE specificity: 25 }
-error_specificity { code: ATTR_VALUE_REQUIRED_BY_LAYOUT specificity: 26 }
-error_specificity { code: MANDATORY_ATTR_MISSING specificity: 27 }
-error_specificity { code: MANDATORY_ONEOF_ATTR_MISSING specificity: 28 }
-error_specificity { code: MANDATORY_ANYOF_ATTR_MISSING specificity: 29 }
-error_specificity { code: ATTR_REQUIRED_BUT_MISSING specificity: 30 }
-error_specificity { code: DUPLICATE_UNIQUE_TAG specificity: 31 }
-error_specificity { code: DUPLICATE_UNIQUE_TAG_WARNING specificity: 32 }
-error_specificity { code: STYLESHEET_TOO_LONG specificity: 33 }
-error_specificity { code: STYLESHEET_AND_INLINE_STYLE_TOO_LONG specificity: 34 }
-error_specificity { code: INLINE_STYLE_TOO_LONG specificity: 35 }
-error_specificity { code: INLINE_SCRIPT_TOO_LONG specificity: 36 }
-error_specificity { code: CSS_SYNTAX_INVALID_AT_RULE specificity: 37 }
+error_specificity { code: INVALID_EXTENSION_VERSION specificity: 18 }
+error_specificity { code: INVALID_EXTENSION_PATH specificity: 19 }
+error_specificity { code: NON_LTS_SCRIPT_AFTER_LTS specificity: 20 }
+error_specificity { code: LTS_SCRIPT_AFTER_NON_LTS specificity: 21 }
+error_specificity { code: INCORRECT_SCRIPT_RELEASE_VERSION specificity: 22 }
+error_specificity { code: DISALLOWED_AMP_DOMAIN specificity: 23 }
+error_specificity { code: DISALLOWED_TAG specificity: 24 }
+error_specificity { code: DISALLOWED_ATTR specificity: 25 }
+error_specificity { code: INVALID_ATTR_VALUE specificity: 26 }
+error_specificity { code: DUPLICATE_ATTRIBUTE specificity: 27 }
+error_specificity { code: ATTR_VALUE_REQUIRED_BY_LAYOUT specificity: 28 }
+error_specificity { code: MANDATORY_ATTR_MISSING specificity: 29 }
+error_specificity { code: MANDATORY_ONEOF_ATTR_MISSING specificity: 30 }
+error_specificity { code: MANDATORY_ANYOF_ATTR_MISSING specificity: 31 }
+error_specificity { code: ATTR_REQUIRED_BUT_MISSING specificity: 32 }
+error_specificity { code: DUPLICATE_UNIQUE_TAG specificity: 33 }
+error_specificity { code: DUPLICATE_UNIQUE_TAG_WARNING specificity: 34 }
+error_specificity { code: STYLESHEET_TOO_LONG specificity: 35 }
+error_specificity { code: STYLESHEET_AND_INLINE_STYLE_TOO_LONG specificity: 36 }
+error_specificity { code: INLINE_STYLE_TOO_LONG specificity: 37 }
+error_specificity { code: INLINE_SCRIPT_TOO_LONG specificity: 38 }
+error_specificity { code: CSS_SYNTAX_INVALID_AT_RULE specificity: 39 }
 error_specificity {
-  code: MANDATORY_PROPERTY_MISSING_FROM_ATTR_VALUE specificity: 38
+  code: MANDATORY_PROPERTY_MISSING_FROM_ATTR_VALUE specificity: 40
 }
-error_specificity { code: INVALID_PROPERTY_VALUE_IN_ATTR_VALUE specificity: 39 }
-error_specificity { code: DISALLOWED_PROPERTY_IN_ATTR_VALUE specificity: 40 }
-error_specificity { code: MUTUALLY_EXCLUSIVE_ATTRS specificity: 41 }
-error_specificity { code: UNESCAPED_TEMPLATE_IN_ATTR_VALUE specificity: 42 }
-error_specificity { code: TEMPLATE_PARTIAL_IN_ATTR_VALUE specificity: 43 }
-error_specificity { code: TEMPLATE_IN_ATTR_NAME specificity: 44 }
+error_specificity { code: INVALID_PROPERTY_VALUE_IN_ATTR_VALUE specificity: 41 }
+error_specificity { code: DISALLOWED_PROPERTY_IN_ATTR_VALUE specificity: 42 }
+error_specificity { code: MUTUALLY_EXCLUSIVE_ATTRS specificity: 43 }
+error_specificity { code: UNESCAPED_TEMPLATE_IN_ATTR_VALUE specificity: 44 }
+error_specificity { code: TEMPLATE_PARTIAL_IN_ATTR_VALUE specificity: 45 }
+error_specificity { code: TEMPLATE_IN_ATTR_NAME specificity: 46 }
 error_specificity {
-  code: INCONSISTENT_UNITS_FOR_WIDTH_AND_HEIGHT specificity: 45
+  code: INCONSISTENT_UNITS_FOR_WIDTH_AND_HEIGHT specificity: 47
 }
-error_specificity { code: MISSING_LAYOUT_ATTRIBUTES specificity: 46 }
-error_specificity { code: IMPLIED_LAYOUT_INVALID specificity: 47 }
-error_specificity { code: SPECIFIED_LAYOUT_INVALID specificity: 48 }
-error_specificity { code: ATTR_DISALLOWED_BY_IMPLIED_LAYOUT specificity: 49 }
-error_specificity { code: ATTR_DISALLOWED_BY_SPECIFIED_LAYOUT specificity: 50 }
-error_specificity { code: DUPLICATE_DIMENSION specificity: 51 }
-error_specificity { code: DISALLOWED_RELATIVE_URL specificity: 52 }
-error_specificity { code: MISSING_URL specificity: 53 }
-error_specificity { code: DISALLOWED_DOMAIN specificity: 54 }
-error_specificity { code: INVALID_URL_PROTOCOL specificity: 55 }
-error_specificity { code: INVALID_URL specificity: 56 }
-error_specificity { code: DISALLOWED_STYLE_ATTR specificity: 57 }
-error_specificity { code: CSS_SYNTAX_STRAY_TRAILING_BACKSLASH specificity: 58 }
-error_specificity { code: CSS_SYNTAX_UNTERMINATED_COMMENT specificity: 59 }
-error_specificity { code: CSS_SYNTAX_UNTERMINATED_STRING specificity: 60 }
-error_specificity { code: CSS_SYNTAX_BAD_URL specificity: 61 }
+error_specificity { code: MISSING_LAYOUT_ATTRIBUTES specificity: 48 }
+error_specificity { code: IMPLIED_LAYOUT_INVALID specificity: 49 }
+error_specificity { code: SPECIFIED_LAYOUT_INVALID specificity: 50 }
+error_specificity { code: ATTR_DISALLOWED_BY_IMPLIED_LAYOUT specificity: 51 }
+error_specificity { code: ATTR_DISALLOWED_BY_SPECIFIED_LAYOUT specificity: 52 }
+error_specificity { code: DUPLICATE_DIMENSION specificity: 53 }
+error_specificity { code: DISALLOWED_RELATIVE_URL specificity: 54 }
+error_specificity { code: MISSING_URL specificity: 55 }
+error_specificity { code: DISALLOWED_DOMAIN specificity: 56 }
+error_specificity { code: INVALID_URL_PROTOCOL specificity: 57 }
+error_specificity { code: INVALID_URL specificity: 58 }
+error_specificity { code: DISALLOWED_STYLE_ATTR specificity: 59 }
+error_specificity { code: CSS_SYNTAX_STRAY_TRAILING_BACKSLASH specificity: 60 }
+error_specificity { code: CSS_SYNTAX_UNTERMINATED_COMMENT specificity: 61 }
+error_specificity { code: CSS_SYNTAX_UNTERMINATED_STRING specificity: 62 }
+error_specificity { code: CSS_SYNTAX_BAD_URL specificity: 63 }
 error_specificity {
-  code: CSS_SYNTAX_EOF_IN_PRELUDE_OF_QUALIFIED_RULE specificity: 62
+  code: CSS_SYNTAX_EOF_IN_PRELUDE_OF_QUALIFIED_RULE specificity: 64
 }
-error_specificity { code: CSS_SYNTAX_INVALID_DECLARATION specificity: 63 }
-error_specificity { code: CSS_SYNTAX_INCOMPLETE_DECLARATION specificity: 64 }
-error_specificity { code: CSS_SYNTAX_ERROR_IN_PSEUDO_SELECTOR specificity: 65 }
-error_specificity { code: CSS_SYNTAX_MISSING_SELECTOR specificity: 66 }
-error_specificity { code: CSS_SYNTAX_NOT_A_SELECTOR_START specificity: 67 }
+error_specificity { code: CSS_SYNTAX_INVALID_DECLARATION specificity: 65 }
+error_specificity { code: CSS_SYNTAX_INCOMPLETE_DECLARATION specificity: 66 }
+error_specificity { code: CSS_SYNTAX_ERROR_IN_PSEUDO_SELECTOR specificity: 67 }
+error_specificity { code: CSS_SYNTAX_MISSING_SELECTOR specificity: 68 }
+error_specificity { code: CSS_SYNTAX_NOT_A_SELECTOR_START specificity: 69 }
 error_specificity {
-  code: CSS_SYNTAX_UNPARSED_INPUT_REMAINS_IN_SELECTOR specificity: 68
+  code: CSS_SYNTAX_UNPARSED_INPUT_REMAINS_IN_SELECTOR specificity: 70
 }
-error_specificity { code: CSS_SYNTAX_MISSING_URL specificity: 69 }
-error_specificity { code: CSS_SYNTAX_DISALLOWED_DOMAIN specificity: 70 }
-error_specificity { code: CSS_SYNTAX_INVALID_URL specificity: 71 }
-error_specificity { code: CSS_SYNTAX_INVALID_URL_PROTOCOL specificity: 72 }
-error_specificity { code: CSS_SYNTAX_DISALLOWED_RELATIVE_URL specificity: 73 }
-error_specificity { code: INCORRECT_NUM_CHILD_TAGS specificity: 74 }
-error_specificity { code: DISALLOWED_CHILD_TAG_NAME specificity: 75 }
-error_specificity { code: DISALLOWED_FIRST_CHILD_TAG_NAME specificity: 76 }
-error_specificity { code: CSS_SYNTAX_INVALID_ATTR_SELECTOR specificity: 77 }
+error_specificity { code: CSS_SYNTAX_MISSING_URL specificity: 71 }
+error_specificity { code: CSS_SYNTAX_DISALLOWED_DOMAIN specificity: 72 }
+error_specificity { code: CSS_SYNTAX_INVALID_URL specificity: 73 }
+error_specificity { code: CSS_SYNTAX_INVALID_URL_PROTOCOL specificity: 74 }
+error_specificity { code: CSS_SYNTAX_DISALLOWED_RELATIVE_URL specificity: 75 }
+error_specificity { code: INCORRECT_NUM_CHILD_TAGS specificity: 76 }
+error_specificity { code: DISALLOWED_CHILD_TAG_NAME specificity: 77 }
+error_specificity { code: DISALLOWED_FIRST_CHILD_TAG_NAME specificity: 78 }
+error_specificity { code: CSS_SYNTAX_INVALID_ATTR_SELECTOR specificity: 79 }
 error_specificity {
-  code: CHILD_TAG_DOES_NOT_SATISFY_REFERENCE_POINT specificity: 78
+  code: CHILD_TAG_DOES_NOT_SATISFY_REFERENCE_POINT specificity: 80
 }
-error_specificity { code: MANDATORY_REFERENCE_POINT_MISSING specificity: 79 }
-error_specificity { code: DUPLICATE_REFERENCE_POINT specificity: 80 }
-error_specificity { code: TAG_REFERENCE_POINT_CONFLICT specificity: 81 }
+error_specificity { code: MANDATORY_REFERENCE_POINT_MISSING specificity: 81 }
+error_specificity { code: DUPLICATE_REFERENCE_POINT specificity: 82 }
+error_specificity { code: TAG_REFERENCE_POINT_CONFLICT specificity: 83 }
 error_specificity {
   code: CHILD_TAG_DOES_NOT_SATISFY_REFERENCE_POINT_SINGULAR
-  specificity: 82
-}
-error_specificity { code: CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE specificity: 83 }
-error_specificity {
-  code: CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE_WITH_HINT
   specificity: 84
 }
+error_specificity { code: CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE specificity: 85 }
 error_specificity {
-  code: CSS_SYNTAX_PROPERTY_DISALLOWED_WITHIN_AT_RULE
-  specificity: 85
-}
-error_specificity {
-  code: CSS_SYNTAX_PROPERTY_DISALLOWED_TOGETHER_WITH
+  code: CSS_SYNTAX_DISALLOWED_PROPERTY_VALUE_WITH_HINT
   specificity: 86
 }
 error_specificity {
-  code: CSS_SYNTAX_PROPERTY_REQUIRES_QUALIFICATION
+  code: CSS_SYNTAX_PROPERTY_DISALLOWED_WITHIN_AT_RULE
   specificity: 87
 }
 error_specificity {
-  code: BASE_TAG_MUST_PRECEED_ALL_URLS
+  code: CSS_SYNTAX_PROPERTY_DISALLOWED_TOGETHER_WITH
   specificity: 88
+}
+error_specificity {
+  code: CSS_SYNTAX_PROPERTY_REQUIRES_QUALIFICATION
+  specificity: 89
+}
+error_specificity {
+  code: BASE_TAG_MUST_PRECEED_ALL_URLS
+  specificity: 90
 }
 error_specificity { code: DISALLOWED_SCRIPT_TAG specificity: 102 }
 error_specificity { code: GENERAL_DISALLOWED_TAG specificity: 103 }
@@ -5334,6 +5341,17 @@ error_formats {
   format: "The extension '%1' is referenced at version '%2' which is a "
           "deprecated version. Please use a more recent version of this "
           "extension. This may become an error in the future."
+}
+error_formats {
+  code: INVALID_EXTENSION_VERSION
+  format: "The extension '%1' is referenced at version '%2' which is an "
+          "invalid version. Please use a valid version of this "
+          "extension."
+}
+error_formats {
+  code: INVALID_EXTENSION_PATH
+  format: "The extension '%1' has a path '%2' which is invalid. Please use "
+          "a valid path for this extension."
 }
 error_formats {
   code: INCORRECT_SCRIPT_RELEASE_VERSION
@@ -9217,6 +9235,56 @@ tags: {  # <amp-date-countdown>
   }
 }
 #
+# Copyright 2021 The AMP HTML Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS-IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the license.
+#
+
+tags: {  # amp-wordpress-embed
+  html_format: AMP
+  tag_name: "SCRIPT"
+  extension_spec: {
+    name: "amp-wordpress-embed"
+    version: "1.0"
+    version: "latest"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # <amp-wordpress-embed>
+  html_format: AMP
+  tag_name: "AMP-WORDPRESS-EMBED"
+  requires_extension: "amp-wordpress-embed"
+  attr_lists: "extended-amp-global"
+  spec_url: "https://amp.dev/documentation/components/amp-wordpress-embed/"
+  attrs: {
+    name: "data-url"
+    value_url: {
+      protocol: "https"
+      allow_relative: false
+    }
+    mandatory: true
+  }
+  amp_layout: {
+    supported_layouts: FILL
+    supported_layouts: FIXED
+    supported_layouts: FIXED_HEIGHT
+    supported_layouts: FLEX_ITEM
+    supported_layouts: INTRINSIC
+    supported_layouts: NODISPLAY
+    supported_layouts: RESPONSIVE
+  }
+}
+#
 # Copyright 2016 The AMP HTML Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -9769,7 +9837,6 @@ tags: {  # amp-facebook-like
   extension_spec: {
     name: "amp-facebook-like"
     version: "0.1"
-    version: "1.0"
     version: "latest"
   }
   attr_lists: "common-extension-attrs"
@@ -10387,6 +10454,72 @@ tags: {  # <amp-story-interactive-results>
     value: "transparent"
   }
 }
+tags: {  # <amp-story-interactive-img-quiz>
+  html_format: AMP
+  tag_name: "AMP-STORY-INTERACTIVE-IMG-QUIZ"
+  requires_extension: "amp-story-interactive"
+  mandatory_ancestor: "AMP-STORY-GRID-LAYER"
+  attr_lists: "interactive-options-img-attrs"
+  attr_lists: "interactive-options-confetti-attrs"
+  attr_lists: "interactive-shared-configs-attrs"
+  attrs: {
+    name: "option-1-correct"
+    mandatory_oneof: "['option-1-correct', 'option-2-correct', 'option-3-correct', 'option-4-correct']"
+  }
+  attrs: {
+    name: "option-2-correct"
+    mandatory_oneof: "['option-1-correct', 'option-2-correct', 'option-3-correct', 'option-4-correct']"
+  }
+  attrs: {
+    name: "option-3-correct"
+    mandatory_oneof: "['option-1-correct', 'option-2-correct', 'option-3-correct', 'option-4-correct']"
+    trigger: {
+      also_requires_attr: "option-3-image"
+    }
+  }
+  attrs: {
+    name: "option-4-correct"
+    mandatory_oneof: "['option-1-correct', 'option-2-correct', 'option-3-correct', 'option-4-correct']"
+    trigger: {
+      also_requires_attr: "option-4-image"
+    }
+  }
+}
+tags: {  # <amp-story-interactive-img-poll>
+  html_format: AMP
+  tag_name: "AMP-STORY-INTERACTIVE-IMG-POLL"
+  requires_extension: "amp-story-interactive"
+  mandatory_ancestor: "AMP-STORY-GRID-LAYER"
+  attr_lists: "interactive-options-img-attrs"
+  attr_lists: "interactive-options-confetti-attrs"
+  attr_lists: "interactive-shared-configs-attrs"
+  attrs: {
+    name: "option-1-results-category"
+    trigger: {
+      also_requires_attr: "option-2-results-category"
+    }
+  }
+  attrs: {
+    name: "option-2-results-category"
+    trigger: {
+      also_requires_attr: "option-1-results-category"
+    }
+  }
+  attrs: {
+    name: "option-3-results-category"
+    trigger: {
+      also_requires_attr: "option-2-results-category"
+      also_requires_attr: "option-3-image"
+    }
+  }
+  attrs: {
+    name: "option-4-results-category"
+    trigger: {
+      also_requires_attr: "option-3-results-category"
+      also_requires_attr: "option-4-image"
+    }
+  }
+}
 
 attr_lists: {
   name: "interactive-shared-configs-attrs"
@@ -10485,6 +10618,66 @@ attr_lists: {
     trigger: {
       also_requires_attr: "option-3-results-category"
       also_requires_attr: "option-4-text"
+    }
+  }
+}
+attr_lists: {
+  name: "interactive-options-img-attrs"
+  attrs: {
+    name: "option-1-image"
+    mandatory: true
+    value_url: {
+      protocol: "http"
+      protocol: "https"
+    }
+  }
+  attrs: {
+    name: "option-2-image"
+    mandatory: true
+    value_url: {
+      protocol: "http"
+      protocol: "https"
+    }
+  }
+  attrs: {
+    name: "option-3-image"
+    trigger: {
+      also_requires_attr: "option-3-image-alt"
+    }
+    value_url: {
+      protocol: "http"
+      protocol: "https"
+    }
+  }
+  attrs: {
+    name: "option-4-image"
+    trigger: {
+      also_requires_attr: "option-3-image"
+      also_requires_attr: "option-4-image-alt"
+    }
+    value_url: {
+      protocol: "http"
+      protocol: "https"
+    }
+  }
+  attrs: {
+    name: "option-1-image-alt"
+    mandatory: true
+  }
+  attrs: {
+    name: "option-2-image-alt"
+    mandatory: true
+  }
+  attrs: {
+    name: "option-3-image-alt"
+    trigger: {
+      also_requires_attr: "option-3-image"
+    }
+  }
+  attrs: {
+    name: "option-4-image-alt"
+    trigger: {
+      also_requires_attr: "option-4-image"
     }
   }
 }
@@ -13595,6 +13788,7 @@ tags: {  # amp-lightbox-gallery
   extension_spec: {
     name: "amp-lightbox-gallery"
     version: "0.1"
+    version: "1.0"
     version: "latest"
     requires_usage: NONE
   }
@@ -13952,11 +14146,11 @@ tags: {  # embedly-card
   extension_spec: {
     name: "amp-embedly-card"
     version: "0.1"
+    version: "1.0"
     version: "latest"
   }
   attr_lists: "common-extension-attrs"
 }
-
 tags: {  # <amp-embedly-card>
   html_format: AMP
   tag_name: "AMP-EMBEDLY-CARD"
@@ -14608,6 +14802,7 @@ descendant_tag_list: {
   tag: "EM"
   tag: "FECOLORMATRIX"
   tag: "FECOMPOSITE"
+  tag: "FEBLEND"
   tag: "FEFLOOD"
   tag: "FEGAUSSIANBLUR"
   tag: "FEMERGE"
@@ -14710,6 +14905,8 @@ descendant_tag_list: {
   tag: "AMP-STORY-360"
   tag: "AMP-STORY-AUTO-ANALYTICS"
   tag: "AMP-STORY-INTERACTIVE-BINARY-POLL"
+  tag: "AMP-STORY-INTERACTIVE-IMG-POLL"
+  tag: "AMP-STORY-INTERACTIVE-IMG-QUIZ"
   tag: "AMP-STORY-INTERACTIVE-POLL"
   tag: "AMP-STORY-INTERACTIVE-QUIZ"
   tag: "AMP-STORY-INTERACTIVE-RESULTS"
@@ -14744,6 +14941,7 @@ descendant_tag_list: {
   tag: "EM"
   tag: "FECOLORMATRIX"
   tag: "FECOMPOSITE"
+  tag: "FEBLEND"
   tag: "FEFLOOD"
   tag: "FEGAUSSIANBLUR"
   tag: "FEMERGE"
@@ -15119,6 +15317,7 @@ descendant_tag_list {
   tag: "EM"
   tag: "FECOLORMATRIX"
   tag: "FECOMPOSITE"
+  tag: "FEBLEND"
   tag: "FEFLOOD"
   tag: "FEGAUSSIANBLUR"
   tag: "FEMERGE"
@@ -18862,67 +19061,6 @@ tags: {  # <amp-analytics>
   }
   attrs: { name: "type" }
   spec_url: "https://amp.dev/documentation/components/amp-analytics/"
-}
-#
-# Copyright 2021 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
-tags: {  # amp-google-assistant-assistjs
-  html_format: AMP
-  tag_name: "SCRIPT"
-  extension_spec: {
-    name: "amp-google-assistant-assistjs"
-    version: "0.1"
-    version: "latest"
-  }
-  attr_lists: "common-extension-attrs"
-}
-tags: {  # <amp-google-assistant-assistjs-config>
-  html_format: AMP
-  tag_name: "AMP-GOOGLE-ASSISTANT-ASSISTJS-CONFIG"
-  requires_extension: "amp-google-assistant-assistjs"
-  amp_layout: {
-    supported_layouts: NODISPLAY
-  }
-}
-tags: {  # <amp-google-assistant-voice-button>
-  html_format: AMP
-  tag_name: "AMP-GOOGLE-ASSISTANT-VOICE-BUTTON"
-  requires_extension: "amp-google-assistant-assistjs"
-  attr_lists: "extended-amp-global"
-  amp_layout: {
-    supported_layouts: RESPONSIVE
-  }
-}
-tags: {  # <amp-google-assistant-voice-bar>
-  html_format: AMP
-  tag_name: "AMP-GOOGLE-ASSISTANT-VOICE-BAR"
-  requires_extension: "amp-google-assistant-assistjs"
-  attr_lists: "extended-amp-global"
-  amp_layout: {
-    supported_layouts: RESPONSIVE
-  }
-}
-tags: {  # <amp-google-assistant-inline-suggestion-bar>
-  html_format: AMP
-  tag_name: "AMP-GOOGLE-ASSISTANT-INLINE-SUGGESTION-BAR"
-  requires_extension: "amp-google-assistant-assistjs"
-  attr_lists: "extended-amp-global"
-  amp_layout: {
-    supported_layouts: RESPONSIVE
-  }
 }
 #
 # Copyright 2018 The AMP HTML Authors. All Rights Reserved.
