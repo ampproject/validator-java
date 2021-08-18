@@ -21,7 +21,6 @@
 
 package dev.amp.validator;
 
-import dev.amp.validator.selector.AttrSelector;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
