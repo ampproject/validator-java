@@ -61,7 +61,7 @@ import java.util.regex.Pattern;
 import static dev.amp.validator.utils.CssSpecUtils.parseInlineStyle;
 import static dev.amp.validator.utils.CssSpecUtils.stripVendorPrefix;
 import static dev.amp.validator.utils.CssSpecUtils.validateAttrCss;
-import static dev.amp.validator.utils.ExtensionsUtils.validateScriptSrcAttr;
+import static dev.amp.validator.utils.ExtensionsUtils.validateAmpScriptSrcAttr;
 
 /**
  * Methods to handle attribute spec validation.
@@ -178,7 +178,7 @@ public final class AttributeSpecUtils {
             if (encounteredTag.attrs().getValue(i).equals("src")
                     && (encounteredTag.isExtensionScript()
                     || encounteredTag.isAmpRuntimeScript())) {
-                validateScriptSrcAttr(encounteredTag, spec, context, result.getValidationResult());
+                validateAmpScriptSrcAttr(encounteredTag, encounteredTag.attrs().getValue(i), spec, context, result.getValidationResult());
             }
             if (!(attrsByName.containsKey(name))) {
                 // The HTML tag specifies type identifiers which are validated in
@@ -204,7 +204,7 @@ public final class AttributeSpecUtils {
                 // method.  For 'src', we also keep track whether we validated it this
                 // way, (seen_src_attr), since it's a mandatory attr.
                 if (spec.hasExtensionSpec()
-                        && validateAttrInExtension(spec, context, name, value, result.getValidationResult())) {
+                        && validateAttrInExtension(spec, name, value)) {
                     if (name.equals("src")) {
                         seenExtensionSrcAttr = true;
                     }
@@ -1212,24 +1212,20 @@ public final class AttributeSpecUtils {
 
     /**
      * Validates whether an encountered attribute is validated by an ExtensionSpec.
-     * ExtensionSpec's validate the 'custom-element', 'custom-template', and 'src'
+     * ExtensionSpec's validate the 'custom-element', 'custom-template', and 'host-service'
      * attributes. If an error is found, it is added to the |result|. The return
      * value indicates whether or not the provided attribute is explained by this
      * validation function.
      *
      * @param tagSpec   tag spec.
-     * @param context   the context.
      * @param attrName  attribute name.
      * @param attrValue attribute value.
-     * @param result    validation result.
      * @return returns value indicates whether or not the provided attribute is explained by validation function.
      * @throws TagValidationException the tag validation exception.
      */
     public static boolean validateAttrInExtension(@Nonnull final ValidatorProtos.TagSpec tagSpec,
-                                                       @Nonnull final Context context,
-                                                       @Nonnull final String attrName,
-                                                       @Nonnull final String attrValue,
-                                                       @Nonnull final ValidatorProtos.ValidationResult.Builder result)
+                                                  @Nonnull final String attrName,
+                                                  @Nonnull final String attrValue)
             throws TagValidationException {
         if (!tagSpec.hasExtensionSpec()) {
             throw new TagValidationException("Expecting extension spec not null");
@@ -1248,56 +1244,6 @@ public final class AttributeSpecUtils {
                 }
                 return false;
             }
-            return true;
-        } else if (attrName.equals("src")) {
-            final Matcher reResult = SRC_URL_REGEX.matcher(attrValue);
-
-            // If the src URL matches this regex and the base name of the file matches
-            // the extension, look to see if the version matches.
-            if (reResult.matches()
-                    && reResult.group(1).equals(extensionSpec.getName())) {
-                final String encounteredVersion = reResult.group(2);
-                boolean foundDecprecatedVersion = false;
-                for (String deprecatedVersion : extensionSpec.getDeprecatedVersionList()) {
-                    if (deprecatedVersion.equals(encounteredVersion)) {
-                        foundDecprecatedVersion = true;
-                        break;
-                    }
-                }
-                if (foundDecprecatedVersion) {
-                    List<String> params = new ArrayList<>();
-                    params.add(extensionSpec.getName());
-                    params.add(encounteredVersion);
-                    context.addWarning(
-                            ValidatorProtos.ValidationError.Code.WARNING_EXTENSION_DEPRECATED_VERSION,
-                            context.getLineCol(),
-                            params,
-                            TagSpecUtils.getTagSpecUrl(tagSpec),
-                            result);
-                    return true;
-                }
-
-                boolean foundVersion = false;
-                for (String version : extensionSpec.getVersionList()) {
-                    if (version.equals(encounteredVersion)) {
-                        foundVersion = true;
-                        break;
-                    }
-                }
-                if (foundVersion) {
-                    return true;
-                }
-            }
-            List<String> params = new ArrayList<>();
-            params.add(attrName);
-            params.add(TagSpecUtils.getTagSpecName(tagSpec));
-            params.add(attrValue);
-            context.addError(
-                    ValidatorProtos.ValidationError.Code.INVALID_ATTR_VALUE,
-                    context.getLineCol(),
-                    params,
-                    TagSpecUtils.getTagSpecUrl(tagSpec),
-                    result);
             return true;
         }
         return false;
