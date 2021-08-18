@@ -19,24 +19,39 @@
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.utils;
+package dev.amp.validator.selector;
 
-import dev.amp.validator.SrcsetParsingResult;
-
-import static dev.amp.validator.utils.ParseSrcSetUtils.parseSrcset;
-
+import dev.amp.validator.css.TokenType;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
- * Test for {@link ParseSrcSetUtils}
+ * Test for {@link TypeSelector}
  *
- * @author GeorgeLuo
+ * @author Jacob James
  */
-
-public class ParseSrcSetUtilsTest {
+public class TypeSelectorTest {
 
     @Test
-    public void testParseSrcset() {
-        SrcsetParsingResult a = parseSrcset("google.com/favicon.ico");
+    public void stringOutputTest() {
+        TypeSelector alpha = new TypeSelector("checker", "checked");
+        String a = alpha.toString();
+        Assert.assertEquals(a, "checker|checked");
+    }
+
+    @Test
+    public void stringOutputTestNil() {
+        TypeSelector beta = new TypeSelector(null, "checked");
+        String b = beta.toString();
+        Assert.assertEquals(b, "checked");
+
+    }
+
+    @Test
+    public void tokenTest() {
+        TypeSelector alpha = new TypeSelector("checker", "checked");
+        TokenType a = alpha.getTokenType();
+        Assert.assertEquals(a, TokenType.TYPE_SELECTOR);
     }
 }
+

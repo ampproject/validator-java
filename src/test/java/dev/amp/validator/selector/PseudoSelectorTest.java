@@ -19,24 +19,33 @@
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.utils;
+package dev.amp.validator.selector;
 
-import dev.amp.validator.SrcsetParsingResult;
-
-import static dev.amp.validator.utils.ParseSrcSetUtils.parseSrcset;
-
+import dev.amp.validator.css.TokenType;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Test for {@link ParseSrcSetUtils}
+ * Test for {@link PseudoSelector}
  *
- * @author GeorgeLuo
+ * @author Jacob James
  */
 
-public class ParseSrcSetUtilsTest {
+public class PseudoSelectorTest {
 
     @Test
-    public void testParseSrcset() {
-        SrcsetParsingResult a = parseSrcset("google.com/favicon.ico");
+    public void getValsPseudoSelector() {
+        List myList = new ArrayList();
+        PseudoSelector alpha = new PseudoSelector(true, "beta", myList);
+        alpha.getName();
+        Assert.assertEquals(alpha.getName(), "beta");
+        Assert.assertEquals(alpha.isClass(), true);
+        TokenType charlie = TokenType.PSEUDO_SELECTOR;
+        Assert.assertEquals(alpha.getTokenType(), charlie);
     }
+
 }
+

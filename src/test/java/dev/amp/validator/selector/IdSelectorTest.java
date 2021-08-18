@@ -19,24 +19,28 @@
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.utils;
+package dev.amp.validator.selector;
 
-import dev.amp.validator.SrcsetParsingResult;
-
-import static dev.amp.validator.utils.ParseSrcSetUtils.parseSrcset;
-
+import dev.amp.validator.css.TokenType;
 import org.testng.annotations.Test;
+import org.testng.Assert;
 
 /**
- * Test for {@link ParseSrcSetUtils}
+ * Test for {@link IdSelector}
  *
- * @author GeorgeLuo
+ * @author Jacob James
  */
 
-public class ParseSrcSetUtilsTest {
+public class IdSelectorTest {
 
     @Test
-    public void testParseSrcset() {
-        SrcsetParsingResult a = parseSrcset("google.com/favicon.ico");
+    public void getIdSelector() {
+        IdSelector a = new IdSelector("Hello");
+        Assert.assertEquals(a.toString(), "#Hello");
+        TokenType beta = TokenType.ID_SELECTOR;
+        Assert.assertEquals(a.getTokenType(), beta);
+
     }
+
+
 }
