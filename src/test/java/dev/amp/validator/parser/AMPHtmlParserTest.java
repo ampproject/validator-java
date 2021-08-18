@@ -60,6 +60,21 @@ public class AMPHtmlParserTest {
   }
 
   @Test
+  public void testCSS() {
+    try {
+      String inputHtml =
+              readFile(
+                      "test-cases/css/testCarouselSelectors.html");
+      final int maxNode = 10000;
+      ValidatorProtos.ValidationResult result =
+              ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
+      Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.PASS);
+    } catch (final IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  @Test
   public void testAmpTimeAgo() {
     try {
       String inputHtml =

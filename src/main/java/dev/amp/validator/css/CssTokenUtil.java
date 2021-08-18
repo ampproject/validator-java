@@ -79,6 +79,7 @@ public final class CssTokenUtil {
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.MINUS, TokenType.DELIM);
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.DOT, TokenType.DELIM);
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.TILDE, TokenType.DELIM);
+        KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.GREATER, TokenType.DELIM);
 
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.HASH, TokenType.HASH);
 
