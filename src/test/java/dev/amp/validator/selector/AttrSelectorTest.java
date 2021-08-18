@@ -19,24 +19,26 @@
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.utils;
+package dev.amp.validator.selector;
 
-import dev.amp.validator.SrcsetParsingResult;
-
-import static dev.amp.validator.utils.ParseSrcSetUtils.parseSrcset;
-
+import dev.amp.validator.utils.ByteUtils;
 import org.testng.annotations.Test;
+import org.testng.Assert;
 
 /**
- * Test for {@link ParseSrcSetUtils}
+ * Test for {@link AttrSelector}
  *
- * @author GeorgeLuo
+ * @author Jacob James
  */
 
-public class ParseSrcSetUtilsTest {
 
+public class AttrSelectorTest {
     @Test
-    public void testParseSrcset() {
-        SrcsetParsingResult a = parseSrcset("google.com/favicon.ico");
+    public void getAttrtest() {
+        ClassSelector a = new ClassSelector("Hi");
+        AttrSelector mark = new AttrSelector("www", "yahoo", ".", "com");
+        Assert.assertEquals(mark.getAttrName(), "yahoo");
+        mark.getTokenType();
     }
+
 }

@@ -24,6 +24,7 @@ import com.steadystate.css.parser.SACParserCSS3Constants;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+
 import com.steadystate.css.parser.Token;
 
 /**
@@ -37,6 +38,7 @@ public class TokenStream {
 
     /**
      * Constructor to initialize stream with underlying token list.
+     *
      * @param tokens css content to store in stream
      * @throws CssValidationException Css Validation Exception
      */
@@ -62,6 +64,7 @@ public class TokenStream {
 
     /**
      * Returns the token at the next position in the token stream.
+     *
      * @return the token at the position after the current token.
      */
     public Token next() {
@@ -83,13 +86,16 @@ public class TokenStream {
 
     /**
      * Returns the token at the current position in the token stream.
+     *
      * @return the token currently found at pos
      */
     public Token current() {
         return this.tokenAt(this.pos);
     }
 
-    /** Rewinds to the previous position in the input. */
+    /**
+     * Rewinds to the previous position in the input.
+     */
     public void reconsume() {
         this.pos--;
     }
@@ -97,6 +103,8 @@ public class TokenStream {
     @Nonnull
     private final List<com.steadystate.css.parser.Token> tokens;
 
-    /** Position of the input. */
+    /**
+     * Position of the input.
+     */
     private int pos;
 }

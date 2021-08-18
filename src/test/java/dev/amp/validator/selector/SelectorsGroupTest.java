@@ -19,24 +19,28 @@
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.utils;
+package dev.amp.validator.selector;
 
-import dev.amp.validator.SrcsetParsingResult;
-
-import static dev.amp.validator.utils.ParseSrcSetUtils.parseSrcset;
-
+import dev.amp.validator.css.TokenType;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.ArrayDeque;
+
 /**
- * Test for {@link ParseSrcSetUtils}
+ * Test for {@link SelectorsGroup}
  *
- * @author GeorgeLuo
+ * @author Jacob James
  */
-
-public class ParseSrcSetUtilsTest {
-
+public class SelectorsGroupTest {
     @Test
-    public void testParseSrcset() {
-        SrcsetParsingResult a = parseSrcset("google.com/favicon.ico");
+    public void getSelectorsGroup() {
+        ArrayDeque<Selector> elements = new ArrayDeque<Selector>();
+        SelectorsGroup alpha = new SelectorsGroup(elements);
+        TokenType beta = TokenType.SELECTORS_GROUP;
+        Assert.assertEquals(alpha.getTokenType(), beta);
+        Assert.assertEquals(alpha.getElements(), elements);
+        /**Ask what does lamba function do*/
+
     }
 }

@@ -19,24 +19,23 @@
  * Changes to the original project are Copyright 2019, Verizon Media Inc..
  */
 
-package dev.amp.validator.utils;
+package dev.amp.validator;
 
-import dev.amp.validator.SrcsetParsingResult;
-
-import static dev.amp.validator.utils.ParseSrcSetUtils.parseSrcset;
-
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
- * Test for {@link ParseSrcSetUtils}
+ * Test for {@link SrcsetSourceDef}
  *
- * @author GeorgeLuo
+ * @author Jacob James
  */
-
-public class ParseSrcSetUtilsTest {
+public class SrcsetSourceDefTest {
 
     @Test
-    public void testParseSrcset() {
-        SrcsetParsingResult a = parseSrcset("google.com/favicon.ico");
+    public void testSrcsetSourceDef() {
+        SrcsetSourceDef alpha = new SrcsetSourceDef("www.yahoo.com", "1024 × 768");
+        Assert.assertEquals(alpha.getUrl(), "www.yahoo.com");
+        Assert.assertEquals(alpha.getWidthOrPixelDensity(), "1024 × 768");
     }
+
 }
