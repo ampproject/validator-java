@@ -36,7 +36,8 @@ public class InvalidDeclVisitor implements RuleVisitor {
      * @param declaration the declaration to visit
      */
     public void visitDeclaration(@Nonnull final Declaration declaration) {
-        final ValidatorProtos.CssDeclaration cssDeclaration = this.spec.getCssDeclarationByName().get(declaration.getName());
+        final ValidatorProtos.CssDeclaration cssDeclaration =
+                this.spec.getCssDeclarationByName().get(declaration.getName().toLowerCase());
         final String firstIdent = declaration.firstIdent();
         if (cssDeclaration == null) {
             List<String> params = new ArrayList<>();
