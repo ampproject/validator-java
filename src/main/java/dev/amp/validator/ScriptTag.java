@@ -47,6 +47,7 @@ public class ScriptTag {
 
         this.extensionName = "";
         this.extensionVersion = "";
+        this.path = "";
         this.isAmpDomain = false;
         this.isExtension = false;
         this.isRuntime = false;
@@ -56,7 +57,6 @@ public class ScriptTag {
         boolean isAsync = false;
         boolean isModule = false;
         boolean isNomodule = false;
-        this.path = "";
         String src = "";
 
         if (!tagName.equals("SCRIPT")) {
@@ -129,6 +129,15 @@ public class ScriptTag {
     }
 
     /**
+     * Getter for isRuntime
+     *
+     * @return True iff isRuntime
+     */
+    public boolean isRuntime() {
+        return isRuntime;
+    }
+
+    /**
      * Getter for Extension Name
      *
      * @return Extension Name
@@ -146,13 +155,52 @@ public class ScriptTag {
         return extensionVersion;
     }
 
+    /**
+     * Getter for hasValidPath
+     *
+     * @return hasValidPath
+     */
+    public boolean hasValidPath() {
+        return hasValidPath;
+    }
 
+    /**
+     * Getter for path
+     *
+     * @return path
+     */
+    public String getPath() {
+        return path;
+    }
+
+    /**
+     * Getter for release version
+     *
+     * @return release version
+     */
+    @Nonnull
+    public ExtensionsUtils.ScriptReleaseVersion getReleaseVersion() {
+        return releaseVersion;
+    }
+
+    /**
+     * extensionName
+     */
     private String extensionName;
 
+    /**
+     * extensionVersion
+     */
     private String extensionVersion;
 
+    /**
+     * isAmpDomain
+     */
     private boolean isAmpDomain;
 
+    /**
+     * path
+     */
     private String path;
 
     /**
@@ -244,7 +292,6 @@ public class ScriptTag {
      */
     @Nonnull
     private static final Pattern EXTENSION_SCRIPT_PATH_REGEX =
-            Pattern.compile("^(?:lts\\/)?v0\\/(amp-[a-z0-9-]*)-([a-z0-9.]*)\\.(?:m)?js(?:\\?f=sxg)?$"
-                    , Pattern.CASE_INSENSITIVE);
-
+            Pattern.compile("^(?:lts\\/)?v0\\/(amp-[a-z0-9-]*)-([a-z0-9.]*)\\.(?:m)?js(?:\\?f=sxg)?$",
+                    Pattern.CASE_INSENSITIVE);
 }

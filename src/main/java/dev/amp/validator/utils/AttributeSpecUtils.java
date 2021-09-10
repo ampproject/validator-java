@@ -173,12 +173,19 @@ public final class AttributeSpecUtils {
                     && (name.equals("class") || name.equals("i-amphtml-layout"))) {
                 continue;
             }
-            // If |spec| is the runtime or an extension script, validate that LTS is
-            // either used by all pages or no pages.
+            // If 'src' attribute and an extension or runtime script, then validate the
+            // 'src' attribute by calling this method.
             if (encounteredTag.attrs().getValue(i).equals("src")
                     && (encounteredTag.isExtensionScript()
                     || encounteredTag.isAmpRuntimeScript())) {
-                validateAmpScriptSrcAttr(encounteredTag, encounteredTag.attrs().getValue(i), spec, context, result.getValidationResult());
+                validateAmpScriptSrcAttr(
+                        encounteredTag, encounteredTag.attrs().getValue(i), spec, context, result.getValidationResult());
+                if (encounteredTag.isExtensionScript()) {
+                    seenExtensionSrcAttr = true;
+                    // Extension TagSpecs do not have an explicit 'src' attribute, while
+                    // Runtime TagSpecs do. For Extension TagSpecs, continue.
+                    continue;
+                }
             }
             if (!(attrsByName.containsKey(name))) {
                 // The HTML tag specifies type identifiers which are validated in
@@ -200,17 +207,11 @@ public final class AttributeSpecUtils {
                 }
 
                 // If |spec| is an extension, then we ad-hoc validate 'custom-element',
-                // 'custom-template', 'host-service', and 'src' attributes by calling this
-                // method.  For 'src', we also keep track whether we validated it this
-                // way, (seen_src_attr), since it's a mandatory attr.
-                if (spec.hasExtensionSpec()
-                        && validateAttrInExtension(spec, name, value)) {
-                    if (name.equals("src")) {
-                        seenExtensionSrcAttr = true;
-                    }
-                    continue;
+                // 'custom-template', and 'host-service' attributes by calling this
+                // method.
+                if (spec.hasExtensionSpec() && validateAttrInExtension(spec, name, value)) {
+                    validateAttrNotFoundInSpec(parsedTagSpec, context, name, result.getValidationResult());
                 }
-                validateAttrNotFoundInSpec(parsedTagSpec, context, name, result.getValidationResult());
                 if (result.getValidationResult().getStatus() == ValidatorProtos.ValidationResult.Status.FAIL) {
                     continue;
                 }

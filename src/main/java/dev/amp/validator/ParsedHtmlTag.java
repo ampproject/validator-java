@@ -1,5 +1,6 @@
 package dev.amp.validator;
 
+import dev.amp.validator.utils.ExtensionsUtils;
 import org.xml.sax.Attributes;
 
 import javax.annotation.Nonnull;
@@ -166,13 +167,7 @@ public class ParsedHtmlTag {
      * @return true iff is AMP runtime script tag
      */
     public boolean isAmpRuntimeScript() {
-        final String src = this.getAttrValueOrNull("src");
-        if (src == null) {
-            return false;
-        }
-        return this.isAmpCacheDomain(src) && this.isAsyncScriptTag(src) && !this.isExtensionScript()
-                && (src.endsWith("/v0.js") || src.endsWith("/v0.mjs")
-                || src.endsWith("/v0.mjs?f=sxg"));
+        return this.scriptTag.isRuntime();
     }
 
     /**
@@ -187,101 +182,6 @@ public class ParsedHtmlTag {
     }
 
     /**
-     * Tests if this is the module LTS version script tag.
-     *
-     * @return true iff this is module LTS version script tag
-     */
-    public boolean isModuleLtsScriptTag() {
-        // Examples:
-        // https://cdn.ampproject.org/lts/v0.mjs
-        // https://cdn.ampproject.org/lts/v0/amp-ad-0.1.mjs
-        final String type = this.getAttrValueOrNull("type");
-        if (type == null) {
-            return false;
-        }
-        final String src = this.getAttrValueOrNull("src");
-        if (src == null) {
-            return false;
-        }
-        return this.isAsyncScriptTag(src) && type.equals("module")
-                && MODULE_LTS_SCRIPT_SRC_REGEX.matcher(src).find();
-    }
-
-    /**
-     * Tests if this is the nomodule LTS version script tag.
-     *
-     * @return true iff this is nomodule LTS version script tag
-     */
-    public boolean isNomoduleLtsScriptTag() {
-        // Examples:
-        // https://cdn.ampproject.org/lts/v0.js
-        // https://cdn.ampproject.org/lts/v0/amp-ad-0.1.js
-        final String src = this.getAttrValueOrNull("src");
-        if (src == null) {
-            return false;
-        }
-        return this.isAsyncScriptTag(src) && this.attrsByKey().containsKey("nomodule")
-                && this.isAmpCacheDomain(src) && NOMODULE_LTS_SCRIPT_SRC_REGEX.matcher(src).find();
-    }
-
-    /**
-     * Tests if this is the module version script tag.
-     *
-     * @return true iff module version script tag
-     */
-    public boolean isModuleScriptTag() {
-        // Examples:
-        // https://cdn.ampproject.org/v0.mjs
-        // https://cdn.ampproject.org/v0/amp-ad-0.1.mjs
-        final String type = this.getAttrValueOrNull("type");
-        if (type == null) {
-            return false;
-        }
-        final String src = this.getAttrValueOrNull("src");
-        if (src == null) {
-            return false;
-        }
-
-        return this.isAsyncScriptTag(src) && type.equals("module")
-                && this.isAmpCacheDomain(src) && MODULE_SCRIPT_SRC_REGEX.matcher(src).find();
-    }
-
-    /**
-     * Tests if this is the nomodule version script tag.
-     *
-     * @return true iff nomodule version script tag
-     */
-    public boolean isNomoduleScriptTag() {
-        // Examples:
-        // https://cdn.ampproject.org/v0.js
-        // https://cdn.ampproject.org/v0/amp-ad-0.1.js
-        final String src = this.getAttrValueOrNull("src");
-        if (src == null) {
-            return false;
-        }
-
-        return this.isAsyncScriptTag(src) && this.attrsByKey().containsKey("nomodule")
-                && this.isAmpCacheDomain(src) && NOMODULE_SCRIPT_SRC_REGEX.matcher(src).find();
-    }
-
-    /**
-     * Tests if this is the LTS version script tag.
-     *
-     * @return true iff lts script tag
-     */
-    public boolean isLtsScriptTag() {
-        // Examples:
-        // https://cdn.ampproject.org/lts/v0.js
-        // https://cdn.ampproject.org/lts/v0/amp-ad-0.1.js
-        final String src = this.getAttrValueOrNull("src");
-        if (src == null) {
-            return false;
-        }
-        return this.isAsyncScriptTag(src) && this.isAmpCacheDomain(src)
-                && LTS_SCRIPT_SRC_REGEX.matcher(src).find();
-    }
-
-    /**
      * Method to nullify object values.
      */
     public void cleanup() {
@@ -292,7 +192,7 @@ public class ParsedHtmlTag {
     /**
      * Upper-case tag name.
      *
-     * @return returns a upper case tag name.
+     * @return an upper case tag name.
      */
     public String upperName() {
         return this.tagName.toUpperCase();
@@ -301,7 +201,7 @@ public class ParsedHtmlTag {
     /**
      * Returns true if tag name length is zero.
      *
-     * @return returns true if tag name length is zero.
+     * @return true if tag name length is zero.
      */
     public boolean isEmpty() {
         return this.tagName.length() == 0;
@@ -310,7 +210,7 @@ public class ParsedHtmlTag {
     /**
      * Returns the extension name.
      *
-     * @return {string}
+     * @return the extension name
      */
     public String getExtensionName() {
         return this.scriptTag.getExtensionName();
@@ -319,10 +219,34 @@ public class ParsedHtmlTag {
     /**
      * Returns the extension version.
      *
-     * @return {string}
+     * @return the extension version
      */
     public String getExtensionVersion() {
         return this.scriptTag.getExtensionVersion();
+    }
+
+    /**
+     * Tests if this tag is a script with a valid AMP script path.
+     * @return true iff this tag is a script with a valid AMP script path.
+     */
+    public boolean hasValidAmpScriptPath() {
+        return this.scriptTag.hasValidPath();
+    }
+
+    /**
+     * Returns the script tag path of the 'src' attribute.
+     * @return the script tag path of the 'src' attribute.
+     */
+    public String getAmpScriptPath() {
+        return this.scriptTag.getPath();
+    }
+
+    /**
+     * Returns the script release version, otherwise ScriptReleaseVersion.UNKNOWN.
+     * @return the script release version
+     */
+    public ExtensionsUtils.ScriptReleaseVersion getScriptReleaseVersion() {
+        return this.scriptTag.getReleaseVersion();
     }
 
     /**

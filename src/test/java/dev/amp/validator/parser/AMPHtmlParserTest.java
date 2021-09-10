@@ -23,7 +23,6 @@ package dev.amp.validator.parser;
 
 import dev.amp.validator.ValidatorProtos;
 import dev.amp.validator.ExitCondition;
-import dev.amp.validator.selector.AttrSelector;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

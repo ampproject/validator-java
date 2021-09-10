@@ -166,7 +166,7 @@ public class Context {
     private void recordScriptReleaseVersionFromTagResult(@Nonnull final ParsedHtmlTag parsedTag) {
         if (this.getScriptReleaseVersion() == ExtensionsUtils.ScriptReleaseVersion.UNKNOWN
                 && (parsedTag.isExtensionScript() || parsedTag.isAmpRuntimeScript())) {
-            this.scriptReleaseVersion = ExtensionsUtils.getScriptReleaseVersion(parsedTag);
+            this.scriptReleaseVersion = parsedTag.getScriptReleaseVersion();
         }
     }
 

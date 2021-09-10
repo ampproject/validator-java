@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static dev.amp.validator.utils.ExtensionsUtils.ScriptReleaseVersion.LTS;
-import static dev.amp.validator.utils.ExtensionsUtils.ScriptReleaseVersion.UNKNOWN;
 import static dev.amp.validator.ValidatorProtos.ValidationError.Code.DISALLOWED_AMP_DOMAIN;
+import static dev.amp.validator.utils.TagSpecUtils.getTagDescriptiveName;
+import static dev.amp.validator.utils.TagSpecUtils.getTagSpecUrl;
 
 /**
  * Utils to handle extension validation
@@ -52,17 +53,6 @@ public final class ExtensionsUtils {
     }
 
     /**
-     * Tests if a tag is an async script tag.
-     *
-     * @param tag to test
-     * @return true iff a tag is an async script tag.
-     */
-    public static boolean isAsyncScriptTag(final ParsedHtmlTag tag) {
-        return "SCRIPT".equals(tag.upperName()) && tag.attrsByKey().
-                containsKey("async") && tag.attrsByKey().containsKey("src");
-    }
-
-    /**
      * Validates the 'src' attribute for AMP JavaScript (Runtime and Extensions)
      * script tags. This validates:
      * - the script is using an AMP domain
@@ -79,7 +69,6 @@ public final class ExtensionsUtils {
                                                 @Nonnull final ValidatorProtos.TagSpec tagSpec, @Nonnull final Context context,
                                                 @Nonnull final ValidatorProtos.ValidationResult.Builder result) {
         if (!tag.isAmpDomain()) {
-
             context.addError(
                     DISALLOWED_AMP_DOMAIN,
                     context.getLineCol(), /* params */new ArrayList<>(), /* spec_url*/ "", result);
@@ -88,39 +77,87 @@ public final class ExtensionsUtils {
             final ValidatorProtos.ExtensionSpec extensionSpec = tagSpec.getExtensionSpec();
             final String extensionName = tag.getExtensionName();
             final String extensionVersion = tag.getExtensionVersion();
-        }
-        //todo
-        final ScriptReleaseVersion scriptReleaseVersion = getScriptReleaseVersion(tag);
-        if (context.getScriptReleaseVersion() != scriptReleaseVersion) {
-            List<String> params = new ArrayList<>();
-            final String specName = (tagSpec.hasExtensionSpec())
-                    ? tagSpec.getExtensionSpec().getName() : tagSpec.getSpecName();
-            params.add(specName);
-            context.addError(
-                    scriptReleaseVersion == LTS
-                            ? ValidatorProtos.ValidationError.Code.LTS_SCRIPT_AFTER_NON_LTS
-                            : ValidatorProtos.ValidationError.Code.NON_LTS_SCRIPT_AFTER_LTS,
-                    context.getLineCol(), params,
-                    "",
-                    result);
-        }
-    }
 
-    /**
-     * @param tag
-     * @return ScriptReleaseVersion of tag
-     */
-    public static ScriptReleaseVersion getScriptReleaseVersion(@Nonnull final ParsedHtmlTag tag) {
-        if (tag.isModuleLtsScriptTag() || tag.isNomoduleLtsScriptTag()) {
-            return ScriptReleaseVersion.MODULE_NOMODULE_LTS;
+            // If the path is invalid, then do not evaluate further.
+            if (!tag.hasValidAmpScriptPath()) {
+                // If path is not empty use invalid path error, otherwise use the invalid
+                // attribute value error. This is to avoid errors saying "has a path ''".
+                if (tag.getAmpScriptPath().length() > 0) {
+                    final List<String> params = new ArrayList<>();
+                    params.add(extensionSpec.getName());
+                    params.add(tag.getAmpScriptPath());
+                    context.addError(ValidatorProtos.ValidationError.Code.INVALID_EXTENSION_PATH,
+                            context.getLineCol(), params, getTagSpecUrl(tagSpec), result);
+                } else {
+                    final List<String> params = new ArrayList<>();
+                    params.add("src");
+                    params.add(getTagDescriptiveName(tagSpec));
+                    params.add(attrValue);
+                    context.addError(ValidatorProtos.ValidationError.Code.INVALID_ATTR_VALUE,
+                            context.getLineCol(), params, getTagSpecUrl(tagSpec), result);
+                }
+                return;
+            }
+
+            if (extensionName.equals(extensionSpec.getName())) {
+                // Validate deprecated version.
+                if (extensionSpec.getDeprecatedVersionList().contains(extensionVersion)) {
+                    final List<String> params = new ArrayList<>();
+                    params.add(extensionSpec.getName());
+                    params.add(extensionVersion);
+                    context.addWarning(
+                            ValidatorProtos.ValidationError.Code.WARNING_EXTENSION_DEPRECATED_VERSION,
+                            context.getLineCol(), params, getTagSpecUrl(tagSpec), result);
+                }
+                // Validate version.
+                if (!extensionSpec.getVersionList().contains(extensionVersion)) {
+                    final List<String> params = new ArrayList<>();
+                    params.add(extensionSpec.getName());
+                    params.add(extensionVersion);
+                    context.addError(
+                            ValidatorProtos.ValidationError.Code.INVALID_EXTENSION_VERSION,
+                            context.getLineCol(), params, getTagSpecUrl(tagSpec), result);
+                }
+            } else {
+                // Extension name does not match extension spec name.
+                final List<String> params = new ArrayList<>();
+                params.add("src");
+                params.add(getTagDescriptiveName(tagSpec));
+                params.add(attrValue);
+                context.addError(
+                        ValidatorProtos.ValidationError.Code.INVALID_ATTR_VALUE,
+                        context.getLineCol(), params, getTagSpecUrl(tagSpec), result);
+            }
         }
-        if (tag.isModuleScriptTag() || tag.isNomoduleScriptTag()) {
-            return ScriptReleaseVersion.MODULE_NOMODULE;
+        // Only evaluate the script tag's release version if the first script tag's
+        // release version is not UNKNOWN.
+
+        if (context.getScriptReleaseVersion() != ScriptReleaseVersion.UNKNOWN) {
+            final ScriptReleaseVersion scriptReleaseVersion = tag.getScriptReleaseVersion();
+            if (context.getScriptReleaseVersion() != scriptReleaseVersion) {
+                final String specName = (tagSpec.hasExtensionSpec())
+                        ? tagSpec.getExtensionSpec().getName() : tagSpec.getSpecName();
+                switch (context.getScriptReleaseVersion()) {
+                    case LTS:
+                    case MODULE_NOMODULE:
+                    case MODULE_NOMODULE_LTS:
+                    case STANDARD:
+                        final List<String> params = new ArrayList<>();
+                        params.add(specName);
+                        params.add(scriptReleaseVersion.toString());
+                        params.add(context.getScriptReleaseVersion().toString());
+                        context.addError(
+                                ValidatorProtos.ValidationError.Code.INCORRECT_SCRIPT_RELEASE_VERSION,
+                                context.getLineCol(), params,
+                                "https://amp.dev/documentation/guides-and-tutorials/" +
+                                        "learn/spec/amphtml#required-markup",
+                                result);
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
-        if (tag.isLtsScriptTag()) {
-            return ScriptReleaseVersion.LTS;
-        }
-        return ScriptReleaseVersion.STANDARD;
     }
 
     /**
