@@ -123,6 +123,22 @@ public class AMPHtmlParserTest {
     }
 
     @Test
+    public void testDeclarationNameCaseSensitive() {
+        try {
+            String inputHtml =
+                    readFile(
+                            "test-cases/css/testDeclarationNameCaseSensitive.html");
+            final int maxNode = 10000;
+            ValidatorProtos.ValidationResult result =
+                    ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
+            Assert.assertEquals(result.getErrorsCount(), 0, "Expecting to have 0 error");
+            Assert.assertEquals(result.getStatus(), ValidatorProtos.ValidationResult.Status.PASS);
+        } catch (final IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
     public void testCarousel() {
         try {
             String inputHtml =
