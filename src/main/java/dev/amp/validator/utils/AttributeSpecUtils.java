@@ -175,11 +175,11 @@ public final class AttributeSpecUtils {
             }
             // If 'src' attribute and an extension or runtime script, then validate the
             // 'src' attribute by calling this method.
-            if (encounteredTag.attrs().getValue(i).equals("src")
+            if (name.equals("src")
                     && (encounteredTag.isExtensionScript()
                     || encounteredTag.isAmpRuntimeScript())) {
                 validateAmpScriptSrcAttr(
-                        encounteredTag, encounteredTag.attrs().getValue(i), spec, context, result.getValidationResult());
+                        encounteredTag, value, spec, context, result.getValidationResult());
                 if (encounteredTag.isExtensionScript()) {
                     seenExtensionSrcAttr = true;
                     // Extension TagSpecs do not have an explicit 'src' attribute, while
@@ -210,8 +210,9 @@ public final class AttributeSpecUtils {
                 // 'custom-template', and 'host-service' attributes by calling this
                 // method.
                 if (spec.hasExtensionSpec() && validateAttrInExtension(spec, name, value)) {
-                    validateAttrNotFoundInSpec(parsedTagSpec, context, name, result.getValidationResult());
+                    continue;
                 }
+                validateAttrNotFoundInSpec(parsedTagSpec, context, name, result.getValidationResult());
                 if (result.getValidationResult().getStatus() == ValidatorProtos.ValidationResult.Status.FAIL) {
                     continue;
                 }
@@ -1238,9 +1239,9 @@ public final class AttributeSpecUtils {
         // field attribute value. The dispatch key matching is case-insensitive for
         // faster lookups, so it still possible for the attribute value to not match
         // if it contains upper-case letters.
-        if (tagSpec.hasExtensionSpec() && getExtensionNameAttribute(extensionSpec) == attrName) {
+        if (tagSpec.hasExtensionSpec() && getExtensionNameAttribute(extensionSpec).equals(attrName)) {
             if (!extensionSpec.getName().equals(attrValue)) {
-                if (extensionSpec.getName().equals(attrValue.toLowerCase())) {
+                if (!extensionSpec.getName().equals(attrValue.toLowerCase())) {
                     throw new TagValidationException("Extension spec name is matched to a lower case attribute value.");
                 }
                 return false;

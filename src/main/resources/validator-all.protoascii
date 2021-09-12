@@ -1,25 +1,4 @@
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
-# This revision id refers to the validator revision id, currently a Google
-# internal mechanism. When backwards incompatible changes to the validator
-# engine are made, this value must be incremented to prevent old binaries
-# in production from crashing. This id is not relevant to validator.js
-# because thus far, engine (validator.js) and spec file
-# (validator-main.protoascii, etc) are always released together.
+# DEPRECATED: This value is no longer updated.
 min_validator_revision_required: 475
 
 # DEPRECATED: This value is no longer updated.
@@ -100,14 +79,6 @@ tags: {  # HTML tag for non-transformed AMP.
   tag_name: "HTML"
   mandatory: true
   mandatory_parent: "!DOCTYPE"
-  attrs: {
-    # This attribute should always be invalid. See https://github.com/ampproject/amphtml/pull/27174
-    # To align with HTML spec, custom attributes should be prefixed with `data-`.
-    # Because `data-*` attributes are always valid AMP, the following rules explicitly disallow usage.
-    name: "data-amp-autocomplete-opt-in"
-    value: "false"
-    disallowed_value_regex: "false"
-  }
   unique: true
   spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#required-markup"
 }
@@ -1322,6 +1293,19 @@ tags: {
 
 # 4.5 Text-level semantics
 # 4.5.1 The a element
+attr_lists: {
+  # https://github.com/ampproject/amphtml/issues/35067
+  name: "click-attributions"
+  attrs: { name: "attributiondestination" }
+  attrs: { name: "attributionexpiry" }
+  attrs: { name: "attributionreportto" }
+  attrs: { name: "attributionsourceeventid" }
+  attrs: { name: "attributionsourceid" }
+  attrs: { name: "conversiondestination" }
+  attrs: { name: "impressiondata" }
+  attrs: { name: "impressionexpiry" }
+  attrs: { name: "reportingorigin" }
+}
 tags: {
   html_format: AMP
   html_format: AMP4ADS
@@ -1408,6 +1392,11 @@ tags: {
     implicit: true
   }
   attrs: {
+    name: "show-tooltip"
+    value: "auto"
+    value: "true"
+  }
+  attrs: {
     name: "tabindex"
     implicit: true
   }
@@ -1422,12 +1411,9 @@ tags: {
     value_casei: "text/html"
     value_casei: "application/rss+xml"
   }
-  attrs: {
-    name: "show-tooltip"
-    value: "auto"
-    value: "true"
-  }
+  attr_lists: "click-attributions"
   attr_lists: "name-attr"
+  attr_lists: "private-click-measurement-attributes"
   # <amp-bind>
   attrs: { name: "[href]" }
   spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#links"
@@ -1484,6 +1470,20 @@ tags: {
     name: "type"
     value_casei: "text/html"
   }
+}
+# Private Click Measurement attributes for anchor tags.
+# See https://github.com/ampproject/amphtml/issues/35067
+attr_lists {
+  name: "private-click-measurement-attributes"
+  attrs: { name: "attributiondestination" }
+  attrs: { name: "attributionexpiry" }
+  attrs: { name: "attributionreportto" }
+  attrs: { name: "attributionsourceeventid" }
+  attrs: { name: "attributionsourceid" }
+  attrs: { name: "conversiondestination" }
+  attrs: { name: "impressiondata" }
+  attrs: { name: "impressionexpiry" }
+  attrs: { name: "reportingorigin" }
 }
 
 # 4.5.2 The em element
@@ -3106,10 +3106,40 @@ attr_lists: {
 }
 tags: {
   html_format: AMP
+  disabled_by: "transformed"
   tag_name: "SCRIPT"
   spec_name: "amphtml engine script"
   descriptive_name: "amphtml engine script"
-  mandatory_alternatives: "amphtml engine script"
+  satisfies: "amphtml javascript runtime (v0.js)"
+  requires: "style[amp-boilerplate]"
+  requires: "noscript > style[amp-boilerplate]"
+  unique: true
+  mandatory_parent: "HEAD"
+  attr_lists: "nonce-attr"
+  attr_lists: "amphtml-engine-attrs"
+  attrs: {
+    name: "src"
+    mandatory: true
+    value: "https://cdn.ampproject.org/v0.js"
+    dispatch_key: NAME_VALUE_DISPATCH
+  }
+  cdata: {
+    disallowed_cdata_regex: {
+      regex: "."
+      error_message: "contents"
+    }
+  }
+  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#required-markup"
+}
+tags: {
+  # The transformed variant is the same except does not require the boilerplate,
+  # given that it may have been removed during transformation.
+  html_format: AMP
+  enabled_by: "transformed"
+  tag_name: "SCRIPT"
+  spec_name: "amphtml engine script (transformed)"
+  descriptive_name: "amphtml engine script"
+  satisfies: "amphtml javascript runtime (v0.js)"
   unique: true
   mandatory_parent: "HEAD"
   attr_lists: "nonce-attr"
@@ -3130,10 +3160,40 @@ tags: {
 }
 tags: {
   html_format: AMP
+  disabled_by: "transformed"
   tag_name: "SCRIPT"
   spec_name: "amphtml engine script (LTS)"
   descriptive_name: "amphtml engine script"
-  mandatory_alternatives: "amphtml engine script"
+  satisfies: "amphtml javascript runtime (v0.js)"
+  requires: "style[amp-boilerplate]"
+  requires: "noscript > style[amp-boilerplate]"
+  unique: true
+  mandatory_parent: "HEAD"
+  attr_lists: "nonce-attr"
+  attr_lists: "amphtml-engine-attrs"
+  attrs: {
+    name: "src"
+    mandatory: true
+    value: "https://cdn.ampproject.org/lts/v0.js"
+    dispatch_key: NAME_VALUE_DISPATCH
+  }
+  cdata: {
+    disallowed_cdata_regex: {
+      regex: "."
+      error_message: "contents"
+    }
+  }
+  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#required-markup"
+}
+tags: {
+  # The transformed variant is the same except does not require the boilerplate,
+  # given that it may have been removed during transformation.
+  html_format: AMP
+  enabled_by: "transformed"
+  tag_name: "SCRIPT"
+  spec_name: "amphtml engine script (LTS) (transformed)"
+  descriptive_name: "amphtml engine script"
+  satisfies: "amphtml javascript runtime (v0.js)"
   unique: true
   mandatory_parent: "HEAD"
   attr_lists: "nonce-attr"
@@ -3158,7 +3218,7 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml module engine script"
   descriptive_name: "amphtml module engine script"
-  mandatory_alternatives: "amphtml engine script"
+  satisfies: "amphtml javascript runtime (v0.js)"
   unique: true
   mandatory_parent: "HEAD"
   satisfies: "amphtml module engine script"
@@ -3183,7 +3243,7 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml nomodule engine script"
   descriptive_name: "amphtml nomodule engine script"
-  mandatory_alternatives: "amphtml engine script"
+  satisfies: "amphtml javascript runtime (v0.js)"
   unique: true
   mandatory_parent: "HEAD"
   satisfies: "amphtml nomodule engine script"
@@ -3208,7 +3268,7 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml module LTS engine script"
   descriptive_name: "amphtml module LTS engine script"
-  mandatory_alternatives: "amphtml engine script"
+  satisfies: "amphtml javascript runtime (v0.js)"
   unique: true
   mandatory_parent: "HEAD"
   satisfies: "amphtml module LTS engine script"
@@ -3233,7 +3293,7 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml nomodule LTS engine script"
   descriptive_name: "amphtml nomdule LTS engine script"
-  mandatory_alternatives: "amphtml engine script"
+  satisfies: "amphtml javascript runtime (v0.js)"
   unique: true
   mandatory_parent: "HEAD"
   satisfies: "amphtml nomodule LTS engine script"
@@ -3257,6 +3317,8 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml engine script [AMP4EMAIL]"
   descriptive_name: "amphtml engine script"
+  satisfies: "amphtml javascript runtime (v0.js)"
+  requires: "style[amp-boilerplate]"
   mandatory: true
   unique: true
   mandatory_parent: "HEAD"
@@ -3281,6 +3343,8 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amp4ads engine script"
   descriptive_name: "amphtml engine script"
+  satisfies: "amphtml javascript runtime (v0.js)"
+  requires: "style[amp-boilerplate]"
   mandatory: true
   unique: true
   mandatory_parent: "HEAD"
@@ -3415,23 +3479,13 @@ tags: {
 # 4.11.2 The noscript element
 tags: {
   html_format: AMP
-  disabled_by: "transformed"
   tag_name: "NOSCRIPT"
-  spec_name: "noscript enclosure for boilerplate"
-  descriptive_name: "noscript enclosure for boilerplate"
-  mandatory: true
-  unique: true
+  spec_name: "noscript enclosure for amp style tags"
   mandatory_parent: "HEAD"
-  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amp-boilerplate/?format=websites"
-}
-tags: {
-  html_format: AMP
-  enabled_by: "transformed"
-  tag_name: "NOSCRIPT"
-  spec_name: "noscript enclosure for boilerplate (transformed)"
-  descriptive_name: "noscript enclosure for boilerplate"
-  unique: true
-  mandatory_parent: "HEAD"
+  child_tags {
+    child_tag_name_oneof: "STYLE"
+    mandatory_min_num_child_tags: 1
+  }
   spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amp-boilerplate/?format=websites"
 }
 # We allow noscript in the body to contain tags otherwise disallowed by AMP.
@@ -3616,6 +3670,9 @@ tags: {  # <amp-img>
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "AMP-IMG"
+  # amp-img does not require a matching extension script, it's built in to v0.
+  # js directly, so we explicitly list that dependency here.
+  requires: "amphtml javascript runtime (v0.js)"
   attrs: { name: "alt" }
   attrs: { name: "attribution" }
   attrs: { name: "crossorigin" }
@@ -3648,6 +3705,9 @@ tags: {  # <amp-img i-amphtml-ssr>
   enabled_by: "transformed"
   tag_name: "AMP-IMG"
   spec_name: "amp-img (transformed)"
+  # amp-img does not require a matching extension script, it's built in to v0.
+  # js directly, so we explicitly list that dependency here.
+  requires: "amphtml javascript runtime (v0.js)"
   attrs: {
     dispatch_key: NAME_DISPATCH
     name: "i-amphtml-ssr"
@@ -3684,6 +3744,11 @@ tags: {  # <amp-img>
   html_format: AMP4EMAIL
   tag_name: "AMP-IMG"
   spec_name: "AMP-IMG (AMP4EMAIL)"
+  # amp-img does not require a matching extension script, it's built in to v0.
+  # js directly, so we explicitly list that dependency here. This is redundant
+  # for email since v0.js is still required, but we include to for consistency
+  # and to future proof.
+  requires: "amphtml javascript runtime (v0.js)"
   attrs: { name: "alt" }
   attrs: { name: "attribution" }
   attrs: { name: "placeholder" }
@@ -3708,6 +3773,9 @@ tags: {  # <amp-layout>
   html_format: AMP4ADS
   html_format: AMP4EMAIL
   tag_name: "AMP-LAYOUT"
+  # amp-pixel does not require a matching extension script, it's built in to v0.
+  # js directly, so we explicitly list that dependency here.
+  requires: "amphtml javascript runtime (v0.js)"
   attr_lists: "extended-amp-global"
   spec_url: "https://amp.dev/documentation/components/amp-layout/"
   amp_layout: {
@@ -3725,6 +3793,9 @@ tags: {  # <amp-pixel>
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "AMP-PIXEL"
+  # amp-pixel does not require a matching extension script, it's built in to v0.
+  # js directly, so we explicitly list that dependency here.
+  requires: "amphtml javascript runtime (v0.js)"
   attrs: { name: "allow-ssr-img" }
   attrs: {
     name: "referrerpolicy"
@@ -3772,6 +3843,10 @@ tags: {
     name: "i-amphtml-disable-ar"
     value: ""
   }
+  attrs: {
+    name: "slot"
+    value: "i-amphtml-svc"
+  }
 }
 
 tags: {
@@ -3789,6 +3864,10 @@ tags: {
   attrs: {
     name: "i-amphtml-disable-ar"
     value: ""
+  }
+  attrs: {
+    name: "slot"
+    value: "i-amphtml-svc"
   }
 }
 
@@ -5833,22 +5912,6 @@ error_formats {
           "corresponding attribute 'data-css-strict' for enabling strict "
           "CSS validation. This may become an error in the future."
 }
-#
-# Copyright 2020 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 declaration_list {
   name: "BASIC_DECLARATIONS"
   declaration: { name: "align-content" }
@@ -6958,35 +7021,10 @@ tags: {  # <style amp-custom>, AMP4EMAIL, data-css-strict
 
 tags: {  # `<style amp-boilerplate>`, [AMP]
   html_format: AMP
-  disabled_by: "transformed"
   tag_name: "STYLE"
   spec_name: "head > style[amp-boilerplate]"
   descriptive_name: "head > style[amp-boilerplate]"
-  mandatory: true
-  unique: true
-  mandatory_parent: "HEAD"
-  attr_lists: "nonce-attr"
-  attrs: {
-    name: "amp-boilerplate"
-    mandatory: true
-    value: ""
-    dispatch_key: NAME_VALUE_PARENT_DISPATCH
-  }
-  cdata: {
-    doc_css_bytes: false
-    # This regex allows arbitrary whitespace whenever some whitespace
-    # is required in the boilerplate. It was made by replacing ' ' with \\s+.
-    cdata_regex: "\\s*body\\s*{\\s*-webkit-animation:\\s*-amp-start\\s+8s\\s+steps\\(1,\\s*end\\)\\s+0s\\s+1\\s+normal\\s+both;\\s*-moz-animation:\\s*-amp-start\\s+8s\\s+steps\\s*\\(1\\s*,\\s*end\\s*\\)\\s+0s\\s+1\\s+normal\\s+both;\\s*-ms-animation:\\s*-amp-start\\s+8s\\s+steps\\s*\\(1\\s*,\\s*end\\s*\\)\\s+0s\\s+1\\s+normal\\s+both;\\s*animation:\\s*-amp-start\\s+8s\\s+steps\\(1,\\s*end\\)\\s+0s\\s+1\\s+normal\\s+both;?\\s*}\\s*@-webkit-keyframes\\s+-amp-start\\s*{\\s*from\\s*{\\s*visibility:\\s*hidden;?\\s*}\\s*to\\s*{\\s*visibility:\\s*visible;?\\s*}\\s*}\\s*@-moz-keyframes\\s+-amp-start\\s*{\\s*from\\s*{\\s*visibility:\\s*hidden;?\\s*}\\s*to\\s*{\\s*visibility:\\s*visible;?\\s*}\\s*}\\s*@-ms-keyframes\\s+-amp-start\\s*{\\s*from\\s*{\\s*visibility:\\s*hidden;?\\s*}\\s*to\\s*{\\s*visibility:\\s*visible;?\\s*}\\s*}\\s*@-o-keyframes\\s+-amp-start\\s*{\\s*from\\s*{\\s*visibility:\\s*hidden;?\\s*}\\s*to\\s*{\\s*visibility:\\s*visible;?\\s*}\\s*}\\s*@keyframes\\s+-amp-start\\s*{\\s*from\\s*{\\s*visibility:\\s*hidden;?\\s*}\\s*to\\s*{\\s*visibility:\\s*visible;?\\s*}\\s*}\\s*"
-  }
-  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amp-boilerplate/?format=websites"
-}
-
-tags: {  # `<style amp-boilerplate>`, transformed [AMP]
-  html_format: AMP
-  enabled_by: "transformed"
-  tag_name: "STYLE"
-  spec_name: "head > style[amp-boilerplate] (transformed)"
-  descriptive_name: "head > style[amp-boilerplate]"
+  satisfies: "style[amp-boilerplate]"
   unique: true
   mandatory_parent: "HEAD"
   attr_lists: "nonce-attr"
@@ -7010,7 +7048,7 @@ tags: {  # `<style amp4ads-boilerplate>`, AMP4ADS
   tag_name: "STYLE"
   spec_name: "head > style[amp4ads-boilerplate]"
   descriptive_name: "head > style[amp4ads-boilerplate]"
-  mandatory: true
+  satisfies: "style[amp-boilerplate]"
   unique: true
   mandatory_parent: "HEAD"
   attr_lists: "nonce-attr"
@@ -7035,7 +7073,7 @@ tags: {  # `<style amp4email-boilerplate>`, AMP4EMAIL
   tag_name: "STYLE"
   spec_name: "head > style[amp4email-boilerplate]"
   descriptive_name: "head > style[amp4email-boilerplate]"
-  mandatory: true
+  satisfies: "style[amp-boilerplate]"
   unique: true
   mandatory_parent: "HEAD"
   attrs: {
@@ -7055,34 +7093,10 @@ tags: {  # `<style amp4email-boilerplate>`, AMP4EMAIL
 
 tags: {  # `<style amp-boilerplate>`, [AMP]
   html_format: AMP
-  disabled_by: "transformed"
   tag_name: "STYLE"
   spec_name: "noscript > style[amp-boilerplate]"
   descriptive_name: "noscript > style[amp-boilerplate]"
-  mandatory: true
-  unique: true
-  mandatory_parent: "NOSCRIPT"
-  mandatory_ancestor: "HEAD"
-  attr_lists: "nonce-attr"
-  attrs: {
-    name: "amp-boilerplate"
-    mandatory: true
-    value: ""
-    dispatch_key: NAME_VALUE_PARENT_DISPATCH
-  }
-  cdata {
-    doc_css_bytes: false
-    cdata_regex: "\\s*body\\s*{\\s*-webkit-animation:\\s*none;\\s*-moz-animation:\\s*none;\\s*-ms-animation:\\s*none;\\s*animation:\\s*none;?\\s*}\\s*"
-  }
-  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amp-boilerplate/?format=websites"
-}
-
-tags: {  # `<style amp-boilerplate>`, transformed [AMP]
-  html_format: AMP
-  enabled_by: "transformed"
-  tag_name: "STYLE"
-  spec_name: "noscript > style[amp-boilerplate] (transformed)"
-  descriptive_name: "noscript > style[amp-boilerplate]"
+  satisfies: "noscript > style[amp-boilerplate]"
   unique: true
   mandatory_parent: "NOSCRIPT"
   mandatory_ancestor: "HEAD"
@@ -7237,22 +7251,115 @@ tags: {  # '<style amp-runtime>`, transformed AMP
   }
   spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#stylesheets"
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 
+tags: {  # <style amp-noscript>, [AMP]
+  html_format: AMP
+  tag_name: "STYLE"
+  spec_name: "style amp-noscript"
+  descriptive_name: "style amp-noscript"
+  unique: true
+  mandatory_parent: "NOSCRIPT"
+  mandatory_ancestor: "HEAD"
+  attr_lists: "nonce-attr"
+  attrs: {
+    name: "amp-noscript"
+    mandatory: true
+    value: ""
+    dispatch_key: NAME_DISPATCH
+  }
+  attrs: {  # Allow the default.
+    name: "type"
+    value_casei: "text/css"
+  }
+  cdata: {
+    doc_css_bytes: true
+    max_bytes: 10000
+    max_bytes_spec_url:
+    "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#maximum-size"
+
+    css_spec: {
+      at_rule_spec: {
+         name: 'media'
+         media_query_spec: {
+           issues_as_error: false
+           type: 'all'
+           type: 'print'
+           type: 'screen'
+           type: 'speech'
+           type: 'tty'
+           type: 'tv'
+           type: 'projection'
+           type: 'handheld'
+           type: 'braille'
+           type: 'embossesd'
+           type: 'aural'
+           feature: 'any-hover'
+           feature: 'any-pointer'
+           feature: 'aspect-ratio'
+           feature: 'color'
+           feature: 'color-gamut'
+           feature: 'color-index'
+           feature: 'device-aspect-ratio'
+           feature: 'device-height'
+           feature: 'device-width'
+           feature: 'display-mode'
+           feature: 'forced-colors'
+           feature: 'grid'
+           feature: 'height'
+           feature: 'hover'
+           feature: 'inverted-colors'
+           feature: 'light-level'
+           feature: 'max-aspect-ratio'
+           feature: 'max-color-index'
+           feature: 'max-device-aspect-ratio'
+           feature: 'max-device-height'
+           feature: 'max-device-width'
+           feature: 'max-height'
+           feature: 'max-resolution'
+           feature: 'max-width'
+           feature: 'min-aspect-ratio'
+           feature: 'min-color-index'
+           feature: 'min-device-aspect-ratio'
+           feature: 'min-device-height'
+           feature: 'min-device-width'
+           feature: 'min-height'
+           feature: 'min-resolution'
+           feature: 'min-width'
+           feature: 'monochrome'
+           feature: 'orientation'
+           feature: 'overflow-block'
+           feature: 'overflow-inline'
+           feature: 'pointer'
+           feature: 'prefers-color-scheme'
+           feature: 'prefers-contrast'
+           feature: 'prefers-reduced-motion'
+           feature: 'prefers-reduced-transparency'
+           feature: 'resolution'
+           feature: 'scan'
+           feature: 'scripting'
+           feature: 'transform-3d'
+           feature: 'update'
+           feature: 'width'
+         }
+      }
+      at_rule_spec: { name: 'page' }
+      at_rule_spec: { name: 'supports' }
+      # https://github.com/ampproject/amphtml/issues/26406
+      at_rule_spec: { name: '-moz-document' }
+    }
+    disallowed_cdata_regex: {
+      regex: "<!--"
+      error_message: "html comments"
+    }
+    # These regex denylists are temporary hacks to validate essential CSS
+    # rules. They will be replaced later with more principled solutions.
+    disallowed_cdata_regex: {
+      regex: "(^|\\W)i-amphtml-"
+      error_message: "CSS i-amphtml- name prefix"
+    }
+  }
+  spec_url: "https://github.com/ampproject/amphtml/issues/20609"
+}
 tags: {  # amp-user-notification
   html_format: AMP
   tag_name: "SCRIPT"
@@ -7296,22 +7403,6 @@ tags: {  # <amp-user-notification>
     value: "application/x-www-form-urlencoded"
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-apester-media
   html_format: AMP
   tag_name: "SCRIPT"
@@ -7349,22 +7440,6 @@ tags: {  # <amp-apester-media>
   }
   spec_url: "https://amp.dev/documentation/components/amp-apester-media/"
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-riddle-quiz
   html_format: AMP
   tag_name: "SCRIPT"
@@ -7390,22 +7465,6 @@ tags: {  # <amp-riddle-quiz>
   }
   spec_url: "https://amp.dev/documentation/components/amp-riddle-quiz/"
 }
-#
-# Copyright 2019 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-minute-media-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -7453,21 +7512,6 @@ tags: {  # <amp-minute-media-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # <script custom-element="amp-fx-flying-carpet">
   html_format: AMP
   tag_name: "SCRIPT"
@@ -7490,22 +7534,6 @@ tags: {  # <amp-fx-flying-carpet>
     mandatory: true
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 # Specific script tags for custom elements and runtime imports.
 tags: {  # amp-experiment
   html_format: AMP
@@ -7549,21 +7577,6 @@ tags: {  # <amp-experiment>
   unique: true
   spec_url: "https://amp.dev/documentation/components/amp-experiment/"
 }
-#
-# Copyright 2019 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-mega-menu
   html_format: AMP
   tag_name: "SCRIPT"
@@ -7773,22 +7786,6 @@ descendant_tag_list {
   tag: "UL"
   tag: "USE"
 }
-#
-# Copyright 2020 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-story-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -7891,21 +7888,6 @@ tags: {
   attr_lists: "mandatory-src-or-srcset"
   spec_url: "https://amp.dev/documentation/components/amp-story-player/"
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-image-lightbox
   html_format: AMP
   tag_name: "SCRIPT"
@@ -7943,22 +7925,6 @@ tags: {  # <amp-image-lightbox>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-date-display
   html_format: AMP
   tag_name: "SCRIPT"
@@ -7967,6 +7933,7 @@ tags: {  # amp-date-display
     version: "0.1"
     version: "1.0"
     version: "latest"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -8012,22 +7979,6 @@ tags: {  # <amp-date-display>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2019 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-base-carousel
   html_format: AMP
   tag_name: "SCRIPT"
@@ -8036,6 +7987,7 @@ tags: {  # amp-base-carousel
     version: "0.1"
     version: "1.0"
     version: "latest"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -8084,7 +8036,7 @@ attr_lists: {
   attrs: {
     name: "loop"
     # Media query / boolean pairs
-    value_regex: "([^,]+\\s+(true|false),\\s*)*(true|false)"
+    value_regex: "([^,]+\\s+(true|false),\\s*)*(true|false|^$)"
   }
   attrs: {
     name: "mixed-length"
@@ -8205,22 +8157,6 @@ tags: {
     value_regex_casei: "^[a-z][a-z\\d_-]*"
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-mowplayer
   html_format: AMP
   tag_name: "SCRIPT"
@@ -8250,22 +8186,6 @@ tags: {  # <amp-mowplayer>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-delight-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -8299,22 +8219,6 @@ tags: {  # <amp-delight-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2020 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-story-panning-media
   html_format: AMP
   tag_name: "SCRIPT"
@@ -8335,22 +8239,6 @@ tags: {  # <amp-story-panning-media>
     supported_layouts: FILL
   }
 }
-#
-# Copyright 2021 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-tiktok
   html_format: AMP
   tag_name: "SCRIPT"
@@ -8369,7 +8257,7 @@ tags: {  # <amp-tiktok>
   attr_lists: "extended-amp-global"
   attrs: {
     name: "data-src";
-    value_regex: "\\d";
+    value_regex: "(https://www\\.tiktok\\.com/.*)?\\d+.*";
     mandatory: true
   }
   spec_url: "https://amp.dev/documentation/components/amp-tiktok"
@@ -8412,21 +8300,6 @@ tags: {
   attr_lists: "cite-attr"
   mandatory_ancestor: "AMP-TIKTOK blockquote"
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-
 # AMP-AD is full of special cases for validation rules that are partly
 # implemented in code, so be very careful when editing this file.
 # Historically, amp-ad/amp-embed javascript were embedded into the main
@@ -8707,21 +8580,6 @@ tags: {  # <amp-embed data-multi-size>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # <script custom-element="amp-sticky-ad">
   html_format: AMP  # Ads are not allowed inside ads.
   tag_name: "SCRIPT"
@@ -8750,21 +8608,6 @@ tags: {  # <amp-sticky-ad>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-inputmask
   html_format: AMP
   tag_name: "SCRIPT"
@@ -8910,21 +8753,6 @@ attr_lists: {
   # amp-bind
   attrs: { name: "[type]" }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-pan-zoom
   html_format: AMP
   tag_name: "SCRIPT"
@@ -8971,25 +8799,11 @@ tags: {  # <amp-pan-zoom>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-facebook-page
   html_format: AMP
   tag_name: "SCRIPT"
+  satisfies: "amp-facebook-page 0.1"
+  excludes: "amp-facebook 1.0"
   extension_spec: {
     name: "amp-facebook-page"
     version: "0.1"
@@ -9001,16 +8815,9 @@ tags: {  # <amp-facebook-page>
   html_format: AMP
   tag_name: "AMP-FACEBOOK-PAGE"
   requires_extension: "amp-facebook-page"
-  # data-* is generally allowed, but it's not generally mandatory.
-  attrs: {
-    name: "data-href"
-    mandatory: true
-    value_url: {
-      protocol: "http"
-      protocol: "https"
-      allow_relative: false
-    }
-  }
+  requires: "amp-facebook-page 0.1"
+  # The amp-facebook-strict attr_list is defined in the amp-facebook protoascii
+  attr_lists: "amp-facebook-strict"
   attr_lists: "extended-amp-global"
   amp_layout: {
     supported_layouts: FILL
@@ -9021,22 +8828,6 @@ tags: {  # <amp-facebook-page>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-story-auto-ads
   html_format: AMP
   tag_name: "SCRIPT"
@@ -9097,22 +8888,6 @@ tags: {
   reference_points: { tag_spec_name: "AMP-STORY-GRID-LAYER default" }
   reference_points: { tag_spec_name: "AMP-STORY-GRID-LAYER animate-in" }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-access-laterpay
   html_format: AMP
   tag_name: "SCRIPT"
@@ -9126,22 +8901,6 @@ tags: {  # amp-access-laterpay
   }
   attr_lists: "common-extension-attrs"
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-date-countdown
   html_format: AMP
   tag_name: "SCRIPT"
@@ -9150,6 +8909,7 @@ tags: {  # amp-date-countdown
     version: "0.1"
     version: "1.0"
     version: "latest"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -9234,22 +8994,6 @@ tags: {  # <amp-date-countdown>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2021 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-wordpress-embed
   html_format: AMP
   tag_name: "SCRIPT"
@@ -9257,6 +9001,8 @@ tags: {  # amp-wordpress-embed
     name: "amp-wordpress-embed"
     version: "1.0"
     version: "latest"
+    bento_supported_version: "1.0"
+    bento_supported_version: "latest"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -9284,22 +9030,6 @@ tags: {  # <amp-wordpress-embed>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-pinterest
   html_format: AMP
   tag_name: "SCRIPT"
@@ -9336,22 +9066,6 @@ tags: {  # <amp-pinterest>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-playbuzz
   html_format: AMP
   tag_name: "SCRIPT"
@@ -9395,22 +9109,6 @@ tags: {  # <amp-playbuzz>
     supported_layouts: FIXED_HEIGHT
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-soundcloud 1.0
   html_format: AMP
   tag_name: "SCRIPT"
@@ -9420,6 +9118,7 @@ tags: {  # amp-soundcloud 1.0
     name: "amp-soundcloud"
     version_name: "v1.0"
     version: "1.0"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -9476,22 +9175,6 @@ tags: {  # <amp-soundcloud>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {
   html_format: AMP
   tag_name: "SCRIPT"
@@ -9750,22 +9433,6 @@ tags: {
     value: "amp-mustache"
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-vimeo
   html_format: AMP
   tag_name: "SCRIPT"
@@ -9776,6 +9443,7 @@ tags: {  # amp-vimeo
     version_name: "v0.1"
     version: "0.1"
     version: "latest"
+    bento_supported_version: "1.0"
     requires_usage: EXEMPTED
     deprecated_allow_duplicates: true
   }
@@ -9815,25 +9483,11 @@ tags: {  # <amp-vimeo>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-facebook-like
   html_format: AMP
   tag_name: "SCRIPT"
+  satisfies: "amp-facebook-like 0.1"
+  excludes: "amp-facebook 1.0"
   extension_spec: {
     name: "amp-facebook-like"
     version: "0.1"
@@ -9845,16 +9499,9 @@ tags: {  # <amp-facebook-like>
   html_format: AMP
   tag_name: "AMP-FACEBOOK-LIKE"
   requires_extension: "amp-facebook-like"
-  # data-* is generally allowed, but it's not generally mandatory.
-  attrs: {
-    name: "data-href"
-    mandatory: true
-    value_url: {
-      protocol: "http"
-      protocol: "https"
-      allow_relative: false
-    }
-  }
+  requires: "amp-facebook-like 0.1"
+  # The amp-facebook-strict attr_list is defined in the amp-facebook protoascii
+  attr_lists: "amp-facebook-strict"
   attr_lists: "extended-amp-global"
   amp_layout: {
     supported_layouts: FILL
@@ -9865,22 +9512,6 @@ tags: {  # <amp-facebook-like>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-imgur
   html_format: AMP
   tag_name: "SCRIPT"
@@ -9909,22 +9540,6 @@ tags: {  # <amp-imgur>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-carousel
   html_format: AMP
   html_format: AMP4ADS
@@ -10059,22 +9674,6 @@ tags: {
     value_regex_casei: "^[a-z][a-z\\d_-]*"
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-consent
   html_format: AMP
   tag_name: "SCRIPT"
@@ -10138,22 +9737,6 @@ tags: {  # <amp-consent> (type)
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-ooyala-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -10188,21 +9771,6 @@ tags: {  # <amp-ooyala-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-dailymotion
   html_format: AMP
   tag_name: "SCRIPT"
@@ -10272,22 +9840,6 @@ tags: {  # <amp-dailymotion>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2020 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-story-interactive
   html_format: AMP
   tag_name: "SCRIPT"
@@ -10681,22 +10233,6 @@ attr_lists: {
     }
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-brid-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -10763,22 +10299,6 @@ tags: {  # <amp-brid-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2019 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-redbull-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -10808,21 +10328,6 @@ tags: {  # <amp-redbull-player>
     supported_layouts: INTRINSIC
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-list
   html_format: AMP
   tag_name: "SCRIPT"
@@ -11049,22 +10554,6 @@ tags: {  # <amp-list>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 # Specific URL to reference for violations having to do with mustache
 # templates. These are specific to any particular tag, so must live at
 # the top level of this rules file.
@@ -11738,22 +11227,6 @@ tags: {
     value: "amp-mustache"
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-lightbox 1.0
   html_format: AMP
   tag_name: "SCRIPT"
@@ -11763,6 +11236,7 @@ tags: {  # amp-lightbox 1.0
     name: "amp-lightbox"
     version_name: "v1.0"
     version: "1.0"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -11867,22 +11341,6 @@ tags: {   # <amp-lightbox close-button> in AMP4ADS.
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-addthis
   html_format: AMP
   tag_name: "SCRIPT"
@@ -11935,22 +11393,6 @@ tags: {  # <amp-addthis>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-dynamic-css-classes
   html_format: AMP
   tag_name: "SCRIPT"
@@ -11963,21 +11405,6 @@ tags: {  # amp-dynamic-css-classes
   }
   attr_lists: "common-extension-attrs"
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-bind
   html_format: AMP
   html_format: AMP4ADS
@@ -12093,21 +11520,6 @@ tags: {  # <amp-bind-macro>
   attr_lists: "mandatory-id-attr"
   spec_url: "https://amp.dev/documentation/components/amp-bind/"
 }
-#
-# Copyright 2019 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-action-macro
   html_format: AMP
   tag_name: "SCRIPT"
@@ -12132,22 +11544,6 @@ tags: {  # <amp-action-macro>
   attr_lists: "mandatory-id-attr"
   spec_url: "https://amp.dev/documentation/components/amp-action-macro/"
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-gist
   html_format: AMP
   tag_name: "SCRIPT"
@@ -12172,22 +11568,6 @@ tags: {  # <amp-gist>
     supported_layouts: FIXED_HEIGHT
   }
 }
-#
-# Copyright 2019 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-autocomplete
   html_format: AMP
   tag_name: "SCRIPT"
@@ -12346,22 +11726,6 @@ tags: {  # amp-autocomplete JSON
     }
   }
 }
-#
-# Copyright 2021 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-story-auto-analytics
   html_format: AMP
   tag_name: "SCRIPT"
@@ -12382,22 +11746,6 @@ tags: {  # <amp-story-auto-analytics>
     value_regex: "[A-Z]{1,2}-[A-Z0-9-]+"
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-beopinion
   html_format: AMP
   tag_name: "SCRIPT"
@@ -12440,22 +11788,6 @@ tags: {  # <amp-beopinion>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-access-poool
   html_format: AMP
   tag_name: "SCRIPT"
@@ -12468,22 +11800,6 @@ tags: {  # amp-access-poool
   }
   attr_lists: "common-extension-attrs"
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-font
   html_format: AMP
   html_format: AMP4ADS
@@ -12522,22 +11838,6 @@ tags: {  # <amp-font>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-hulu
   html_format: AMP
   tag_name: "SCRIPT"
@@ -12566,22 +11866,6 @@ tags: {  # <amp-hulu>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-accordion for websites
   html_format: AMP
   tag_name: "SCRIPT"
@@ -12591,6 +11875,7 @@ tags: {  # amp-accordion for websites
     name: "amp-accordion"
     version_name: "v1.0"
     version: "1.0"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -12683,21 +11968,6 @@ tags: {  # <amp-accordion> > <section>
     first_child_tag_name_oneof: "HEADER"
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-selector 1.0
   html_format: AMP
   tag_name: "SCRIPT"
@@ -12707,6 +11977,7 @@ tags: {  # amp-selector 1.0
     name: "amp-selector"
     version_name: "v1.0"
     version: "1.0"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -12825,22 +12096,6 @@ tags: {
     tag_spec_name: "AMP-SELECTOR child"
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 # Specific script tags for custom elements and runtime imports.
 tags: {  # amp-geo
   html_format: AMP
@@ -12886,22 +12141,6 @@ tags: {  # amp-geo (json)
   }
   spec_url: "https://amp.dev/documentation/components/amp-geo/"
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-video 1.0
   html_format: AMP
   tag_name: "SCRIPT"
@@ -12911,6 +12150,7 @@ tags: {  # amp-video 1.0
     name: "amp-video"
     version_name: "v1.0"
     version: "1.0"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -13082,6 +12322,10 @@ tags: {  # <amp-video> in amp-story
     name: "cache"
     value: "google"
   }
+  attrs: {
+    name: "captions-id"
+    requires_extension: "amp-story-captions"
+  }
   attr_lists: "extended-amp-global"
   attr_lists: "amp-video-common"
   spec_url: "https://amp.dev/documentation/components/amp-video/"
@@ -13094,22 +12338,6 @@ tags: {  # <amp-video> in amp-story
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-video-iframe
   html_format: AMP  # Iframes not allowed in ads.
   tag_name: "SCRIPT"
@@ -13119,6 +12347,7 @@ tags: {  # amp-video-iframe
     name: "amp-video-iframe"
     version_name: "v1.0"
     version: "1.0"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -13218,22 +12447,6 @@ tags: {  # <amp-video-iframe> (transformed)
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-reddit
   html_format: AMP
   tag_name: "SCRIPT"
@@ -13279,21 +12492,6 @@ tags: {  # <amp-reddit>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-
 tags: {  # amp-ad-custom
   html_format: AMP  # AMP only as ads are not allowed inside AMP Ads
   tag_name: "SCRIPT"
@@ -13332,22 +12530,6 @@ tags: {  # <amp-ad-custom>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2019 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-megaphone
   html_format: AMP
   tag_name: "SCRIPT"
@@ -13424,27 +12606,27 @@ tags: {  # <amp-megaphone> for episodes
     supported_layouts: FIXED_HEIGHT
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
-tags: {  # amp-brightcove
+tags: {  # amp-brightcove 1.0
   html_format: AMP
   tag_name: "SCRIPT"
+  satisfies: "amp-brightcove 1.0"
+  excludes: "amp-brightcove 0.1"
   extension_spec: {
     name: "amp-brightcove"
+    version_name: "v1.0"
+    version: "1.0"
+    bento_supported_version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # amp-brightcove 0.1 and latest
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-brightcove 0.1"
+  excludes: "amp-brightcove 1.0"
+  extension_spec: {
+    name: "amp-brightcove"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     requires_usage: EXEMPTED
@@ -13487,22 +12669,6 @@ tags: {  # <amp-brightcove>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-fit-text 1.0
   html_format: AMP
   tag_name: "SCRIPT"
@@ -13512,6 +12678,7 @@ tags: {  # amp-fit-text 1.0
     name: "amp-fit-text"
     version_name: "v1.0"
     version: "1.0"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -13564,37 +12731,6 @@ tags: {  # <amp-fit-text>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2020 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-animation
   html_format: AMP
   html_format: AMP4ADS
@@ -13647,21 +12783,6 @@ tags: {  # <amp-animation>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-live-list
   html_format: AMP
   tag_name: "SCRIPT"
@@ -13766,22 +12887,6 @@ tags: {
   attr_lists: "mandatory-id-attr"
   spec_url: "https://amp.dev/documentation/components/amp-live-list/#items"
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-lightbox-gallery
   html_format: AMP
   tag_name: "SCRIPT"
@@ -13790,6 +12895,7 @@ tags: {  # amp-lightbox-gallery
     version: "0.1"
     version: "1.0"
     version: "latest"
+    bento_supported_version: "1.0"
     requires_usage: NONE
   }
   attr_lists: "common-extension-attrs"
@@ -13802,22 +12908,6 @@ attr_lists: {
     value_regex_casei: "^[a-z][a-z\\d_-]*"
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-social-share 1.0
   html_format: AMP
   tag_name: "SCRIPT"
@@ -13827,6 +12917,7 @@ tags: {  # amp-social-share 1.0
     name: "amp-social-share"
     version_name: "v1.0"
     version: "1.0"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -13896,22 +12987,6 @@ tags: {  # <amp-social-share>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2019 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-truncate-text
   html_format: AMP
   tag_name: "SCRIPT"
@@ -13944,22 +13019,6 @@ tags: {  # <amp-truncate-text>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-ad-exit
   html_format: AMP4ADS
   tag_name: "SCRIPT"
@@ -14003,22 +13062,6 @@ tags: {  # amp-ad-exit config JSON
   attr_lists: "nonce-attr"
   spec_url: "https://amp.dev/documentation/components/amp-ad-exit/"
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-kaltura-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -14051,22 +13094,6 @@ tags: {  # <amp-kaltura-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-nexxtv-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -14124,22 +13151,6 @@ tags: {  # <amp-nexxtv-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # embedly-card
   html_format: AMP
   tag_name: "SCRIPT"
@@ -14148,6 +13159,7 @@ tags: {  # embedly-card
     version: "0.1"
     version: "1.0"
     version: "latest"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -14183,22 +13195,6 @@ tags: {  # <amp-embedly-key>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-story
   html_format: AMP
   tag_name: "SCRIPT"
@@ -14901,9 +13897,11 @@ descendant_tag_list: {
   tag: "AMP-LIST"
   tag: "AMP-LIVE-LIST"
   tag: "AMP-PIXEL"
+  tag: "AMP-RENDER"
   tag: "AMP-STATE"
   tag: "AMP-STORY-360"
   tag: "AMP-STORY-AUTO-ANALYTICS"
+  tag: "AMP-STORY-CAPTIONS"
   tag: "AMP-STORY-INTERACTIVE-BINARY-POLL"
   tag: "AMP-STORY-INTERACTIVE-IMG-POLL"
   tag: "AMP-STORY-INTERACTIVE-IMG-QUIZ"
@@ -15275,6 +14273,7 @@ descendant_tag_list {
   tag: "AMP-POWR-PLAYER"
   tag: "AMP-REACH-PLAYER"
   tag: "AMP-REDDIT"
+  tag: "AMP-RENDER"
   tag: "AMP-RIDDLE-QUIZ"
   tag: "AMP-SOUNDCLOUD"
   tag: "AMP-SPRINGBOARD-PLAYER"
@@ -15386,6 +14385,7 @@ descendant_tag_list {
   tag: "TABLE"
   tag: "TBODY"
   tag: "TD"
+  tag: "TEMPLATE"
   tag: "TEXT"
   tag: "TEXTPATH"
   tag: "TFOOT"
@@ -15405,22 +14405,6 @@ descendant_tag_list {
   tag: "VKERN"
   tag: "WBR"
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-ima-video
   html_format: AMP
   tag_name: "SCRIPT"
@@ -15474,22 +14458,6 @@ tags: {  # <amp-ima-video>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-install-serviceworker
   html_format: AMP  # Ads cannot install serviceworkers
   tag_name: "SCRIPT"
@@ -15527,22 +14495,6 @@ tags: {  # <amp-install-serviceworker>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-video-docking
   html_format: AMP
   tag_name: "SCRIPT"
@@ -15553,21 +14505,6 @@ tags: {  # amp-video-docking
   }
   attr_lists: "common-extension-attrs"
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-form
   # Accepted form elements can be found in validator-main.protoascii
   # under section "4.10 Forms"
@@ -15596,22 +14533,6 @@ tags: {  # amp-form
   }
   attr_lists: "common-extension-attrs"
 }
-#
-# Copyright 2019 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-connatix-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -15641,22 +14562,6 @@ tags: {  # <amp-connatix-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2020 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-onetap-google
   html_format: AMP
   tag_name: "SCRIPT"
@@ -15686,22 +14591,6 @@ tags: {  # <amp-onetap-google>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-subscriptions
   html_format: AMP
   tag_name: "SCRIPT"
@@ -15833,22 +14722,6 @@ tags: {  # <span swg_amp_cache_nonce="NONCE">
   }
 }
 # related attributes are listed in validator-main.protoascii
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-powr-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -15895,21 +14768,6 @@ tags: {  # <amp-powr-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2019 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-link-rewriter
   html_format: AMP
   tag_name: "SCRIPT"
@@ -15956,22 +14814,6 @@ tags: {  # <amp-link-rewriter>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-anim
   html_format: AMP
   html_format: AMP4ADS
@@ -16039,21 +14881,6 @@ tags: {  # <amp-anim>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # <script custom-element="amp-sticky-ad">
   html_format: AMP  # Ads are not allowed inside ads.
   tag_name: "SCRIPT"
@@ -16083,22 +14910,6 @@ tags: {  # <amp-app-banner>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-call-tracking
   html_format: AMP
   tag_name: "SCRIPT"
@@ -16138,22 +14949,6 @@ tags: {  # <amp-call-tracking>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-byside-content
   html_format: AMP
   tag_name: "SCRIPT"
@@ -16186,22 +14981,6 @@ tags: {  # <amp-byside-content>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2020 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-stream-gallery
   html_format: AMP
   tag_name: "SCRIPT"
@@ -16209,6 +14988,8 @@ tags: {  # amp-stream-gallery
     name: "amp-stream-gallery"
     version: "1.0"
     version: "latest"
+    bento_supported_version: "1.0"
+    bento_supported_version: "latest"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -16248,7 +15029,7 @@ attr_lists: {
   attrs: {
     name: "loop"
     # Media query / boolean pairs
-    value_regex: "([^,]+\\s+(true|false),\\s*)*(true|false)"
+    value_regex: "([^,]+\\s+(true|false),\\s*)*(true|false|^$)"
   }
   attrs: {
     name: "min-visible-count"
@@ -16304,22 +15085,6 @@ attr_lists: {
   attrs: { name: "[slide-align]" }
   attrs: { name: "[snap]" }
 }
-#
-# Copyright 2019 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-mraid
   html_format: AMP4ADS
   tag_name: "SCRIPT"
@@ -16335,22 +15100,6 @@ tags: {  # amp-mraid
     name: "no-fallback"
   }
 }
-#
-# Copyright 2021 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-render
   html_format: AMP
   tag_name: "SCRIPT"
@@ -16358,6 +15107,7 @@ tags: {  # amp-render
     name: "amp-render"
     version: "1.0"
     version: "latest"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -16409,21 +15159,6 @@ tags: {  # <amp-render>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-sidebar
   html_format: AMP
   tag_name: "SCRIPT"
@@ -16521,22 +15256,6 @@ tags: {  # amp-sidebar > nav
     child_tag_name_oneof: "UL"
   }
 }
-#
-# Copyright 2019 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-smartlinks
   html_format: AMP
   tag_name: "SCRIPT"
@@ -16578,21 +15297,6 @@ tags: {  # <amp-smartlinks>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2019 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-nested-menu
   html_format: AMP
   tag_name: "SCRIPT"
@@ -16766,7 +15470,7 @@ descendant_tag_list {
   tag: "USE"
 }
 #
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
+# Copyright 2021 The AMP HTML Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16781,6 +15485,36 @@ descendant_tag_list {
 # limitations under the license.
 #
 
+tags: {  # amp-story-captions
+  html_format: AMP
+  tag_name: "SCRIPT"
+  extension_spec: {
+    name: "amp-story-captions"
+    version: "0.1"
+    version: "latest"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # <amp-story-captions>
+  html_format: AMP
+  tag_name: "AMP-STORY-CAPTIONS"
+  requires_extension: "amp-story-captions"
+  attr_lists: "extended-amp-global"
+  spec_url: "https://amp.dev/documentation/components/amp-story-captions"
+  mandatory_ancestor: "AMP-STORY"
+  amp_layout: {
+    supported_layouts: FILL
+    supported_layouts: FIXED
+    supported_layouts: FIXED_HEIGHT
+    supported_layouts: FLEX_ITEM
+    supported_layouts: FLUID
+    supported_layouts: INTRINSIC
+    supported_layouts: RESPONSIVE
+  }
+  child_tags: {
+    mandatory_num_child_tags: 0
+  }
+}
 tags: {  # amp-jwplayer
   html_format: AMP
   tag_name: "SCRIPT"
@@ -16830,22 +15564,6 @@ tags: {  # <amp-jwplayer>
   }
   spec_url: "https://amp.dev/documentation/components/amp-jwplayer/"
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-viqeo-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -16880,21 +15598,6 @@ tags: {  # <amp-viqeo-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-fx-collection
   # Accepted amp-fx-collection attributes can be found in
   # validator-main.protoascii
@@ -16910,22 +15613,6 @@ tags: {  # amp-fx-collection
   }
   attr_lists: "common-extension-attrs"
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-o2-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -16960,22 +15647,6 @@ tags: {  # <amp-o2-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-springboard-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -17028,22 +15699,6 @@ tags: {  # <amp-springboard-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 # This tag no longer exists. It has been folded into amp-carousel. See
 # https://github.com/ampproject/amphtml/issues/5981
 # However, some pages are still including the javascript file.
@@ -17061,22 +15716,6 @@ tags: {  # amp-slides
   deprecation: "amp-carousel"
   deprecation_url: "https://www.ampproject.org/docs/reference/components/amp-carousel"
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {
   html_format: AMP
   tag_name: "SCRIPT"
@@ -17306,22 +15945,6 @@ tags: {
   requires_extension: "amp-script"
   spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#html-tags"
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-3q-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -17352,22 +15975,6 @@ tags: {  # <amp-3q-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-vk
   html_format: AMP
   tag_name: "SCRIPT"
@@ -17393,22 +16000,6 @@ tags: {  # <amp-vk>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-position-observer
   html_format: AMP
   html_format: AMP4ADS
@@ -17447,22 +16038,6 @@ tags: {  # <amp-position-observer>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2021 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-cache-url
   html_format: AMP
   tag_name: "SCRIPT"
@@ -17473,22 +16048,6 @@ tags: {  # amp-cache-url
   }
   attr_lists: "common-extension-attrs"
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-yotpo
   html_format: AMP
   tag_name: "SCRIPT"
@@ -17523,22 +16082,6 @@ tags: {  # <amp-yotpo>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-twitter 1.0
   html_format: AMP
   tag_name: "SCRIPT"
@@ -17548,6 +16091,7 @@ tags: {  # amp-twitter 1.0
     name: "amp-twitter"
     version_name: "v1.0"
     version: "1.0"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -17659,22 +16203,6 @@ tags: {  # <amp-twitter>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-wistia-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -17710,22 +16238,6 @@ tags: {  # <amp-wistia-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-izlesene
   html_format: AMP
   tag_name: "SCRIPT"
@@ -17755,22 +16267,6 @@ tags: {  # <amp-izlesene>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-web-push
   html_format: AMP
   tag_name: "SCRIPT"
@@ -17843,22 +16339,6 @@ tags: {  # <amp-web-push-widget>
     supported_layouts: FIXED
   }
 }
-#
-# Copyright 2020 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-inline-gallery
   html_format: AMP
   tag_name: "SCRIPT"
@@ -17867,6 +16347,7 @@ tags: {  # amp-inline-gallery
     version: "0.1"
     version: "1.0"
     version: "latest"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -17946,6 +16427,7 @@ tags: {  # <amp-inline-gallery-thumbnails>
     name: "loop"
     value: "true"
     value: "false"
+    value: ""
   }
   attr_lists: "extended-amp-global"
   spec_url: "https://amp.dev/documentation/components/amp-inline-gallery/"
@@ -17960,22 +16442,6 @@ tags: {  # <amp-inline-gallery-thumbnails>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-orientation-observer
   html_format: AMP
   tag_name: "SCRIPT"
@@ -18017,21 +16483,6 @@ tags: {  # <amp-orientation-observer>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-
 tags: {  # amp-auto-ads
   html_format: AMP
   tag_name: "SCRIPT"
@@ -18054,22 +16505,6 @@ tags: {  # <amp-auto-ads>
   attr_lists: "extended-amp-global"
   spec_url: "https://amp.dev/documentation/components/amp-auto-ads/"
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-iframe
   html_format: AMP  # Iframes not allowed in ads.
   tag_name: "SCRIPT"
@@ -18152,22 +16587,6 @@ tags: {  # <amp-iframe>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-vine
   html_format: AMP
   tag_name: "SCRIPT"
@@ -18199,27 +16618,33 @@ tags: {  # <amp-vine>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
-tags: {  # amp-facebook
+tags: {  # amp-facebook 1.0
   html_format: AMP
   tag_name: "SCRIPT"
+  # The 1.0 amp-facebook script registers all amp-facebook-* components.
+  # See https://github.com/ampproject/amphtml/pull/35395 for context.
+  spec_name: "amp-facebook 1.0"
+  satisfies: "amp-facebook 1.0"
+  excludes: "amp-facebook 0.1"
+  excludes: "amp-facebook-comments 0.1"
+  excludes: "amp-facebook-like 0.1"
+  excludes: "amp-facebook-page 0.1"
   extension_spec: {
     name: "amp-facebook"
+    version_name: "v1.0"
+    version: "1.0"
+    bento_supported_version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # amp-facebook 0.1 and latest
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-facebook 0.1"
+  excludes: "amp-facebook 1.0"
+  extension_spec: {
+    name: "amp-facebook"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     requires_usage: EXEMPTED
@@ -18231,11 +16656,7 @@ tags: {  # <amp-facebook>
   html_format: AMP
   tag_name: "AMP-FACEBOOK"
   requires_extension: "amp-facebook"
-  # data-* is generally allowed, but it's not generally mandatory.
-  attrs: {
-    name: "data-href"
-    mandatory: true
-  }
+  attr_lists: "amp-facebook"
   attr_lists: "extended-amp-global"
   amp_layout: {
     supported_layouts: FILL
@@ -18246,22 +16667,78 @@ tags: {  # <amp-facebook>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
+tags: {  # <amp-facebook-comments> via amp-facebook script
+  html_format: AMP
+  spec_name: "amp-facebook-comments 1.0"
+  tag_name: "AMP-FACEBOOK-COMMENTS"
+  requires_extension: "amp-facebook"
+  requires: "amp-facebook 1.0"
+  attr_lists: "amp-facebook"
+  attr_lists: "extended-amp-global"
+  amp_layout: {
+    supported_layouts: FILL
+    supported_layouts: FIXED
+    supported_layouts: FIXED_HEIGHT
+    supported_layouts: FLEX_ITEM
+    supported_layouts: NODISPLAY
+    supported_layouts: RESPONSIVE
+  }
+}
+tags: {  # <amp-facebook-like> via amp-facebook script
+  html_format: AMP
+  spec_name: "amp-facebook-like 1.0"
+  tag_name: "AMP-FACEBOOK-LIKE"
+  requires_extension: "amp-facebook"
+  requires: "amp-facebook 1.0"
+  attr_lists: "amp-facebook-strict"
+  attr_lists: "extended-amp-global"
+  amp_layout: {
+    supported_layouts: FILL
+    supported_layouts: FIXED
+    supported_layouts: FIXED_HEIGHT
+    supported_layouts: FLEX_ITEM
+    supported_layouts: NODISPLAY
+    supported_layouts: RESPONSIVE
+  }
+}
+tags: {  # <amp-facebook-page> via amp-facebook script
+  html_format: AMP
+  spec_name: "amp-facebook-page 1.0"
+  tag_name: "AMP-FACEBOOK-PAGE"
+  requires_extension: "amp-facebook"
+  requires: "amp-facebook 1.0"
+  attr_lists: "amp-facebook-strict"
+  attr_lists: "extended-amp-global"
+  amp_layout: {
+    supported_layouts: FILL
+    supported_layouts: FIXED
+    supported_layouts: FIXED_HEIGHT
+    supported_layouts: FLEX_ITEM
+    supported_layouts: NODISPLAY
+    supported_layouts: RESPONSIVE
+  }
+}
+attr_lists: {
+  name: "amp-facebook"
+  # data-* is generally allowed, but it's not generally mandatory.
+  attrs: {
+    name: "data-href"
+    mandatory: true
+  }
+}
+attr_lists: {
+  name: "amp-facebook-strict"
+  # data-* is generally allowed, but it's not generally mandatory.
+  attrs: {
+    name: "data-href"
+    mandatory: true
+    value_url: {
+      protocol: "http"
+      protocol: "https"
+      allow_relative: false
+    }
+  }
+}
 tags: {  # amp-timeago
   html_format: AMP
   tag_name: "SCRIPT"
@@ -18270,6 +16747,7 @@ tags: {  # amp-timeago
     version: "0.1"
     version: "1.0"
     version: "latest"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -18312,22 +16790,6 @@ tags: {  # <amp-timeago>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-youtube 1.0
   html_format: AMP
   tag_name: "SCRIPT"
@@ -18337,6 +16799,7 @@ tags: {  # amp-youtube 1.0
     name: "amp-youtube"
     version_name: "v1.0"
     version: "1.0"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -18395,21 +16858,6 @@ tags: {  # <amp-youtube>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-
 tags: {  # amp-next-page
   html_format: AMP
   tag_name: "SCRIPT"
@@ -18576,22 +17024,6 @@ tags: {  # <amp-next-page type="adsense">
   }
   spec_url: "https://amp.dev/documentation/components/amp-next-page/"
 }
-#
-# Copyright 2021 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-iframely
   html_format: AMP
   tag_name: "SCRIPT"
@@ -18644,22 +17076,6 @@ tags: {  # <amp-iframely>
     supported_layouts: INTRINSIC
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-bodymovin-animation
   html_format: AMP
   tag_name: "SCRIPT"
@@ -18707,25 +17123,11 @@ tags: {  # <amp-bodymovin-animation>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-facebook-comments
   html_format: AMP
   tag_name: "SCRIPT"
+  satisfies: "amp-facebook-comments 0.1"
+  excludes: "amp-facebook 1.0"
   extension_spec: {
     name: "amp-facebook-comments"
     version: "0.1"
@@ -18737,11 +17139,9 @@ tags: {  # <amp-facebook-comments>
   html_format: AMP
   tag_name: "AMP-FACEBOOK-COMMENTS"
   requires_extension: "amp-facebook-comments"
-  # data-* is generally allowed, but it's not generally mandatory.
-  attrs: {
-    name: "data-href"
-    mandatory: true
-  }
+  requires: "amp-facebook-comments 0.1"
+  # The amp-facebook attr_list is defined in the amp-facebook protoascii
+  attr_lists: "amp-facebook"
   attr_lists: "extended-amp-global"
   amp_layout: {
     supported_layouts: FILL
@@ -18752,21 +17152,6 @@ tags: {  # <amp-facebook-comments>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-audio
   html_format: AMP
   html_format: AMP4ADS
@@ -18871,22 +17256,6 @@ tags: {  # <amp-audio> for A4A (autoplay attribute disallowed)
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-access-scroll
   html_format: AMP
   tag_name: "SCRIPT"
@@ -18899,22 +17268,6 @@ tags: {  # amp-access-scroll
   }
   attr_lists: "common-extension-attrs"
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-gfycat
   html_format: AMP
   tag_name: "SCRIPT"
@@ -18949,22 +17302,6 @@ tags: {  # <amp-gfycat>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-mathml
   html_format: AMP
   tag_name: "SCRIPT"
@@ -18992,22 +17329,6 @@ tags: {  # <amp-mathml>
     supported_layouts: CONTAINER
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 # Specific script tags for custom elements and runtime imports.
 tags: {  # amp-analytics
   html_format: AMP
@@ -19062,21 +17383,6 @@ tags: {  # <amp-analytics>
   attrs: { name: "type" }
   spec_url: "https://amp.dev/documentation/components/amp-analytics/"
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-recaptcha-input
   html_format: AMP
   tag_name: "SCRIPT"
@@ -19106,22 +17412,6 @@ tags: {  # <amp-form> <amp-recaptcha-input>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2017 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-gwd-animation
   html_format: AMP4ADS
   tag_name: "SCRIPT"
@@ -19142,22 +17432,6 @@ tags: {  # <amp-gwd-animation>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-instagram 1.0
   html_format: AMP
   tag_name: "SCRIPT"
@@ -19167,6 +17441,7 @@ tags: {  # amp-instagram 1.0
     name: "amp-instagram"
     version_name: "v1.0"
     version: "1.0"
+    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -19204,22 +17479,6 @@ tags: {  # <amp-instagram>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-skimlinks
   html_format: AMP
   tag_name: "SCRIPT"
@@ -19266,22 +17525,6 @@ tags: {  # <amp-skimlinks>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2020 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-story-360
   html_format: AMP
   tag_name: "SCRIPT"
@@ -19364,22 +17607,6 @@ tags: {  # <amp-story-360>
     supported_layouts: NODISPLAY
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-google-document-embed
   html_format: AMP
   tag_name: "SCRIPT"
@@ -19418,22 +17645,6 @@ tags: {  # <amp-google-document-embed>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-image-slider
   html_format: AMP
   tag_name: "SCRIPT"
@@ -19532,22 +17743,6 @@ tags: {
   }
   spec_url: "https://amp.dev/documentation/components/amp-image-slider/"
 }
-#
-# Copyright 2018 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-3d-gltf
   html_format: AMP
   tag_name: "SCRIPT"
@@ -19605,22 +17800,6 @@ tags: {  # <amp-3d-gltf>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
-
 tags: {  # amp-reach-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -19652,21 +17831,6 @@ tags: {  # <amp-reach-player>
     supported_layouts: RESPONSIVE
   }
 }
-#
-# Copyright 2016 The AMP HTML Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS-IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the license.
-#
 tags: {  # amp-access
   html_format: AMP
   tag_name: "SCRIPT"

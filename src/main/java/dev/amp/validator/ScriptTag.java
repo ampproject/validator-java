@@ -25,6 +25,7 @@ import org.xml.sax.Attributes;
 
 import javax.annotation.Nonnull;
 import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -93,10 +94,11 @@ public class ScriptTag {
                     this.isRuntime = true;
                 }
                 // For AMP Extensions, validate path and extract name and version.
-                if (this.isExtension && EXTENSION_SCRIPT_PATH_REGEX.matcher(this.path).find()) {
+                final Matcher matcher = EXTENSION_SCRIPT_PATH_REGEX.matcher(this.path);
+                if (this.isExtension && matcher.find()) {
                     this.hasValidPath = true;
-                    final MatchResult reResult = EXTENSION_SCRIPT_PATH_REGEX.matcher(this.path).toMatchResult();
-                    if (reResult.groupCount() < 2) {
+                    final MatchResult reResult = matcher.toMatchResult();
+                    if (reResult.groupCount() == 2) {
                         this.extensionName = reResult.group(1);
                         this.extensionVersion = reResult.group(2);
                     }
