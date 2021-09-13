@@ -311,7 +311,7 @@ public class ContextTest {
         Assert.assertEquals(context.getInlineStyleByteSize(), 40);
     }
 
-    private final int MAX_BODY_LENGTH = 100000;
+    private static final int MAX_BODY_LENGTH = 100000;
 
     private ParsedValidatorRules mockValidatorRules;
     private static final String UPPER_NAME = "HEAD";

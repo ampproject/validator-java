@@ -21,7 +21,6 @@
 
 package dev.amp.validator.selector;
 
-import dev.amp.validator.utils.ByteUtils;
 import org.testng.annotations.Test;
 import org.testng.Assert;
 
