@@ -12,6 +12,6 @@ jobs:
           distribution: temurin
           java-version: 11
           cache: maven
-          
+
       - name: ⭐ Test Build ⭐
         run: mvn clean install -q -B
