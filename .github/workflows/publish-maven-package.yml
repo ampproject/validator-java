@@ -23,4 +23,4 @@ jobs:
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: ⭐ Publish to Apache Maven Central ⭐
-        run: mvn deploy -P publish -DskipTests=true
+        run: mvn --batch-mode deploy -P publish -DskipTests=true
