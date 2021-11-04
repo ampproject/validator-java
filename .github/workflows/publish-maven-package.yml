@@ -34,7 +34,7 @@ jobs:
 
       - name: ⭐ Publish to Maven Central ⭐
         run: |
-          ls -R
+          cat ~/.m2/settings.xml
           mvn -X deploy --batch-mode -P publish -DskipTests=true -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
