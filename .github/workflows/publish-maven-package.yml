@@ -11,31 +11,18 @@ jobs:
     environment: deploy
     steps:
       - uses: actions/checkout@v2
-
-      - name: Set up JDK 11
+      - name: Set up Maven Central Respository
         uses: actions/setup-java@v2
         with:
           distribution: temurin
           java-version: 11
-
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-
-      - name: Set up Maven Central
-        uses: actions/setup-java@v2
-        with: # running setup-java again overwrites the settings.xml
-          distribution: temurin
-          java-version: 11
           server-id: ossrh
-          server-username: OSSRH_USERNAME # env variable for username in deploy
-          server-password: OSSRH_PASSWORD # env variable for password in deploy
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }} # Value of the GPG private key to import
-          gpg-passphrase: GPG_PASSPHRASE # env variable for GPG private key passphrase
-
+          server-username: OSSRH_USERNAME
+          server-password: OSSRH_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
       - name: ⭐ Publish to Maven Central ⭐
-        run: |
-          cat ~/.m2/settings.xml
-          mvn -X deploy --batch-mode -P publish -DskipTests=true -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
+        run: mvn deploy --batch-mode -P publish -DskipTests=true
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
