@@ -29,7 +29,7 @@ jobs:
           gpg-passphrase: GPG_PASSPHRASE # env variable for GPG private key passphrase
 
       -name:  ⭐ Publish to Maven Central ⭐
-        run: mvn deploy --batch-mode -P publish -DskipTests=true -Dgpg.passphrase=${{ GPG_PASSPHRASE }}
+        run: mvn deploy --batch-mode -P publish -DskipTests=true -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
