@@ -23,12 +23,17 @@
         <developer>
             <id>nhant01</id>
             <name>Nhan Thuan Nguyen</name>
-            <email>nhan.thuan.nguyen@verizonmedia.com</email>
+            <email>nhan.thuan.nguyen@yahooinc.com</email>
         </developer>
         <developer>
             <id>GeorgeLuo</id>
             <name>George Luo</name>
-            <email>george.luo@verizonmedia.com</email>
+            <email>formal.email.gl@gmail.com</email>
+        </developer>
+        <developer>
+            <id>randymo</id>
+            <name>Randal Modowski</name>
+            <email>randal.modowski@yahooinc.com</email>
         </developer>
     </developers>
 
