@@ -453,7 +453,7 @@ public final class SelectorUtils {
         }
 
         String value = "";
-        if (matchOperator.equals("")) {  // If we saw an operator, parse the value.
+        if (!matchOperator.equals("")) {  // If we saw an operator, parse the value.
             current = getTokenType(tokenStream.current());
             if (current == TokenType.IDENT) {
                 ident = tokenStream.current();
