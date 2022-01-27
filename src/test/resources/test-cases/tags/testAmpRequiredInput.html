@@ -1,0 +1,443 @@
+<!doctype html>
+<html ⚡4email data-css-strict>
+<head>
+    <meta name="robots" content="noindex, nofollow">
+    <meta charset="utf-8">
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+
+    <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
+    <script async custom-element="amp-bind" src="https://cdn.ampproject.org/v0/amp-bind-0.1.js"></script>
+    <script custom-template="amp-mustache" src="https://cdn.ampproject.org/v0/amp-mustache-0.2.js" async></script>
+    <style amp4email-boilerplate>
+        body {
+            visibility: hidden
+        }
+    </style>
+    <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
+    <meta name="x-apple-disable-message-reformatting">
+    <style amp-custom>
+        u+#body a {
+            color: inherit;
+            text-decoration: none;
+            font-size: inherit;
+            font-family: inherit;
+            font-weight: inherit;
+            line-height: inherit;
+        }
+
+        #MessageViewBody a {
+            color: inherit;
+            text-decoration: none;
+            font-size: inherit;
+            font-family: inherit;
+            font-weight: inherit;
+            line-height: inherit;
+        }
+
+        tr {
+            vertical-align: middle;
+        }
+
+        p,
+        a,
+        li {
+            font-family: Roboto, arial, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+        }
+
+        p,
+        li {
+            color: #63737E;
+        }
+
+        p:first-child {
+            margin-top: 0;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        a {
+            color: #195A6A;
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: Source Serif Pro, Palatino, serif;
+            font-size: 25px;
+            line-height: 40px;
+            font-weight: bold;
+            text-align: left;
+            margin: 0;
+        }
+
+        strong.text-black {
+            color: #333333;
+        }
+
+        p.text-small {
+            font-size: 12px;
+            line-height: 18px;
+            margin: 10px 0;
+            text-align: center;
+            color: #6e6e6e
+        }
+
+        p.text-small a {
+            font-size: 12px;
+        }
+
+        ul {
+            list-style-type: disc;
+            padding: 0px 0px 0px 40px;
+            margin: 0px;
+        }
+
+        .footer-link {
+            font-size: 12px;
+            line-height: 18px;
+            color: #6e6e6e;
+            text-decoration: underline
+        }
+
+        .white-text {
+            color: #ffffff;
+        }
+
+        /* MOBILE STYLES */
+        @media only screen and (max-width:599px) {
+            .full-width-mobile {
+                width: 100%;
+                height: auto;
+            }
+
+            .mobile-padding {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .mobile-stack {
+                display: block;
+                width: 100%;
+            }
+        }
+
+
+        .formContainer {
+            width: 100%;
+            border-top: 4px solid #2A5EE4;
+            box-shadow: 0px 0px 1px rgba(71, 89, 107, 0.32), 0px 1px 2px rgba(71, 89, 107, 0.12);
+            border-radius: 4px;
+            font-family: 'Helvetica', sans-serif;
+            font-size: 14px;
+        }
+
+        .widgetBody {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .integrationLogo {
+            height: 16px;
+            font-size: 14;
+            font-weight: bold;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+        }
+
+        .inputDropdown {
+            color: black;
+        }
+
+        .integrationName {
+            font-size: 12px;
+            color: rgba(0, 0, 0, 0.48);
+            margin-left: 8px;
+            margin-top: 0px;
+        }
+
+        .question {
+            margin-top: 0px;
+            margin-bottom: 8px;
+        }
+
+        .field {
+            width: 100%;
+            margin-bottom: 20px;
+            height: 40px;
+            border-radius: 8px;
+            border: none;
+            background-color: rgba(42, 94, 228, 0.04);
+            padding-left: 16px;
+            padding-right: 16px;
+            box-sizing: border-box;
+        }
+
+        .field:hover {
+            background-color: rgba(42, 94, 228, 0.12);
+            box-shadow: none;
+        }
+
+        .field:focus, .field:focus {
+            background-color: white;
+            color: black;
+            outline: none;
+            box-shadow: inset 0px 0px 0px 2px #2A5EE4;
+        }
+
+        .multipleChoiceOptions {
+            margin-bottom: 20px;
+        }
+
+        .checkbox {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            margin: 0px;
+        }
+
+        .submitButton {
+            width: 100%;
+            background-color: #2A5EE4;
+            height: 40px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            border: none;
+        }
+
+        .submitButton:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        .submitButton:active {
+            opacity: 0.64;
+        }
+
+        .submitButton:focus {
+            opacity: 0.64;
+            box-shadow: 0px 0px 0px 2px #2A5EE4, inset 0px 0px 0px 1px #FFFFFF;
+        }
+
+        .submitButton:disabled,
+        .submitButton[disabled] {
+            opacity: 0.32;
+        }
+
+        .widgetFooter {
+            box-shadow: 0px -1px 0px rgba(0, 0, 0, 0.08);
+            font-size: 10px;
+            font-weight: 700;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 12px;
+            padding-bottom: 12px;
+        }
+
+        select {
+            /* Reset */
+            appearance: none;
+            border: 0;
+            outline: 0;
+            font: inherit;
+            /* Personalize */
+            height: 40px;
+            width: 100%;
+            background: url(https://spellbound-images-public.s3.us-east-2.amazonaws.com/caret.png)
+            no-repeat right 0.8em center / 1.4em,
+            white;
+            color: white;
+            border-radius: 8px;
+            box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="body" style="background-color: #F5F8FA;">
+<div style="display:none">InboxReady has the analytics you need. &#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;&#847; &#847; &#847; &#847; &#847; &#847; &#847; &#847;</div>
+<div role="article" aria-label="All the benefits in one glance." lang="en" dir="ltr" style="font-size:16px; font-size:1rem; font-size:max(16px, 1rem)">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" bgcolor="#F5F8FA" width="100%" style="border-collapse: collapse; width: 100%; background-color: #F5F8FA; margin-left: auto; margin-right: auto;">
+        <tr style="vertical-align: middle;" valign="middle">
+            <td>
+            </td>
+        </tr>
+        <tr style="vertical-align: middle;" valign="middle">
+            <td>
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" bgcolor="#fffffe" width="600" style="border-collapse: collapse; background-color: #fffffe; max-width: 600px; width: 100%; margin-left: auto; margin-right: auto;" class="outlook-black">
+                    <tr style="vertical-align: middle;" valign="middle">
+                        <td style="padding: 30px 0 20px 0; margin-left: auto; margin-right: auto;">
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" bgcolor="#fffffe" width="350" style="border-collapse: collapse; background-color: #fffffe; max-width: 350px; width: 100%; margin-left: auto; margin-right: auto;" class="outlook-black" align="center">
+                                <tr style="vertical-align: middle;" valign="middle">
+                                    <td style="margin-left: auto; margin-right: auto;" align="center">
+                                        <div class="logo-outlook outlook-black">
+                                            <a href="https://email.e.learn.mailgun.com/c/eJxNjkuOwyAQRE-Dd1gG8wkLFiNFucao-ThGMhBhGE9uH2JlEakX3VX1WuU0TIxwNgRNlaJ9U1iSiWC6SMBSCo454Yu3xhoCDLFp81DSGCFs95ZGm-Owamp7xgoKYgbCLtQ6JwkouXAvjGKXYdNrrY8dzT-I3vocx_H9As23VuPvnluxHs1X2_aaoy9jyIiKtxW9C63nrv6NfUQL8QHhnrocksn_uHhwT3x4ExKUoeju__kSlmChhpx6-yesOZ-tqz6ZE-nHB3oBbNxaFA" target="_blank" style="font-family: Roboto, arial, sans-serif; font-size: 16px; line-height: 24px; font-weight: 700; text-decoration: underline; color: #000; background: none;">
+                                                <amp-img src="https://images.ctfassets.net/y6oq7udscnj8/5EZePXsvJcT9tq5PmHgqvz/6f6590c7255240187c9cd51210322e6f/Mailgun-Sinch-Colour-Dark.png" alt="Mailgun by Sinch" width="125" height="37" layout="intrinsic"></amp-img>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td style="margin-left: auto; margin-right: auto;" align="center">
+                                        <div class="outlook-black">
+                                            <a href="https://email.e.learn.mailgun.com/c/eJxNjkuOwyAQRE-Dd1gG8wkLFiNFucao-ThGMhBhGE9uH2JlEakX3VX1WuU0TIxwNgRNlaJ9U1iSiWC6SMBSCo454Yu3xhoCDLFp81DSGCFs95ZGm-Owamp7xgoKYgbCLtQ6JwkouXAvjGKXYdNrrY8dzT-I3vocx_H9As23VuPvnluxHs1X2_aaoy9jyIiKtxW9C63nrv6NfUQL8QHhnrocksn_uHhwT3x4ExKUoeju__kSlmChhpx6-yesOZ-tqz6ZE-nHB3oBbNxaFA" target="_blank" style="font-family: Roboto, arial, sans-serif; font-size: 16px; line-height: 24px; font-weight: 700; text-decoration: underline; color: #000; background: none;">
+                                                <amp-img src="https://go.mailjet.com/img/mtrq/b/mhh8o/6vjh7.png" alt="Salesforce" width="120" height="84" layout="intrinsic"></amp-img>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="vertical-align: middle;" valign="middle">
+                        <td>
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse;">
+                                <tr style="vertical-align: middle;" valign="middle">
+                                    <td style="padding: 0 30px 10px 30px;">
+                                        <h1 style="font-family: Source Serif Pro, Palatino, serif; font-size: 25px; line-height: 40px; font-weight: bold; text-align: left; margin: 0;">Introducing InboxReady - Email analytics all in one place</h1>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr style="vertical-align: middle;" valign="middle">
+                        <td style="margin-left: auto; margin-right: auto;">
+                            <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;width:100%">
+                                <tr style="vertical-align: middle;" valign="middle">
+                                    <td style="padding: 0 30px 30px 30px;">
+                                        <p style="font-family: Roboto, arial, sans-serif; font-size: 16px; line-height: 24px; color: #63737E; margin-top: 0;">Question: How do you maintain your deliverability? Your answer may include multiple methods and tools. But imagine you could maintain list health, monitor for spam traps, detect blocklisting, preview emails to fix errors before sending, and track your IP reputation all within Mailgun. It’s not too good to be true, it’s <a href="https://email.e.learn.mailgun.com/c/eJxNj0GOwyAMRU9DdlSBQEgWLEYa9RojA6ZBClBRMmlvXxJVmpG8sJ_9v22noRdMii5oPs-8ZTNVrGeUewVUqVFSyaRHa6xhIIjoV4SSLhHCetvSxebYLVoJ56aJGfTgTD-5Qc0KLSoLo_VC8m7VS633Bxm-CL-22Pf9v0UjIZn8LAjudUwM163Gn0feikUyfNuQCR8PFNGFLTaEh_wDLcQ7hFtq-LShpw_d0YQEpSu69X-xBB8s1JBT--IFS87n9VX_rW7FR_QGg1tdDw" style="font-family: Roboto, arial, sans-serif; font-size: 16px; line-height: 24px; color: #195A6A; font-weight: 700; text-decoration: underline;" aria-label="InboxReady">InboxReady</a>.</p>
+                                        <p style="font-family: Roboto, arial, sans-serif; font-size: 16px; line-height: 24px; color: #63737E; margin-top: 0;">Join Kate Nowrouzi and Alex Rubin of Mailgun by Sinch and Eric Hannon of Salesforce to learn how to remain on top of your deliverability and in your customers’ inboxes wit InboxReady.</p>
+                                        <p style="font-family: Roboto, arial, sans-serif; font-size: 16px; line-height: 24px; color: #63737E; margin-top: 0;"><strong>Improve email deliverability with InboxReady</strong><br>Wednesday, January 19 11:30 AM CST/9:30 AM PST</p>
+                                        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+
+                                            <div style="width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center">
+                                                <div style="max-width: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; border-radius: 4px">
+                                                    <div class="formContainer">
+                                                        <div class="widgetBody" style="box-sizing: border-box; padding: 20px">
+                                                            <amp-state id="formState" hidden aria-hidden="true">
+                                                                <script type="application/json">
+                                                                    {
+                                                                        "formStep": 0,
+                                                                        "tempNextState": 0,
+                                                                        "nextQuestionState": 0,
+                                                                        "skipNextQuestionState": 1
+
+                                                                    }
+                                                                </script>
+                                                            </amp-state>
+                                                            <div class="integrationLogo">
+                                                                <div>
+                                                                    <amp-img src="https://spellbound-images-public.s3.us-east-2.amazonaws.com/livestorm-logo.png" width="16px" height="16px" />
+                                                                </div>
+                                                                <p class="integrationName">Livestorm</p>
+                                                            </div>
+                                                            <div><h3 style='margin-bottom: 4px; margin: 20px 0'>Spellbound Test 2</h3>
+                                                                <hr style='border-color: rgba(0, 0, 0, 0.04); margin-bottom: 20px' /></div>
+                                                            <form method="POST"  data-amp-bind-hidden="formState.formStep != ''" style="" action-xhr="https://app.spellbound.io/widgets/forms/v1/nextSubmit?emailId=61eafeb37db9124addca95c6&sentEmailId=61eafeb32b0ea37ea8125316" on="submit-success: AMP.setState({formState: { formStep: '__spellboundEndReached', skipNextQuestion: 1 }})" >
+                                                                <h3 class="question">Session List</h3>
+                                                                <div style='display: flex; flex-direction: row; align-content: center; margin-bottom: 20px; margin-top: 20px;'>
+                                                                    <input id="8f82ea7e-273c-4364-b86a-c240d54878b2" type="checkbox" class="checkbox" data-amp-bind-checked="TODO" name="__spellboundSessionsList" value="8cc608ee-f2fa-4076-91d4-df73db2fded1" tabIndex="0" role="button" on="change: AMP.setState({ formState: { tempNextState: '__spellboundEndReached', skipNextQuestionState: 0 }})" />
+                                                                    <label style="font-size: 12px;margin-left: 12px;" for="8f82ea7e-273c-4364-b86a-c240d54878b2">Jan 24, 2022 11:00 AM</label>
+
+                                                                </div>
+                                                                <h3 class="question">Email *</h3>
+
+                                                                <input class="field" type="email" id="email" name="email" placeholder="Email *" value="ampverification@yahoo.com" tabIndex="0" role="button" on="change: AMP.setState({ formState: { tempNextState: '__spellboundEndReached', skipNextQuestionState: 0 }})" required />
+                                                                <h3 class="question">First Name *</h3>
+
+                                                                <input class="field" type="text" id="first_name" name="first_name" placeholder="First Name *" value="" tabIndex="0" role="button" on="change: AMP.setState({ formState: { tempNextState: '__spellboundEndReached', skipNextQuestionState: 0 }})" required />
+                                                                <h3 class="question">Last Name *</h3>
+
+                                                                <input class="field" type="text" id="last_name" name="last_name" placeholder="Last Name *" value="" tabIndex="0" role="button" on="change: AMP.setState({ formState: { tempNextState: '__spellboundEndReached', skipNextQuestionState: 0 }})" required />
+                                                                <button style="background: #2A5EE4" class="submitButton" tabIndex='0' role='button' type="submit" name="__spellboundEndReached" value="done">Submit</button>
+                                                                <br><br>
+                                                                <div submit-error="">
+                                                                    <template type="amp-mustache">
+                                                                        <div
+                                                                                class="error"
+                                                                                style="text-align: center; width: 100%; color: red"
+                                                                        >
+                                                                            {{message}}
+                                                                        </div>
+                                                                    </template>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div hidden style="display: flex; justify-content: center; align-items: center" data-amp-bind-hidden="formState.formStep != '__spellboundEndReached'">
+                                                            <div style="max-width: 300px; text-align: center; box-sizing: border-box; padding: 0 10px;  width: 100%;">
+                                                                <amp-img src="https://spellbound-images-public.s3.us-east-2.amazonaws.com/submitted-form.png" width="64" height="64"></amp-img>
+                                                                <h3>You're now registered for this event</h3>
+                                                                <p>You will recieve an email containing your connection link</p>
+                                                            </div>
+
+                                                        </div>
+                                                        <a style="color: black; text-decoration: none;" href="https://email.e.learn.mailgun.com/c/eJwdjTkOwyAUBU9jOluAWURBkSb3-GzxlzBYGCfx7YMivWKmmRcsUMGkIGi5MXyQmTWjbOZJw6y1krNkMkXvvGMgJkFzhFaWHTC_rrL4upPNQuCrkNSsDoRPEiRTOjnuvKIKVNIk263345zWx8SfY-cRc3b1KmHBSpqF_XjHhgk9dKxl3Nyw1frPd4vF1W-LEO4hn-iwQPsBenQ6kQ">
+                                                            <div class="widgetFooter" style="display: flex; flex-direction: row; align-items: center;">
+                                                                <amp-img width="16" height="16" style="margin-right: 12px;" src="https://spellbound-images-public.s3.us-east-2.amazonaws.com/spellbound-footer-logo.png"></amp-img>
+                                                                <span>Made interactive with Spellbound</span>
+                                                                <amp-img width="10" height="10" style="margin-left: auto;" src="https://spellbound-images-public.s3.us-east-2.amazonaws.com/arrow.png"></amp-img>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:#F5F8FA;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse; background-color: #F5F8FA; margin-left: auto; margin-right: auto;" bgcolor="#F5F8FA">
+                                <tr style="vertical-align: middle;" valign="middle">
+                                    <td style="padding: 64px 0 20px 0; margin-left: auto; margin-right: auto;" align="center">
+                                        <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
+                                            <tr style="vertical-align: middle;" valign="middle">
+                                                <td>
+                                                    <div class="logo-outlook logo-black">
+                                                        <a href="https://email.e.learn.mailgun.com/c/eJxNjkuOwyAQRE-Dd1gG8wkLFiNFucao-ThGMhBhGE9uH2JlEakX3VX1WuU0TIxwNgRNlaJ9U1iSiWC6SMBSCo454Yu3xhoCDLFp81DSGCFs95ZGm-Owamp7xgoKYgbCLtQ6JwkouXAvjGKXYdNrrY8dzT-I3vocx_H9As23VuPvnluxHs1X2_aaoy9jyIiKtxW9C63nrv6NfUQL8QHhnrocksn_uHhwT3x4ExKUoeju__kSlmChhpx6-yesOZ-tqz6ZE-nHB3oBbNxaFA" target="_blank" style="font-family: Roboto, arial, sans-serif; font-size: 16px; line-height: 24px; font-weight: 700; text-decoration: underline; color: #000; background: none;">
+                                                            <amp-img src="https://images.ctfassets.net/y6oq7udscnj8/5EZePXsvJcT9tq5PmHgqvz/6f6590c7255240187c9cd51210322e6f/Mailgun-Sinch-Colour-Dark.png" alt="Mailgun by Sinch" width="125" height="37" layout="intrinsic"></amp-img>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr style="vertical-align: middle;" valign="middle">
+                                    <td style="padding: 0 30px 15px 30px; margin-left: auto; margin-right: auto;">
+                                        <p class="text-small" style="font-family: Roboto, arial, sans-serif; margin-top: 0; margin-bottom: 0; font-size: 12px; line-height: 18px; text-align: center; color: #6e6e6e; margin: 0;">
+                                            &copy; 2022 Mailgun by Sinch | <span style="text-decoration:none;font-weight:normal;">112 E. Pecan Street - San Antonio, TX 78205, USA | <a href="https://email.e.learn.mailgun.com/c/eJxNTUsKwyAUPE3cGfKMn7pw0U3v8TSaCIkGa2tz-0pXhYH5MMwsBicOgpNomNasK00VTEBZUEiVkoIKEME76ywgH_i0eyxpPDDu6yuNLh9kM1YqLoXl4GBWLIAWvSwWzthNMy2B7Gar9XwO831gj47W2v9ET-ye106kGDzOty8xRIc15tQvL9xy_l1VE5PNn-Jxubpp3saE5QuoTj0J" style="font-family: Roboto, arial, sans-serif; line-height: 24px; color: #195A6A; font-weight: 700; text-decoration: underline; font-size: 12px;">Visit our blog</a>
+												</span></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="margin-left: auto; margin-right: auto;">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse;">
+                                            <tr style="vertical-align: middle;" valign="middle">
+                                                <td style="padding: 15px 30px 10px 30px; margin-left: auto; margin-right: auto;">
+                                                    <p class="text-small" style="font-family: Roboto, arial, sans-serif; margin-top: 0; margin-bottom: 0; font-size: 12px; line-height: 18px; text-align: center; color: #6e6e6e; margin: 0;">You’re receiving this because you are a Mailgun customer<br>
+                                                        If you do not wish to receive further communication like this, <a target="_blank" href="https://email.e.learn.mailgun.com/c/eJxlkDtvgzAAhH9N2EA2L4eBgbwoSQgFoTTtUtlggwkYSngEfn1J10o33OnT3XCpjYEODV3itmpZ6uIsGUEAZZUhLCNkGrIBDUYTkhCI9ZUOSopboVSYl1kvlKSupNzWNJhCQlkKASMwQUQDumEwCxOTmiZNpdLOu655rDRnpR4W0Vdfocq_sYX1L34c03m3D8bJ8R1_d8s94Llw3o-XrXA9jzTO5loe4h-k96Z2i8hXEDjiVEfhetvUO_AJtpx2LHkHWXg_YppkF43PhzcduUNB27kfehLBjdFl1RRvgkcYXB9hPPtxdD9T9wRMDzGtMZ5X3OO2KMziLFvFt-e356FYOx8iPwWj1Nq4agbacsYT3PFaLOdMOK_rv1M6mwtSP1uK02kJIyVc4PYXWAB33Q" class="white-link" style="font-family: Roboto, arial, sans-serif; line-height: 24px; color: #195A6A; font-weight: 700; text-decoration: underline; font-size: 12px;">unsubscribe&nbsp;here</a></p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+<amp-img src="https://app.spellbound.io/widgets/v1/tracking/amp?emailId=61eafeb32b0ea37ea8125316" width="1px" height="1px"/><amp-img width="1px" height="1px" alt="" src="https://email.e.learn.mailgun.com/o/eJwdzMsOgyAQQNGvqTsMj-G14GNmAOskCg3Rtv59TXf3bk5JKEFZmDjpGPVdUXglldCLR-G9s8Iqu9RMmRTCA-RWcbR5R96eZ5tz36c1BQ2FwIRM2hhH5Ao6hBBtcBRlpWkk3F_vOnjhjAf3dkMXrr3_gSNxo_4dFct1z6cSNxw_bhYwXQ"></body>
+</html>

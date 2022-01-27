@@ -1377,6 +1377,8 @@ tags: {
       protocol: "intent"
       # Line messenger (https://media.line.me/howto/en/)
       protocol: "line"
+      # (https://docs.microsoft.com/en-us/windows/uwp/launch-resume/launch-default-app#microsoft-edge-uri-scheme)
+      protocol: "microsoft-edge"
       protocol: "skype"
       protocol: "sms"
       protocol: "snapchat"
@@ -1826,6 +1828,7 @@ tags: {
   spec_name: "Standard Img"
   descriptive_name: "img"
   disallowed_ancestor: "AMP-IMG"
+  disallowed_ancestor: "AMP-STORY"
   attrs: {
     name: "decoding"
     value_casei: "async"
@@ -1839,6 +1842,7 @@ tags: {
   spec_name: "Hero Img"
   descriptive_name: "img"
   disallowed_ancestor: "AMP-IMG"
+  disallowed_ancestor: "AMP-STORY"
   attrs: {
     name: "data-hero"
     mandatory: true
@@ -1847,6 +1851,9 @@ tags: {
   attrs: {
     name: "decoding"
     value_casei: "async"
+  }
+  attrs: {
+    name: "sizes"
   }
   attr_lists: "img-attrs"
   attr_lists: "mandatory-src-or-srcset"
@@ -1857,6 +1864,7 @@ tags: {
   spec_name: "Img using srcset"
   descriptive_name: "img"
   disallowed_ancestor: "AMP-IMG"
+  disallowed_ancestor: "AMP-STORY"
   attrs: {
     name: "decoding"
     value_casei: "async"
@@ -1873,6 +1881,7 @@ tags: {
   spec_name: "Standard Image"
   descriptive_name: "img"
   disallowed_ancestor: "AMP-IMG"
+  disallowed_ancestor: "AMP-STORY"
   attrs: {
     name: "decoding"
     value_casei: "async"
@@ -1886,6 +1895,7 @@ tags: {
   spec_name: "Hero Image"
   descriptive_name: "img"
   disallowed_ancestor: "AMP-IMG"
+  disallowed_ancestor: "AMP-STORY"
   attrs: {
     name: "data-hero"
     mandatory: true
@@ -1895,6 +1905,9 @@ tags: {
     name: "decoding"
     value_casei: "async"
   }
+  attrs: {
+    name: "sizes"
+  }
   attr_lists: "img-attrs"
   attr_lists: "mandatory-src-or-srcset"
 }
@@ -1903,6 +1916,7 @@ tags: {
   tag_name: "IMAGE"
   spec_name: "Image using srcset"
   disallowed_ancestor: "AMP-IMG"
+  disallowed_ancestor: "AMP-STORY"
   descriptive_name: "img"
   attrs: {
     name: "decoding"
@@ -3863,6 +3877,13 @@ tags: {  # <amp-img>
   attrs: { name: "alt" }
   attrs: { name: "attribution" }
   attrs: { name: "crossorigin" }
+  # https://developers.google.com/web/updates/2019/02/priority-hints
+  attrs: {
+    name: "importance"
+    value_casei: "high"
+    value_casei: "low"
+    value_casei: "auto"
+  }
   attrs: { name: "object-fit" }
   attrs: { name: "object-position" }
   attrs: { name: "placeholder" }
@@ -3902,6 +3923,13 @@ tags: {  # <amp-img i-amphtml-ssr>
   }
   attrs: { name: "alt" }
   attrs: { name: "attribution" }
+  # https://developers.google.com/web/updates/2019/02/priority-hints
+  attrs: {
+    name: "importance"
+    value_casei: "high"
+    value_casei: "low"
+    value_casei: "auto"
+  }
   attrs: { name: "object-fit" }
   attrs: { name: "object-position" }
   attrs: { name: "placeholder" }
@@ -4102,6 +4130,13 @@ tags: {
   attrs: { name: "alt" }
   attrs: { name: "attribution" }
   attrs: { name: "height" }
+  # https://developers.google.com/web/updates/2019/02/priority-hints
+  attrs: {
+    name: "importance"
+    value_casei: "high"
+    value_casei: "low"
+    value_casei: "auto"
+  }
   attrs: { name: "object-fit" }
   attrs: { name: "object-position" }
   attrs: { name: "referrerpolicy" }
@@ -5154,6 +5189,7 @@ attr_lists: {
   attrs: { name: "aria-labelledby" }
   attrs: { name: "aria-level" }
   attrs: { name: "aria-live" }
+  attrs: { name: "aria-modal" }
   attrs: { name: "aria-multiline" }
   attrs: { name: "aria-multiselectable" }
   attrs: { name: "aria-orientation" }
@@ -7465,6 +7501,7 @@ tags: {  # <style amp-noscript>, [AMP]
     "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#maximum-size"
 
     css_spec: {
+      allow_important: true
       at_rule_spec: {
          name: 'media'
          media_query_spec: {
@@ -9383,6 +9420,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name: "AMP-BASE-CAROUSEL lightbox [lightbox-exclude]"
+  descriptive_name: "amp-base-carousel [lightbox-exclude] child"
   attrs: {
     name: "lightbox-exclude"
     mandatory: true
@@ -9392,6 +9430,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name: "AMP-BASE-CAROUSEL lightbox [child]"
+  descriptive_name: "amp-base-carousel [lightbox-thumbnail-id] child"
   attrs: {
     name: "lightbox-thumbnail-id"
     value_regex_casei: "^[a-z][a-z\\d_-]*"
@@ -10924,6 +10963,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name: "AMP-CAROUSEL lightbox [lightbox-exclude]"
+  descriptive_name: "amp-carousel lightbox [lightbox-exclude] child"
   attrs: {
     name: "lightbox-exclude"
     mandatory: true
@@ -10933,6 +10973,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name: "AMP-CAROUSEL lightbox [child]"
+  descriptive_name: "amp-carousel lightbox [lightbox-thumbnail-id] child"
   attrs: {
     name: "lightbox-thumbnail-id"
     value_regex_casei: "^[a-z][a-z\\d_-]*"
@@ -11035,11 +11076,27 @@ tags: {  # <amp-ooyala-player>
     supported_layouts: RESPONSIVE
   }
 }
-tags: {  # amp-dailymotion
+tags: {  # amp-dailymotion 1.0
   html_format: AMP
   tag_name: "SCRIPT"
+  satisfies: "amp-dailymotion 1.0"
+  excludes: "amp-dailymotion 0.1"
   extension_spec: {
     name: "amp-dailymotion"
+    version_name: "v1.0"
+    version: "1.0"
+    bento_supported_version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # amp-dailymotion 0.1 and latest
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-dailymotion 0.1"
+  excludes: "amp-dailymotion 1.0"
+  extension_spec: {
+    name: "amp-dailymotion"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     requires_usage: EXEMPTED
@@ -13333,6 +13390,7 @@ tags: {
   html_format: AMP4EMAIL
   tag_name: "$REFERENCE_POINT"
   spec_name: "AMP-SELECTOR option"
+  descriptive_name : "amp-selector [option] descendant"
   attrs: {
     name: "disabled"
     value: ""
@@ -13353,6 +13411,9 @@ tags: {
   html_format: AMP4EMAIL
   tag_name: "$REFERENCE_POINT"
   spec_name: "AMP-SELECTOR child"
+  descriptive_name : "amp-selector child"
+  # This is used recursively so that the "AMP-SELECTOR option" can be any
+  # depth below the main <amp-sepector>:
   reference_points: {
     tag_spec_name: "AMP-SELECTOR option"
   }
@@ -14111,7 +14172,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name : "AMP-LIVE-LIST [update]"
-  descriptive_name : "amp-live-list [update]"
+  descriptive_name : "amp-live-list [update] child"
   attrs: {
     name: "update"
     mandatory: true
@@ -14122,7 +14183,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name: "AMP-LIVE-LIST [items]"
-  descriptive_name : "amp-live-list [items]"
+  descriptive_name : "amp-live-list [items] child"
   attrs: {
     name: "items"
     mandatory: true
@@ -14136,7 +14197,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name : "AMP-LIVE-LIST [pagination]"
-  descriptive_name : "amp-live-list [pagination]"
+  descriptive_name : "amp-live-list [pagination] child"
   attrs: {
     name: "pagination"
     mandatory: true
@@ -14147,7 +14208,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name : "AMP-LIVE-LIST [items] item"
-  descriptive_name : "amp-live-list [items] item"
+  descriptive_name : "amp-live-list [data-sort-time] child"
   attrs: {
     name: "data-sort-time"
     mandatory: true
@@ -14649,6 +14710,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name: "AMP-STORY-GRID-LAYER default"
+  descriptive_name: "amp-story-grid-layer child"
   attrs: {
     name: "align-content"
     value: "center"
@@ -14766,6 +14828,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name: "AMP-STORY-GRID-LAYER animate-in"
+  descriptive_name: "amp-story-grid-layer [animate-in] child"
   # Attribute grid-area is not allowed in this tag. That's what makes this
   # reference point different than the grid-area reference point.
   attrs: {
@@ -14987,6 +15050,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name: "AMP-STORY-CTA-LAYER animate-in"
+  descriptive_name: "amp-story-cta-layer [animate-in] child"
   attrs: {
     name: "animate-in"
     value: "drop"
@@ -16047,6 +16111,24 @@ tags: {  # <amp-story-shopping-attachment>
     supported_layouts: NODISPLAY
   }
 }
+tags: {  # amp-story-subscriptions
+  html_format: AMP
+  tag_name: "SCRIPT"
+  extension_spec: {
+    name: "amp-story-subscriptions"
+    version: "0.1"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # <amp-story-subscriptions>
+  html_format: AMP
+  tag_name: "AMP-STORY-SUBSCRIPTIONS"
+  requires_extension: "amp-story-subscriptions"
+  attr_lists: "extended-amp-global"
+  amp_layout: {
+    supported_layouts: CONTAINER
+  }
+}
 tags: {  # amp-powr-player
   html_format: AMP
   tag_name: "SCRIPT"
@@ -16432,7 +16514,6 @@ tags: {  # amp-render
     name: "amp-render"
     version: "1.0"
     version: "latest"
-    bento_supported_version: "1.0"
   }
   attr_lists: "common-extension-attrs"
 }
@@ -16844,6 +16925,7 @@ tags: {  # <amp-story-captions>
   spec_url: "https://amp.dev/documentation/components/amp-story-captions"
   mandatory_ancestor: "AMP-STORY"
   amp_layout: {
+    supported_layouts: CONTAINER
     supported_layouts: FILL
     supported_layouts: FIXED
     supported_layouts: FIXED_HEIGHT
@@ -18246,6 +18328,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name: "AMP-NEXT-PAGE > [separator]"
+  descriptive_name : "amp-next-page [separator] child"
   mandatory_parent: "AMP-NEXT-PAGE"
   attrs: {
     name: "separator"
@@ -18256,6 +18339,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name: "AMP-NEXT-PAGE > [recommendation-box]"
+  descriptive_name : "amp-next-page [recommendation-box] child"
   mandatory_parent: "AMP-NEXT-PAGE"
   attrs: {
     name: "recommendation-box"
@@ -18266,6 +18350,7 @@ tags: {
   html_format: AMP
   tag_name: "$REFERENCE_POINT"
   spec_name: "AMP-NEXT-PAGE > [footer]"
+  descriptive_name : "amp-next-page [footer] child"
   mandatory_parent: "AMP-NEXT-PAGE"
   attrs: {
     name: "footer"
