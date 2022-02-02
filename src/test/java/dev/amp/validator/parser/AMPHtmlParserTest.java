@@ -203,7 +203,7 @@ public class AMPHtmlParserTest {
     }
 
     @Test
-    public void testAmpRequiredInput() {
+    public void testAmpVoidTag() {
         try {
             String inputHtml =
                     readFile(
