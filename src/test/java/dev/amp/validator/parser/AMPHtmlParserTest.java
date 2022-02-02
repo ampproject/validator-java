@@ -207,7 +207,7 @@ public class AMPHtmlParserTest {
         try {
             String inputHtml =
                     readFile(
-                            "test-cases/tags/testAmpRequiredInput.html");
+                            "test-cases/tags/testAmpVoidTag.html");
             final int maxNode = 10000;
             ValidatorProtos.ValidationResult result =
                     ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.EXIT_ON_FIRST_ERROR, maxNode);
