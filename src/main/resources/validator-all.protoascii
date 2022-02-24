@@ -2942,6 +2942,35 @@ tags: {
   mandatory_ancestor: "FORM [method=POST]"
   spec_url: "https://amp.dev/documentation/components/amp-form/"
 }
+tags: {
+  html_format: AMP
+  tag_name: "INPUT"
+  spec_name: "INPUT [type=image]"
+  attrs: {
+    name: "type"
+    value_casei: "image"
+    mandatory: true
+    dispatch_key: NAME_VALUE_DISPATCH
+  }
+  attrs: {
+    disabled_by: "amp4email"
+    name: "[type]"
+  }
+  attrs: {
+    name: "src"
+    mandatory: true
+    value_url: {
+      protocol: "data"
+      protocol: "http"
+      protocol: "https"
+    }
+    disallowed_value_regex: "__amp_source_origin"
+  }
+  attr_lists: "input-common-attr"
+  attr_lists: "name-attr"
+  mandatory_ancestor: "FORM [method=POST]"
+  spec_url: "https://amp.dev/documentation/components/amp-form/"
+}
 # 4.10.6 The button element
 tags: {
   html_format: AMP
@@ -6601,16 +6630,7 @@ declaration_list {
   declaration: { name: "pitch" }
   declaration: { name: "pitch-range" }
   declaration: { name: "place-items" }
-  # CSS property `position` with values `fixed` and `sticky` are not allowed.
-  # From https://www.w3schools.com/cssref/pr_class_position.asp
-  declaration: {
-    name: "position"
-    value_casei: "absolute"
-    value_casei: "inherit"
-    value_casei: "initial"
-    value_casei: "relative"
-    value_casei: "static"
-  }
+  declaration: { name: "position" }
   declaration: { name: "quotes" }
   declaration: { name: "resize" }
   declaration: { name: "richness" }
@@ -12096,7 +12116,8 @@ tags: {
   disallowed_ancestor: "FORM DIV [submit-error][template]"
   disallowed_ancestor: "FORM DIV [submitting][template]"
   disallowed_ancestor: "FORM DIV [verify-error][template]"
-  # AMP4EMAIL addition.
+  # AMP4EMAIL addition. See the comment for AMP4EMAIL for the spec named
+  # "FORM DIV [submitting][template]".
   disallowed_ancestor: "FORM DIV [submitting]"
   requires_extension: "amp-mustache"
   attrs: {
@@ -12413,7 +12434,8 @@ tags: {
   disallowed_ancestor: "FORM DIV [submit-error][template]"
   disallowed_ancestor: "FORM DIV [submitting][template]"
   disallowed_ancestor: "FORM DIV [verify-error][template]"
-  # AMP4EMAIL addition.
+  # AMP4EMAIL addition. See the comment for AMP4EMAIL for the spec named
+  # "FORM DIV [submitting][template]".
   disallowed_ancestor: "FORM DIV [submitting]"
   requires_extension: "amp-mustache"
   attrs: {
@@ -13653,9 +13675,8 @@ tags: {  # <amp-video> in amp-story
   }
   attrs: {
     name: "volume"
-    # Disallow 0 to prevent shipping unnecessary audio track when the video is muted.
-    # Volume must be in the range [0.1, 1].
-    value_regex: "^((0?\\.[1-9]+)?|1(\\.0*)?)$"
+    # Volume must be in the range [0, 1].
+    value_regex: "^(0(\\.0*)?|(0?\\.[0-9]+)?|1(\\.0*)?)$"
   }
   attr_lists: "extended-amp-global"
   attr_lists: "amp-video-common"
@@ -18902,6 +18923,79 @@ tags: {  # <amp-gwd-animation>
   attr_lists: "extended-amp-global"
   amp_layout: {
     supported_layouts: NODISPLAY
+  }
+}
+tags: {  # amp-google-read-aloud-player
+  html_format: AMP
+  tag_name: "SCRIPT"
+  extension_spec: {
+    name: "amp-google-read-aloud-player"
+    version: "0.1"
+    version: "latest"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # <amp-google-read-aloud-player>
+  html_format: AMP
+  tag_name: "AMP-GOOGLE-READ-ALOUD-PLAYER"
+  requires_extension: "amp-google-read-aloud-player"
+  attrs: {
+    name: "data-api-key"
+    mandatory: true
+  }
+  attrs: {
+    name: "data-tracking-ids"
+    mandatory: true;
+    value_regex_casei: "^UA-\\d+-\\d+(\\s*,\\s*UA-\\d+-\\d+)*$";
+  }
+  attrs: {
+    name: "data-voice"
+    mandatory: true;
+  }
+  attrs: {
+    name: "data-url"
+    value_url {
+      protocol: 'https';
+      allow_relative: false;
+    }
+  }
+  attrs: {
+    name: "data-speakable"
+    value: ""
+  }
+  attrs: {
+    name: "data-call-to-action-label"
+  }
+  attrs: {
+    name: "data-locale"
+    value_regex_casei: "[a-z]{2}";
+  }
+  attrs: {
+    name: "data-intro"
+    value_url {
+      protocol: 'https';
+      allow_relative: false;
+    }
+  }
+  attrs: {
+    name: "data-outro"
+    value_url {
+      protocol: 'https';
+      allow_relative: false;
+    }
+  }
+  attrs: {
+    name: "data-ad-tag-url"
+    value_url {
+      protocol: 'https';
+      allow_relative: false;
+    }
+  }
+  spec_url: "https://amp.dev/documentation/components/amp-google-read-aloud-player"
+  attr_lists: "extended-amp-global"
+  amp_layout: {
+    supported_layouts: FIXED
+    supported_layouts: FIXED_HEIGHT
   }
 }
 tags: {  # amp-instagram 1.0
