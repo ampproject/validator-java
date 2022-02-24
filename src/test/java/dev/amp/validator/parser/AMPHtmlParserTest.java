@@ -1089,7 +1089,8 @@ public class AMPHtmlParserTest {
         }
     }
 
-    @Test
+    //after feb 24 2022 amphtml sync (validator-all.protoascii) this is allowed inside EMAIL_SPECIFIC_DECLARATIONS
+    @Test(enabled = false)
     public void testCSSSyntaxDisallowedPropertyValue() {
         try {
             String inputHtml =
