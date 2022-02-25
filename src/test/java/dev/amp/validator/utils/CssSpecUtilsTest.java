@@ -56,14 +56,14 @@ public class CssSpecUtilsTest {
   @Test
   public void testParseAStylesheet() {
     final List<Token> tokens = new LinkedList<>();
-    tokens.add(new Token(75, "@media"));
-    tokens.add(new Token(1, " "));
-    tokens.add(new Token(22, "screen"));
-    tokens.add(new Token(55, "{"));
-    tokens.add(new Token(56, "}"));
-    tokens.add(new Token(56, "}"));
-    tokens.add(new Token(1, "\n"));
-    tokens.add(new Token(0, ""));
+    tokens.add(new Token(SACParserCSS3Constants.MEDIA_SYM, "@media"));
+    tokens.add(new Token(SACParserCSS3Constants.S, " "));
+    tokens.add(new Token(SACParserCSS3Constants.IDENT, "screen"));
+    tokens.add(new Token(SACParserCSS3Constants.LBRACE, "{"));
+    tokens.add(new Token(SACParserCSS3Constants.RBRACE, "}"));
+    tokens.add(new Token(SACParserCSS3Constants.RBRACE, "}"));
+    tokens.add(new Token(SACParserCSS3Constants.S, "\n"));
+    tokens.add(new Token(SACParserCSS3Constants.EOF, ""));
 
     final Map<String, CssSpecUtils.BlockType> atRuleSpec = new HashMap<>();
     atRuleSpec.put("$DEFAULT", CssSpecUtils.BlockType.PARSE_AS_IGNORE);
@@ -100,15 +100,15 @@ public class CssSpecUtilsTest {
   public void testExtractUrls() {
 
     final List<Token> tokens = new LinkedList<>();
-    tokens.add(new Token(22, "@media"));
-    tokens.add(new Token(55, "screen"));
-    tokens.add(new Token(1, "\n"));
-    tokens.add(new Token(22, "background-image"));
-    tokens.add(new Token(61, ":"));
-    tokens.add(new Token(100, "https://www.somesite.com/image.jpg"));
-    tokens.add(new Token(60, ";"));
-    tokens.add(new Token(1, "\n"));
-    tokens.add(new Token(0, ""));
+    tokens.add(new Token(SACParserCSS3Constants.IDENT, "@media"));
+    tokens.add(new Token(SACParserCSS3Constants.LBRACE, "screen"));
+    tokens.add(new Token(SACParserCSS3Constants.S, "\n"));
+    tokens.add(new Token(SACParserCSS3Constants.IDENT, "background-image"));
+    tokens.add(new Token(SACParserCSS3Constants.COLON, ":"));
+    tokens.add(new Token(SACParserCSS3Constants.URI, "https://www.somesite.com/image.jpg"));
+    tokens.add(new Token(SACParserCSS3Constants.SEMICOLON, ";"));
+    tokens.add(new Token(SACParserCSS3Constants.S, "\n"));
+    tokens.add(new Token(SACParserCSS3Constants.EOF, ""));
 
 
     final Map<String, CssSpecUtils.BlockType> atRuleSpec = new HashMap<>();
@@ -148,7 +148,7 @@ public class CssSpecUtilsTest {
 
   @Test
   public void testAsciiMatch() {
-    final Token token = new Token(22, "@media");
+    final Token token = new Token(SACParserCSS3Constants.IDENT, "@media");
     Assert.assertTrue(CssSpecUtils.asciiMatch(token, "@media"));
   }
 
@@ -179,9 +179,9 @@ public class CssSpecUtilsTest {
   @Test
   public void testParseUrlToken() {
     final List<Token> tokens = new LinkedList<>();
-    tokens.add(new Token(22, "@media"));
-    tokens.add(new Token(100, "https://www.someurl.com/image.jpg"));
-    tokens.add(new Token(0, ""));
+    tokens.add(new Token(SACParserCSS3Constants.IDENT, "@media"));
+    tokens.add(new Token(SACParserCSS3Constants.URI, "https://www.someurl.com/image.jpg"));
+    tokens.add(new Token(SACParserCSS3Constants.EOF, ""));
 
     final ParsedCssUrl parsedCssUrl = new ParsedCssUrl();
 
@@ -198,13 +198,13 @@ public class CssSpecUtilsTest {
   @Test
   public void testParseUrlFunction() {
     final List<Token> tokens = new LinkedList<>();
-    tokens.add(new Token(22, "square"));
-    tokens.add(new Token(1, "\n"));
+    tokens.add(new Token(SACParserCSS3Constants.IDENT, "square"));
+    tokens.add(new Token(SACParserCSS3Constants.S, "\n"));
     tokens.add(new Token(SACParserCSS3Constants.FUNCTION, "url("));
     tokens.add(new Token(SACParserCSS3Constants.STRING, "https://www.somesite.com/image.jpg"));
     tokens.add(new Token(SACParserCSS3Constants.RROUND, ")"));
-    tokens.add(new Token(1, "\n"));
-    tokens.add(new Token(0, ""));
+    tokens.add(new Token(SACParserCSS3Constants.S, "\n"));
+    tokens.add(new Token(SACParserCSS3Constants.EOF, ""));
 
     final ParsedCssUrl parsedCssUrl = new ParsedCssUrl();
 
@@ -219,15 +219,15 @@ public class CssSpecUtilsTest {
   @Test
   public void testParseInlineStyle() {
     final List<Token> tokens = new LinkedList<>();
-    tokens.add(new Token(22, "position"));
-    tokens.add(new Token(61, ":"));
-    tokens.add(new Token(22, "10"));
-    tokens.add(new Token(60, ";"));
-    tokens.add(new Token(22, "color"));
-    tokens.add(new Token(61, ":"));
-    tokens.add(new Token(22, "blue"));
-    tokens.add(new Token(60, ";"));
-    tokens.add(new Token(0, ""));
+    tokens.add(new Token(SACParserCSS3Constants.IDENT, "position"));
+    tokens.add(new Token(SACParserCSS3Constants.COLON, ":"));
+    tokens.add(new Token(SACParserCSS3Constants.IDENT, "10"));
+    tokens.add(new Token(SACParserCSS3Constants.SEMICOLON, ";"));
+    tokens.add(new Token(SACParserCSS3Constants.IDENT, "color"));
+    tokens.add(new Token(SACParserCSS3Constants.COLON, ":"));
+    tokens.add(new Token(SACParserCSS3Constants.IDENT, "blue"));
+    tokens.add(new Token(SACParserCSS3Constants.SEMICOLON, ";"));
+    tokens.add(new Token(SACParserCSS3Constants.EOF, ""));
 
     final List<ErrorToken> errors = new ArrayList<>();
 
