@@ -1,5 +1,8 @@
 # Changelog
 
+## AMP HTML Validator 1.0.27
+upgrade cssparser from 0.9.27 to 0.9.29
+
 ## AMP HTML Validator 1.0.26
 
 upgrade build-helper-maven-plugin from 3.1.0 to 3.3.0
@@ -17,7 +20,6 @@ upgrade testng from 7.1.0 to 7.5
 upgrade junit from 4.13.1 to 4.13.2
 upgrade commons-lang3 from 3.10 to 3.12.0
 upgrade commons-text from 1.8 to 1.9
-upgrade cssparser from 0.9.27 to 0.9.29
 
 sync validator-all.protoascii with amphtml
 Use SACParserCSS3Constants enum values for all tests
