@@ -65,12 +65,12 @@ public class CanonicalizerTest {
     try {
       final List<ErrorToken> cssErrors = new ArrayList<>();
       List<Token> tokens = new LinkedList<>();
-      tokens.add(new Token(22, "amp-img"));
-      tokens.add(new Token(55, "{"));
-      tokens.add(new Token(1, ""));
-      tokens.add(new Token(56, "}"));
-      tokens.add(new Token(1, ""));
-      tokens.add(new Token(0, ""));
+      tokens.add(new Token(SACParserCSS3Constants.IDENT, "amp-img"));
+      tokens.add(new Token(SACParserCSS3Constants.LBRACE, "{"));
+      tokens.add(new Token(SACParserCSS3Constants.S, ""));
+      tokens.add(new Token(SACParserCSS3Constants.RBRACE, "}"));
+      tokens.add(new Token(SACParserCSS3Constants.S, ""));
+      tokens.add(new Token(SACParserCSS3Constants.EOF, ""));
       TokenStream tokenStream = new TokenStream(tokens);
       tokenStream.consume();
 
