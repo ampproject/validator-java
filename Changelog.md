@@ -5,6 +5,7 @@ upgrade git actions from v2 to v3
 upgrade spotbugs-annotations from 4.0.3 to 4.6.0
 upgrade maven-compiler-plugin from 3.8.1 to 3.10.1
 upgrade nexus-staging-maven-plugin from 1.6.8 to 1.6.12
+upgrade maven-javadoc-plugin from 3.3.1 to 3.3.2
 
 ## AMP HTML Validator 1.0.27
 upgrade cssparser from 0.9.27 to 0.9.29
