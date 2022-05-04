@@ -2026,7 +2026,7 @@ tags: {
   spec_url: "https://amp.dev/documentation/components/amp-video/"
 }
 # 4.7.7 The audio element
-# Only allowed in noscript tags. Otherwise use amp-audio.
+# Allowed in noscript tags and inside amp-audio for server side rendering.
 tags: {
   html_format: AMP  # Disallowed in AMP4ADS because <noscript> is disallowed.
   tag_name: "AUDIO"
@@ -2046,6 +2046,14 @@ tags: {
     }
     disallowed_value_regex: "__amp_source_origin"
   }
+  spec_url: "https://amp.dev/documentation/components/amp-audio/"
+}
+tags: {
+  html_format: AMP  # Disallowed in AMP4ADS because <noscript> is disallowed.
+  tag_name: "AUDIO"
+  mandatory_ancestor: "AMP-AUDIO"
+  spec_name: "amp-audio > audio"
+  attrs: { name: "controls" }
   spec_url: "https://amp.dev/documentation/components/amp-audio/"
 }
 # 4.7.7 The picture element
@@ -14686,6 +14694,7 @@ tags: {  # <amp-story-page>
     child_tag_name_oneof: "AMP-STORY-GRID-LAYER"
     child_tag_name_oneof: "AMP-STORY-PAGE-ATTACHMENT"
     child_tag_name_oneof: "AMP-STORY-PAGE-OUTLINK"
+    child_tag_name_oneof: "AMP-STORY-SHOPPING-ATTACHMENT"
     mandatory_min_num_child_tags: 1
   }
 }
@@ -14817,6 +14826,12 @@ tags: {
     value_regex_casei: "[0-9]+px"
   }
   attrs: {
+    name: "pan-scaling-factor"
+    # Allow float number such as "12.3", ".1", or "5."
+    # Note that string with only decimal point such as "." is not allowed.
+    value_regex_casei: "^([0-9]*[.]?[0-9]+)|([0-9]+[.]?[0-9]*)$"
+  }
+  attrs: {
     name: "justify-content"
     value: "center"
     value: "end"
@@ -14910,6 +14925,12 @@ tags: {
   attrs: {
     name: "translate-y"
     value_regex_casei: "[0-9]+px"
+  }
+  attrs: {
+    name: "pan-scaling-factor"
+    # Allow float number such as "12.3", ".1", or "5."
+    # Note that string with only decimal point such as "." is not allowed.
+    value_regex_casei: "^([0-9]*[.]?[0-9]+)|([0-9]+[.]?[0-9]*)$"
   }
   reference_points: {
     tag_spec_name: "AMP-STORY-GRID-LAYER animate-in"
@@ -15115,6 +15136,12 @@ tags: {
     name: "translate-y"
     value_regex_casei: "[0-9]+px"
   }
+  attrs: {
+    name: "pan-scaling-factor"
+    # Allow float number such as "12.3", ".1", or "5."
+    # Note that string with only decimal point such as "." is not allowed.
+    value_regex_casei: "^([0-9]*[.]?[0-9]+)|([0-9]+[.]?[0-9]*)$"
+  }
   reference_points: {
     tag_spec_name: "AMP-STORY-CTA-LAYER animate-in"
   }
@@ -15264,6 +15291,7 @@ descendant_tag_list: {
   tag: "AMP-STORY-INTERACTIVE-QUIZ"
   tag: "AMP-STORY-INTERACTIVE-RESULTS"
   tag: "AMP-STORY-PANNING-MEDIA"
+  tag: "AMP-STORY-SHOPPING-TAG"
   tag: "AMP-TIMEAGO"
   tag: "AMP-TWITTER"
   tag: "AMP-VIDEO"
@@ -16117,31 +16145,64 @@ html_format: AMP
   tag_name: "AMP-STORY-SHOPPING-TAG"
   requires_extension: "amp-story-shopping"
   mandatory_ancestor: "AMP-STORY-GRID-LAYER"
-  attr_lists: "extended-amp-global"
   spec_url: "https://amp.dev/documentation/components/amp-story-shopping/"
   amp_layout: {
     supported_layouts: CONTAINER
   }
-}
-tags: {  # <amp-story-shopping-config>
-  html_format: AMP
-  tag_name: "AMP-STORY-SHOPPING-CONFIG"
-  requires_extension: "amp-story-shopping"
-  attr_lists: "extended-amp-global"
-  spec_url: "https://amp.dev/documentation/components/amp-story-shopping/"
-  amp_layout: {
-    supported_layouts: NODISPLAY
+  attrs: {
+    name: "data-product-id"
+    mandatory: true
   }
 }
 tags: {  # <amp-story-shopping-attachment>
   html_format: AMP
   tag_name: "AMP-STORY-SHOPPING-ATTACHMENT"
   requires_extension: "amp-story-shopping"
-  attr_lists: "extended-amp-global"
+  mandatory_last_child: true
   spec_url: "https://amp.dev/documentation/components/amp-story-shopping/"
-  amp_layout: {
-    supported_layouts: NODISPLAY
+  attrs: {
+    name: "src"
+    value_url: {
+      protocol: "https"
+      allow_relative: true
+    }
   }
+  attrs: {
+    name: "theme"
+    value: "dark"
+    value: "light"
+  }
+  attrs: {
+    name: "cta-text"
+  }
+  child_tags: {
+    child_tag_name_oneof: "SCRIPT"
+    mandatory_min_num_child_tags: 1
+  }
+  amp_layout: {
+    supported_layouts: CONTAINER
+  }
+}
+tags: { # amp-story-shopping-attachment
+  html_format: AMP
+  tag_name: "SCRIPT"
+  spec_name: "amp-story-shopping-attachment config script"
+  mandatory_parent: "AMP-STORY-SHOPPING-ATTACHMENT"
+  requires_extension: "amp-story-shopping"
+  attrs: {
+    name: "type"
+    mandatory: true
+    value_casei: "application/json"
+    dispatch_key: NAME_VALUE_PARENT_DISPATCH
+  }
+  attr_lists: "nonce-attr"
+  cdata: {
+    disallowed_cdata_regex: {
+      regex: "<!--"
+      error_message: "html comments"
+    }
+  }
+  spec_url: "https://amp.dev/documentation/components/amp-story-shopping/"
 }
 tags: {  # amp-story-subscriptions
   html_format: AMP
@@ -16968,6 +17029,11 @@ tags: {  # <amp-story-captions>
   }
   child_tags: {
     mandatory_num_child_tags: 0
+  }
+  attrs: {
+    name: "style-preset"
+    value: "default"
+    value: "appear"
   }
 }
 tags: {  # amp-jwplayer
@@ -18628,12 +18694,28 @@ tags: {  # <amp-facebook-comments>
     supported_layouts: RESPONSIVE
   }
 }
-tags: {  # amp-audio
+tags: {  # amp-audio 1.0
+  html_format: AMP
+  tag_name: "SCRIPT"
+  satisfies: "amp-audio 1.0"
+  excludes: "amp-audio 0.1"
+  extension_spec: {
+    name: "amp-audio"
+    version_name: "v1.0"
+    version: "1.0"
+    bento_supported_version: "1.0"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # amp-audio 0.1
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "SCRIPT"
+  satisfies: "amp-audio 0.1"
+  excludes: "amp-audio 1.0"
   extension_spec: {
     name: "amp-audio"
+    version_name: "v0.1"
     version: "0.1"
     version: "latest"
     deprecated_allow_duplicates: true
@@ -18694,6 +18776,7 @@ tags: {  # <amp-audio> for AMP (autoplay attribute allowed)
     defines_default_width: true
     supported_layouts: FIXED
     supported_layouts: FIXED_HEIGHT
+    supported_layouts: CONTAINER
     supported_layouts: NODISPLAY
   }
 }
