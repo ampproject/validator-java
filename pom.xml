@@ -7,7 +7,7 @@
     <groupId>dev.amp</groupId>
     <artifactId>validator-java</artifactId>
     <name>AMP validator Java API</name>
-    <version>1.0.27</version>
+    <version>1.0.28</version>
     <description>A Java validator for the AMP Html format.</description>
     <packaging>jar</packaging>
     <url>https://github.com/ampproject/validator-java</url>
@@ -63,7 +63,7 @@
         <maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
         <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
         <maven-shade-plugin.version>2.4.2</maven-shade-plugin.version>
-        <maven-javadoc-plugin.version>3.3.1</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.3.2</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
 
         <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
@@ -335,7 +335,7 @@
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs-annotations</artifactId>
-                        <version>4.0.3</version>
+                        <version>4.6.0</version>
                     </dependency>
                     <dependency>
                         <groupId>org.dom4j</groupId>
@@ -490,7 +490,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.10.1</version>
                 <configuration>
                     <fork>true</fork>
                     <meminitial>128m</meminitial>
@@ -583,7 +583,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.8</version>
+                        <version>1.6.12</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
