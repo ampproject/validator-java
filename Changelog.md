@@ -1,5 +1,14 @@
 # Changelog
 
+## AMP HTML Validator 1.0.29
+- upgrade jackson-core from 2.13.1 to 2.13.2
+- upgrade jackson-databind from 2.13.1 to 2.13.2.2
+- upgrade maven-clean-plugin from 3.1.0 to 3.2.0
+- upgrade maven-antrun-plugin from 3.0.0 to 3.1.0
+- upgrade antlr3-maven-plugin from 3.5.2 to 3.5.3
+- upgrade jacoco-maven-plugin from 0.8.7 to 0.8.8
+- upgrade maven-surefire-plugin from 3.0.0-M5 to 3.0.0-M6
+
 ## AMP HTML Validator 1.0.28
 - upgrade git actions from v2 to v3
 - upgrade spotbugs-annotations from 4.0.3 to 4.6.0
