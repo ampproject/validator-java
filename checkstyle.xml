@@ -9,7 +9,7 @@
         <!-- Make the @SuppressWarnings annotations available to Checkstyle -->
         <module name="SuppressWarningsHolder" />
         <module name="JavadocMethod">
-            <property name="scope" value="public"/>
+            <property name="accessModifiers" value="public"/>
         </module>
         <module name="JavadocType">
             <property name="scope" value="public"/>

@@ -7,7 +7,7 @@
     <groupId>dev.amp</groupId>
     <artifactId>validator-java</artifactId>
     <name>AMP validator Java API</name>
-    <version>1.0.29</version>
+    <version>1.0.30</version>
     <description>A Java validator for the AMP Html format.</description>
     <packaging>jar</packaging>
     <url>https://github.com/ampproject/validator-java</url>
@@ -54,26 +54,26 @@
         <!-- protobuf paths -->
         <protobuf.input.directory>${project.basedir}/src/main/proto</protobuf.input.directory>
         <protobuf.output.directory>${project.basedir}/src/main/java</protobuf.output.directory>
-        <validator.main.proto.ascii.directory>${project.basedir}/src/main/resources
-        </validator.main.proto.ascii.directory>
+        <validator.main.proto.ascii.directory>${project.basedir}/src/main/resources</validator.main.proto.ascii.directory>
         <validator.proto.directory>${project.basedir}/src/main/proto</validator.proto.directory>
 
         <!-- library versions -->
         <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
-        <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
+        <maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
         <maven-shade-plugin.version>2.4.2</maven-shade-plugin.version>
         <maven-javadoc-plugin.version>3.3.2</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
 
         <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
-        <protobuf.version>3.16.1</protobuf.version>
+        <protobuf.version>3.20.1</protobuf.version>
         <maven-surefire-plugin.version>3.0.0-M6</maven-surefire-plugin.version>
         <jdk.version>11</jdk.version>
         <main.basedir>${project.basedir}</main.basedir>
 
         <checkstyle.maxAllowedViolations>10</checkstyle.maxAllowedViolations>
 
+        <com.puppycrawl.checkstyle.version>10.2</com.puppycrawl.checkstyle.version>
         <fasterxml.jackson.version>2.13.2</fasterxml.jackson.version>
         <fasterxml.jackson.databind.version>2.13.2.2</fasterxml.jackson.databind.version>
         <mockito.version>1.10.19</mockito.version>
@@ -141,7 +141,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>Fetching AMP resources</id>
@@ -326,17 +326,17 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.0.0</version>
+                <version>4.6.0.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs</artifactId>
-                        <version>4.0.3</version>
+                        <version>4.7.0</version>
                     </dependency>
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs-annotations</artifactId>
-                        <version>4.6.0</version>
+                        <version>4.7.0</version>
                     </dependency>
                     <dependency>
                         <groupId>org.dom4j</groupId>
@@ -379,7 +379,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.13.0</version>
+                <version>3.16.0</version>
                 <configuration>
                     <skip>false</skip>
                     <failOnViolation>true</failOnViolation>
@@ -429,7 +429,7 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>8.32</version>
+                        <version>${com.puppycrawl.checkstyle.version}</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -643,7 +643,7 @@
         <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>8.32</version>
+            <version>${com.puppycrawl.checkstyle.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
