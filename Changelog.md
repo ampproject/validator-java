@@ -4,11 +4,13 @@
 - upgrade protobuf-java from 3.16.1 to 3.20.1
 - upgrade exec-maven-plugin from 1.6.0 to 3.0.0
 - upgrade maven-dependency-plugin from 3.2.0 to 3.3.0
+- upgrade maven-javadoc-plugin from 3.3.2 to 3.4.0
 - upgrade maven-pmd-plugin from 3.13.0 to 3.16.0
+- upgrade nexus-staging-maven-plugin from 1.6.12 to 1.6.13
+- upgrade puppycrawl checkstyle from 8.32 to 10.2
 - upgrade spotbugs-maven-plugin from 4.0.0 to 4.6.0.0
 - upgrade spotbugs from 4.0.3 to 4.7.0
 - upgrade spotbugs-annotations from 4.6.0 to 4.7.0
-- upgrade puppycrawl checkstyle from 8.32 to 10.2
 
 ## AMP HTML Validator 1.0.29
 - upgrade jackson-core from 2.13.1 to 2.13.2
