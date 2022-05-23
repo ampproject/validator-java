@@ -75,7 +75,7 @@
 
         <com.puppycrawl.checkstyle.version>10.2</com.puppycrawl.checkstyle.version>
         <fasterxml.jackson.version>2.13.2</fasterxml.jackson.version>
-        <fasterxml.jackson.databind.version>2.13.2.2</fasterxml.jackson.databind.version>
+        <fasterxml.jackson.databind.version>2.13.3</fasterxml.jackson.databind.version>
         <mockito.version>1.10.19</mockito.version>
     </properties>
 
