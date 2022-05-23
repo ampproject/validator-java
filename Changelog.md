@@ -11,6 +11,7 @@
 - upgrade spotbugs-maven-plugin from 4.0.0 to 4.6.0.0
 - upgrade spotbugs from 4.0.3 to 4.7.0
 - upgrade spotbugs-annotations from 4.6.0 to 4.7.0
+- fix bug for *[class="CLASS"] delimiter parsing error
 
 ## AMP HTML Validator 1.0.29
 - upgrade jackson-core from 2.13.1 to 2.13.2
