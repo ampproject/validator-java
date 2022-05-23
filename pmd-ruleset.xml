@@ -2,21 +2,21 @@
 <ruleset name="PMD-Rules">
     <description>AMP Validator PMD rules.</description>
     <!-- String instantiation -->
-    <rule ref="rulesets/java/strings.xml/StringInstantiation"><priority>1</priority></rule>
-    <rule ref="rulesets/java/basic.xml/BooleanInstantiation"><priority>1</priority></rule>
-    <rule ref="rulesets/java/basic.xml/UnconditionalIfStatement"><priority>1</priority></rule>
+    <rule ref="category/java/performance.xml/StringInstantiation"><priority>1</priority></rule>
+    <rule ref="category/java/performance.xml/BooleanInstantiation"><priority>1</priority></rule>
+    <rule ref="category/java/errorprone.xml/UnconditionalIfStatement"><priority>1</priority></rule>
     <!-- Guards around log statements -->
-    <rule ref="rulesets/java/logging-java.xml/GuardLogStatementJavaUtil"><priority>1</priority></rule>
+    <rule ref="category/java/bestpractices.xml/GuardLogStatement"><priority>1</priority></rule>
     <!-- Rules about throwing and catching exceptions -->
-    <rule ref="rulesets/java/strictexception.xml/AvoidCatchingThrowable"><priority>1</priority></rule>
-    <rule ref="rulesets/java/strictexception.xml/SignatureDeclareThrowsException"><priority>1</priority></rule>
-    <rule ref="rulesets/java/strictexception.xml/ExceptionAsFlowControl"><priority>1</priority></rule>
-    <rule ref="rulesets/java/strictexception.xml/AvoidCatchingNPE"><priority>1</priority></rule>
+    <rule ref="category/java/errorprone.xml/AvoidCatchingThrowable"><priority>1</priority></rule>
+    <rule ref="category/java/design.xml/SignatureDeclareThrowsException"><priority>1</priority></rule>
+    <rule ref="category/java/design.xml/ExceptionAsFlowControl"><priority>1</priority></rule>
+    <rule ref="category/java/errorprone.xml/AvoidCatchingNPE"><priority>1</priority></rule>
     <!--<rule ref="rulesets/java/strictexception.xml/AvoidThrowingRawExceptionTypes"><priority>1</priority></rule>  -->
-    <rule ref="rulesets/java/strictexception.xml/AvoidThrowingNullPointerException"><priority>1</priority></rule>
+    <rule ref="category/java/design.xml/AvoidThrowingNullPointerException"><priority>1</priority></rule>
     <!--<rule ref="rulesets/java/strictexception.xml/AvoidRethrowingException"><priority>1</priority></rule>  -->
-    <rule ref="rulesets/java/strictexception.xml/DoNotExtendJavaLangError"><priority>1</priority></rule>
-    <rule ref="rulesets/java/strictexception.xml/DoNotThrowExceptionInFinally"><priority>1</priority></rule>
+    <rule ref="category/java/design.xml/DoNotExtendJavaLangError"><priority>1</priority></rule>
+    <rule ref="category/java/errorprone.xml/DoNotThrowExceptionInFinally"><priority>1</priority></rule>
     <!--<rule ref="rulesets/java/strictexception.xml/AvoidThrowingNewInstanceOfSameException"><priority>1</priority></rule>  -->
     <!--<rule ref="rulesets/java/strictexception.xml/AvoidCatchingGenericException"><priority>1</priority></rule>  -->
     <!--<rule ref="rulesets/java/strictexception.xml/AvoidLosingExceptionInformation"><priority>1</priority></rule>  -->

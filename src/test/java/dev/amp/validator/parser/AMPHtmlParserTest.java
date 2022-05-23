@@ -937,7 +937,23 @@ public class AMPHtmlParserTest {
             final int maxNode = 10000;
             ValidatorProtos.ValidationResult result =
                     ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
-            Assert.assertEquals(result.getErrorsCount(), 0, "Expecting to have 2 error");
+            Assert.assertEquals(result.getErrorsCount(), 0, "Expecting to have 0 error");
+            Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.PASS);
+        } catch (final IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testEqualsDelimiter() {
+        try {
+            String inputHtml =
+                    readFile(
+                            "test-cases/css/testCSSEqualsDelimiter.html");
+            final int maxNode = 10000;
+            ValidatorProtos.ValidationResult result =
+                    ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
+            Assert.assertEquals(result.getErrorsCount(), 0, "Expecting to have 0 error");
             Assert.assertTrue(result.getStatus() == ValidatorProtos.ValidationResult.Status.PASS);
         } catch (final IOException ex) {
             ex.printStackTrace();
