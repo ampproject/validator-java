@@ -1,5 +1,12 @@
 # Changelog
 
+## AMP HTML Validator 1.0.31
+- upgrade protobuf-java from 3.20.1 to 3.21.0
+- upgrade jackson-databind from 2.13.2.2 to 2.13.3
+- upgrade jackson-core from 2.13.3 to 2.13.2
+- upgrade testng from 7.5 to 7.6.0
+- fix bug for pseudo class function :not in css
+
 ## AMP HTML Validator 1.0.30
 - upgrade protobuf-java from 3.16.1 to 3.20.1
 - upgrade exec-maven-plugin from 1.6.0 to 3.0.0
