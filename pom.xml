@@ -7,7 +7,7 @@
     <groupId>dev.amp</groupId>
     <artifactId>validator-java</artifactId>
     <name>AMP validator Java API</name>
-    <version>1.0.30</version>
+    <version>1.0.31</version>
     <description>A Java validator for the AMP Html format.</description>
     <packaging>jar</packaging>
     <url>https://github.com/ampproject/validator-java</url>
@@ -66,7 +66,7 @@
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
 
         <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
-        <protobuf.version>3.20.1</protobuf.version>
+        <protobuf.version>3.21.0</protobuf.version>
         <maven-surefire-plugin.version>3.0.0-M6</maven-surefire-plugin.version>
         <jdk.version>11</jdk.version>
         <main.basedir>${project.basedir}</main.basedir>
@@ -74,8 +74,8 @@
         <checkstyle.maxAllowedViolations>10</checkstyle.maxAllowedViolations>
 
         <com.puppycrawl.checkstyle.version>10.2</com.puppycrawl.checkstyle.version>
-        <fasterxml.jackson.version>2.13.2</fasterxml.jackson.version>
-        <fasterxml.jackson.databind.version>2.13.2.2</fasterxml.jackson.databind.version>
+        <fasterxml.jackson.version>2.13.3</fasterxml.jackson.version>
+        <fasterxml.jackson.databind.version>2.13.3</fasterxml.jackson.databind.version>
         <mockito.version>1.10.19</mockito.version>
     </properties>
 
@@ -649,7 +649,7 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.5</version>
+            <version>7.6.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>

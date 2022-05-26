@@ -90,6 +90,7 @@ public final class CssTokenUtil {
 
         // TODO : check this
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.FUNCTION, TokenType.FUNCTION_TOKEN);
+        KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.FUNCTION_NOT, TokenType.FUNCTION_TOKEN);
         KIND_TO_TOKENTYPE.put(SACParserCSS3Constants.IDENT, TokenType.IDENT);
 
         // TODO : verify uri and url are interchangeable for validation
