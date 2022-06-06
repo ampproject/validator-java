@@ -1,5 +1,11 @@
 # Changelog
 
+## AMP HTML Validator 1.0.32
+- upgrade protobuf-java from 3.21.0 to 3.21.1
+- upgrade maven-pmd-plugin from 3.16.0 to 3.17.0
+- upgrade maven-scm-plugin from 1.12.2 to 1.13.0
+- upgrade puppycrawl.checkstyle from 10.2 to 10.3
+
 ## AMP HTML Validator 1.0.31
 - upgrade protobuf-java from 3.20.1 to 3.21.0
 - upgrade jackson-databind from 2.13.2.2 to 2.13.3
