@@ -2588,6 +2588,7 @@ tags {  # <form method=POST ...>
     }
     disallowed_value_regex: "__amp_source_origin"
   }
+  attrs: { name: "xssi-prefix" }
   attr_lists: "form-name-attr"
 }
 # AMP4EMAIL allows action-xhr and disallows action attribute. It also disallows
@@ -15268,6 +15269,7 @@ descendant_tag_list: {
   tag: "ADDRESS"
   tag: "AMP-ANALYTICS"
   tag: "AMP-AUDIO"
+  tag: "AMP-BODYMOVIN-ANIMATION"
   tag: "AMP-DATE-COUNTDOWN"
   tag: "AMP-DATE-DISPLAY"
   tag: "AMP-EXPERIMENT"
