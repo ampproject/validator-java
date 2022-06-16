@@ -1,6 +1,7 @@
 # Changelog
 
 ## AMP HTML Validator 1.0.32
+- upgrade junit from 4.13.2 to 5.8.2
 - upgrade protobuf-java from 3.21.0 to 3.21.1
 - upgrade maven-enforcer-plugin from 3.0.0 to 3.1.0
 - upgrade maven-pmd-plugin from 3.16.0 to 3.17.0
