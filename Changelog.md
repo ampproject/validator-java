@@ -8,6 +8,9 @@
 - upgrade maven-scm-plugin from 1.12.2 to 1.13.0
 - upgrade maven-surefire-plugin from 3.0.0-M6 to 3.0.0-M7
 - upgrade puppycrawl.checkstyle from 10.2 to 10.3
+- upgrade spotbugs from 4.7.0 to 4.7.1
+- upgrade spotbugs-annotations from 4.7.0 to 4.7.1
+- upgrade spotbugs-maven-plugin from 4.6.0.0 to 4.7.0.0
 - sync validator-all.protoascii with amphtml (2022.06.16)
 
 ## AMP HTML Validator 1.0.31
