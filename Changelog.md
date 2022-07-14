@@ -7,7 +7,7 @@
 - upgrade mockito from 1.10.19 to 4.6.1
 - upgrade spotbugs-maven-plugin from 4.7.0.0 to 4.7.1.0
 - upgrade testng from 7.6.0 to 7.6.1
-- fix checkstyle violations in ExtensionsUtils, and ParsedValidatorRules
+- fix checkstyle violations in ByteUtils, ExtensionsUtils, and ParsedValidatorRules
 - remove unused imports in Canonicalizer and ExtensionsUtils
 - sync validator-all.protoascii with amphtml (2022.07.14)
 - sync validator-proto with amphtml (2022.07.14)

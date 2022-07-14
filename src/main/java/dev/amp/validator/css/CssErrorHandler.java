@@ -1,5 +1,3 @@
-package dev.amp.validator.css;
-
 /*
  *
  * ====================================================================
@@ -20,6 +18,8 @@ package dev.amp.validator.css;
 /*
  * Changes to the original project are Copyright 2019, Yahoo Inc..
  */
+
+package dev.amp.validator.css;
 
 import org.w3c.css.sac.CSSException;
 import org.w3c.css.sac.CSSParseException;
