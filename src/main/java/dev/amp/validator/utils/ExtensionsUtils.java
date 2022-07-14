@@ -8,7 +8,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.amp.validator.utils.ExtensionsUtils.ScriptReleaseVersion.LTS;
 import static dev.amp.validator.ValidatorProtos.ValidationError.Code.DISALLOWED_AMP_DOMAIN;
 import static dev.amp.validator.utils.TagSpecUtils.getTagDescriptiveName;
 import static dev.amp.validator.utils.TagSpecUtils.getTagSpecUrl;
@@ -149,8 +148,7 @@ public final class ExtensionsUtils {
                         context.addError(
                                 ValidatorProtos.ValidationError.Code.INCORRECT_SCRIPT_RELEASE_VERSION,
                                 context.getLineCol(), params,
-                                "https://amp.dev/documentation/guides-and-tutorials/" +
-                                        "learn/spec/amphtml#required-markup",
+                                "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml#required-markup",
                                 result);
                         break;
                     default:

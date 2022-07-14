@@ -16,7 +16,7 @@
  */
 
 /*
- * Changes to the original project are Copyright 2019, Verizon Media Inc..
+ * Changes to the original project are Copyright 2019, Yahoo Inc..
  */
 
 package dev.amp.validator;
@@ -847,7 +847,7 @@ public class ParsedValidatorRules {
                     context.getTypeIdentifiers())) {
                 continue;
             }
-            for (final String condition : parsedTagSpec.requires()) {
+            for (final String condition : parsedTagSpec.requiresCondition()) {
                 if (!context.satisfiesCondition(condition)) {
                     final List<String> params = new ArrayList<>();
                     params.add(condition);
@@ -860,7 +860,7 @@ public class ParsedValidatorRules {
                             validationResult);
                 }
             }
-            for (final String condition : parsedTagSpec.excludes()) {
+            for (final String condition : parsedTagSpec.excludesCondition()) {
                 if (context.satisfiesCondition(condition)) {
                     final List<String> params = new ArrayList<>();
                     params.add(TagSpecUtils.getTagSpecName(parsedTagSpec.getSpec()));
@@ -924,7 +924,7 @@ public class ParsedValidatorRules {
         if (parsedDocSpec != null) {
             final int bytesUsed = context.getDocByteSize();
             final ValidatorProtos.DocSpec docSpec = parsedDocSpec.spec();
-            if (docSpec.getMaxBytes() != -2 && bytesUsed > docSpec.getMaxBytes()) {
+            if (docSpec.getMaxBytes() != MIN_BYTES && bytesUsed > docSpec.getMaxBytes()) {
 
                 final List<String> params = new ArrayList<>();
                 params.add(String.valueOf(docSpec.getMaxBytes()));

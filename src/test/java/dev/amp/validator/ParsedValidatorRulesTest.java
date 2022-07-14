@@ -60,8 +60,8 @@ public class ParsedValidatorRulesTest {
                 .addAlsoRequiresTagWarning("amp-ad extension .js script")
                 .setSpecName("SCRIPT")
                 .setTagName("SCRIPT")
-                .addRequires("requires")
-                .addExcludes("excludes")
+                .addRequiresCondition("requires")
+                .addExcludesCondition("excludes")
                 .setMandatory(true)
                 .build());
         // different html format
@@ -406,7 +406,7 @@ public class ParsedValidatorRulesTest {
 
         Mockito.verify(mockContext, Mockito.times(1)).addError(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                 Mockito.any(Locator.class),
-                Mockito.anyListOf(String.class),
+                Mockito.anyList(),
                 Mockito.anyString(),
                 Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 
@@ -420,7 +420,7 @@ public class ParsedValidatorRulesTest {
 
         Mockito.verify(mockContext, Mockito.times(1)).addError(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                 Mockito.any(Locator.class),
-                Mockito.anyListOf(String.class),
+                Mockito.anyList(),
                 Mockito.anyString(),
                 Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 
@@ -432,7 +432,7 @@ public class ParsedValidatorRulesTest {
 
         Mockito.verify(mockContext, Mockito.times(1)).addError(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                 Mockito.any(Locator.class),
-                Mockito.anyListOf(String.class),
+                Mockito.anyList(),
                 Mockito.anyString(),
                 Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 
@@ -757,14 +757,14 @@ public class ParsedValidatorRulesTest {
         Mockito.verify(mockContext, Mockito.times(5))
                 .addError(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                         Mockito.any(Locator.class),
-                        Mockito.anyListOf(String.class),
+                        Mockito.anyList(),
                         Mockito.anyString(),
                         Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 
         Mockito.verify(mockContext, Mockito.times(0))
                 .addWarning(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                         Mockito.any(Locator.class),
-                        Mockito.anyListOf(String.class),
+                        Mockito.anyList(),
                         Mockito.anyString(),
                         Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 

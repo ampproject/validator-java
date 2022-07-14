@@ -16,7 +16,7 @@
  */
 
 /*
- * Changes to the original project are Copyright 2019, Verizon Media Inc..
+ * Changes to the original project are Copyright 2019, Yahoo Inc..
  */
 
 package dev.amp.validator.utils;
@@ -139,7 +139,7 @@ public final class TagSpecUtils {
         }
         // Unique and similar can introduce requirements, ie: there cannot be another
         // such tag. We don't want to introduce requirements for failing tags.
-        if (tag.hasUnique() || tag.getRequiresList().size() > 0 || tag.hasUniqueWarning()) {
+        if (tag.hasUnique() || tag.getRequiresConditionList().size() > 0 || tag.hasUniqueWarning()) {
             return RecordValidated.IF_PASSING;
         }
         return RecordValidated.NEVER;

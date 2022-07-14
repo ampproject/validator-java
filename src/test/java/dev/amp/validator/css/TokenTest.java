@@ -16,7 +16,7 @@
  */
 
 /*
- * Changes to the original project are Copyright 2019, Verizon Media Inc..
+ * Changes to the original project are Copyright 2019, Yahoo Inc..
  */
 package dev.amp.validator.css;
 

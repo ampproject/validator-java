@@ -16,7 +16,7 @@
  */
 
 /*
- * Changes to the original project are Copyright 2019, Verizon Media Inc..
+ * Changes to the original project are Copyright 2019, Yahoo Inc..
  */
 
 package dev.amp.validator;
@@ -223,7 +223,7 @@ public class Context {
      * @param parsedTagSpec parsed tag spec.
      */
     private void satisfyConditionsFromTagSpec(@Nonnull final ParsedTagSpec parsedTagSpec) {
-        for (final String condition : parsedTagSpec.getSpec().getSatisfiesList()) {
+        for (final String condition : parsedTagSpec.getSpec().getSatisfiesConditionList()) {
             this.conditionsSatisfied.put(condition, true);
         }
     }

@@ -105,7 +105,7 @@ public class TagSpecUtilsTest {
         Assert.assertEquals(TagSpecUtils.shouldRecordTagspecValidated(tagSpecBuilder2.build(), 3, ImmutableMap.of(2, true)),
                 RecordValidated.IF_PASSING);
 
-        final ValidatorProtos.TagSpec.Builder tagSpecBuilder3 = ValidatorProtos.TagSpec.newBuilder().addRequires("req3");
+        final ValidatorProtos.TagSpec.Builder tagSpecBuilder3 = ValidatorProtos.TagSpec.newBuilder().addRequiresCondition("req3");
 
         Assert.assertEquals(TagSpecUtils.shouldRecordTagspecValidated(tagSpecBuilder3.build(), 3, ImmutableMap.of(2, true)),
                 RecordValidated.IF_PASSING);
@@ -137,12 +137,12 @@ public class TagSpecUtilsTest {
 
         final ParsedTagSpec mockParsedTagSpec1 = Mockito.mock(ParsedTagSpec.class);
         Mockito.when(mockParsedTagSpec1.getSpec()).thenReturn(ValidatorProtos.TagSpec.getDefaultInstance());
-        Mockito.when(mockParsedTagSpec1.isUsedForTypeIdentifiers(Mockito.anyListOf(String.class))).thenReturn(true);
+        Mockito.when(mockParsedTagSpec1.isUsedForTypeIdentifiers(Mockito.anyList())).thenReturn(true);
         Mockito.when(mockRules.getByTagSpecId(0)).thenReturn(mockParsedTagSpec1);
         Mockito.when(mockRules.getByTagSpecId(2)).thenReturn(mockParsedTagSpec1);
 
         final ParsedTagSpec mockParsedTagSpec2 = Mockito.mock(ParsedTagSpec.class);
-        Mockito.when(mockParsedTagSpec2.isUsedForTypeIdentifiers(Mockito.anyListOf(String.class))).thenReturn(false);
+        Mockito.when(mockParsedTagSpec2.isUsedForTypeIdentifiers(Mockito.anyList())).thenReturn(false);
         Mockito.when(mockParsedTagSpec2.getSpec()).thenReturn(ValidatorProtos.TagSpec.getDefaultInstance());
         Mockito.when(mockRules.getByTagSpecId(1)).thenReturn(mockParsedTagSpec2);
 
@@ -232,12 +232,12 @@ public class TagSpecUtilsTest {
 
         final ParsedTagSpec mockParsedTagSpec1 = Mockito.mock(ParsedTagSpec.class);
         Mockito.when(mockParsedTagSpec1.getSpec()).thenReturn(ValidatorProtos.TagSpec.getDefaultInstance());
-        Mockito.when(mockParsedTagSpec1.isUsedForTypeIdentifiers(Mockito.anyListOf(String.class))).thenReturn(false);
+        Mockito.when(mockParsedTagSpec1.isUsedForTypeIdentifiers(Mockito.anyList())).thenReturn(false);
         Mockito.when(mockRules.getByTagSpecId(0)).thenReturn(mockParsedTagSpec1);
         Mockito.when(mockRules.getByTagSpecId(2)).thenReturn(mockParsedTagSpec1);
 
         final ParsedTagSpec mockParsedTagSpec2 = Mockito.mock(ParsedTagSpec.class);
-        Mockito.when(mockParsedTagSpec2.isUsedForTypeIdentifiers(Mockito.anyListOf(String.class))).thenReturn(false);
+        Mockito.when(mockParsedTagSpec2.isUsedForTypeIdentifiers(Mockito.anyList())).thenReturn(false);
         Mockito.when(mockParsedTagSpec2.getSpec()).thenReturn(ValidatorProtos.TagSpec.getDefaultInstance());
         Mockito.when(mockRules.getByTagSpecId(1)).thenReturn(mockParsedTagSpec2);
 
@@ -302,12 +302,12 @@ public class TagSpecUtilsTest {
 
         final ParsedTagSpec mockParsedTagSpec1 = Mockito.mock(ParsedTagSpec.class);
         Mockito.when(mockParsedTagSpec1.getSpec()).thenReturn(ValidatorProtos.TagSpec.getDefaultInstance());
-        Mockito.when(mockParsedTagSpec1.isUsedForTypeIdentifiers(Mockito.anyListOf(String.class))).thenReturn(false);
+        Mockito.when(mockParsedTagSpec1.isUsedForTypeIdentifiers(Mockito.anyList())).thenReturn(false);
         Mockito.when(mockRules.getByTagSpecId(0)).thenReturn(mockParsedTagSpec1);
         Mockito.when(mockRules.getByTagSpecId(2)).thenReturn(mockParsedTagSpec1);
 
         final ParsedTagSpec mockParsedTagSpec2 = Mockito.mock(ParsedTagSpec.class);
-        Mockito.when(mockParsedTagSpec2.isUsedForTypeIdentifiers(Mockito.anyListOf(String.class))).thenReturn(false);
+        Mockito.when(mockParsedTagSpec2.isUsedForTypeIdentifiers(Mockito.anyList())).thenReturn(false);
         Mockito.when(mockParsedTagSpec2.getSpec()).thenReturn(ValidatorProtos.TagSpec.getDefaultInstance());
         Mockito.when(mockRules.getByTagSpecId(1)).thenReturn(mockParsedTagSpec2);
 
@@ -374,12 +374,12 @@ public class TagSpecUtilsTest {
 
         final ParsedTagSpec mockParsedTagSpec1 = Mockito.mock(ParsedTagSpec.class);
         Mockito.when(mockParsedTagSpec1.getSpec()).thenReturn(ValidatorProtos.TagSpec.getDefaultInstance());
-        Mockito.when(mockParsedTagSpec1.isUsedForTypeIdentifiers(Mockito.anyListOf(String.class))).thenReturn(true);
+        Mockito.when(mockParsedTagSpec1.isUsedForTypeIdentifiers(Mockito.anyList())).thenReturn(true);
         Mockito.when(mockRules.getByTagSpecId(0)).thenReturn(mockParsedTagSpec1);
         Mockito.when(mockRules.getByTagSpecId(2)).thenReturn(mockParsedTagSpec1);
 
         final ParsedTagSpec mockParsedTagSpec2 = Mockito.mock(ParsedTagSpec.class);
-        Mockito.when(mockParsedTagSpec2.isUsedForTypeIdentifiers(Mockito.anyListOf(String.class))).thenReturn(true);
+        Mockito.when(mockParsedTagSpec2.isUsedForTypeIdentifiers(Mockito.anyList())).thenReturn(true);
         Mockito.when(mockParsedTagSpec2.getSpec()).thenReturn(ValidatorProtos.TagSpec.getDefaultInstance());
         Mockito.when(mockRules.getByTagSpecId(1)).thenReturn(mockParsedTagSpec2);
 
