@@ -1,6 +1,7 @@
 # Changelog
 
 ## AMP HTML Validator 1.0.33
+- upgrade exec-maven-plugin from 3.0.0 to 3.1.0
 - upgrade protobuf-java from 3.21.1 to 3.21.2
 - upgrade puppycrawl.tools.checkstyle from 10.3 to 10.3.1
 - upgrade maven-assembly-plugin from 3.3.0 to 3.4.1
@@ -10,7 +11,7 @@
 - fix checkstyle violations in ByteUtils, ExtensionsUtils, and ParsedValidatorRules
 - remove unused imports in Canonicalizer and ExtensionsUtils
 - sync validator-all.protoascii with amphtml (2022.07.14)
-- sync validator-proto with amphtml (2022.07.14)
+- sync validator-proto with amphtml (2022.07.25)
 
 ## AMP HTML Validator 1.0.32
 - upgrade junit from 4.13.2 to 5.8.2

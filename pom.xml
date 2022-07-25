@@ -69,6 +69,7 @@
         <protobuf.version>3.21.2</protobuf.version>
         <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
         <jdk.version>11</jdk.version>
+        <encoding>UTF-8</encoding>
         <main.basedir>${project.basedir}</main.basedir>
 
         <checkstyle.maxAllowedViolations>10</checkstyle.maxAllowedViolations>
@@ -140,7 +141,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>Fetching AMP resources</id>

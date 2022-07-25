@@ -14668,6 +14668,7 @@ tags: {  # <amp-story>
     child_tag_name_oneof: "AMP-STORY-BOOKEND"
     child_tag_name_oneof: "AMP-STORY-PAGE"
     child_tag_name_oneof: "AMP-STORY-SOCIAL-SHARE"
+    child_tag_name_oneof: "AMP-STORY-SUBSCRIPTIONS"
   }
 }
 tags: {  # <amp-story-page>
@@ -16222,6 +16223,23 @@ tags: {  # <amp-story-subscriptions>
   attr_lists: "extended-amp-global"
   amp_layout: {
     supported_layouts: CONTAINER
+  }
+  attrs: {
+    name: "price"
+    mandatory: true
+  }
+  attrs: {
+    name: "description"
+    mandatory: true
+  }
+  attrs: {
+    name: "subscriptions-page-index"
+  }
+  attrs: {
+    name: "headline"
+  }
+  attrs: {
+    name: "additional-description"
   }
 }
 tags: {  # amp-powr-player
