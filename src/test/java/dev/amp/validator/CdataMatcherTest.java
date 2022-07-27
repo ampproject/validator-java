@@ -16,7 +16,7 @@
  */
 
 /*
- * Changes to the original project are Copyright 2019, Verizon Media Inc..
+ * Changes to the original project are Copyright 2019, Yahoo Inc..
  */
 
 package dev.amp.validator;
@@ -500,7 +500,7 @@ public class CdataMatcherTest {
         Mockito.verify(mockContext, Mockito.times(0))
                 .addError(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                         Mockito.any(Locator.class),
-                        Mockito.anyListOf(String.class),
+                        Mockito.anyList(),
                         Mockito.anyString(),
                         Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 
@@ -567,7 +567,7 @@ public class CdataMatcherTest {
         Mockito.verify(mockContext, Mockito.times(0))
                 .addError(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                         Mockito.any(Locator.class),
-                        Mockito.anyListOf(String.class),
+                        Mockito.anyList(),
                         Mockito.anyString(),
                         Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 

@@ -241,7 +241,7 @@ tags: {
   spec_name: "link rel=manifest"
   descriptive_name: "link rel=manifest"
   mandatory_parent: "HEAD"
-  satisfies: "amp-app-banner data source"
+  satisfies_condition: "amp-app-banner data source"
   attrs: {
     name: "href"
     mandatory: true
@@ -532,7 +532,7 @@ tags: {
   tag_name: "META"
   spec_name: "meta name=apple-itunes-app"
   mandatory_parent: "HEAD"
-  satisfies: "amp-app-banner data source"
+  satisfies_condition: "amp-app-banner data source"
   attrs: {
     name: "content"
     mandatory: true
@@ -593,7 +593,7 @@ tags: {
   tag_name: "META"
   spec_name: "meta name=amp-consent-blocking"
   mandatory_parent: "HEAD"
-  satisfies: "meta name=amp-consent-blocking"
+  satisfies_condition: "meta name=amp-consent-blocking"
   unique: true
   attrs: {
     name: "content"
@@ -625,7 +625,7 @@ tags: {
   }
   # Disabled because there are no active origin experiments; uncomment when
   # there is at least one corresponding `requires` clause.
-  # satisfies: "amp-experiment-token"
+  # satisfies_condition: "amp-experiment-token"
 }
 # AMP metadata, name=amp-link-variable-allowed-origin
 # https://github.com/ampproject/amphtml/issues/8132
@@ -3016,7 +3016,7 @@ tags: {
   html_format: AMP4ADS
   tag_name: "BUTTON"
   spec_name: "amp-app-banner button[open-button]"
-  satisfies: "amp-app-banner button[open-button]"
+  satisfies_condition: "amp-app-banner button[open-button]"
   mandatory_ancestor: "AMP-APP-BANNER"
   attrs: {
     name: "open-button"
@@ -3327,9 +3327,9 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml engine script"
   descriptive_name: "amphtml engine script"
-  satisfies: "amphtml javascript runtime (v0.js)"
-  requires: "style[amp-boilerplate]"
-  requires: "noscript > style[amp-boilerplate]"
+  satisfies_condition: "amphtml javascript runtime (v0.js)"
+  requires_condition: "style[amp-boilerplate]"
+  requires_condition: "noscript > style[amp-boilerplate]"
   unique: true
   mandatory_parent: "HEAD"
   attr_lists: "nonce-attr"
@@ -3356,7 +3356,7 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml engine script (transformed)"
   descriptive_name: "amphtml engine script"
-  satisfies: "amphtml javascript runtime (v0.js)"
+  satisfies_condition: "amphtml javascript runtime (v0.js)"
   unique: true
   mandatory_parent: "HEAD"
   attr_lists: "nonce-attr"
@@ -3381,9 +3381,9 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml engine script (LTS)"
   descriptive_name: "amphtml engine script"
-  satisfies: "amphtml javascript runtime (v0.js)"
-  requires: "style[amp-boilerplate]"
-  requires: "noscript > style[amp-boilerplate]"
+  satisfies_condition: "amphtml javascript runtime (v0.js)"
+  requires_condition: "style[amp-boilerplate]"
+  requires_condition: "noscript > style[amp-boilerplate]"
   unique: true
   mandatory_parent: "HEAD"
   attr_lists: "nonce-attr"
@@ -3410,7 +3410,7 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml engine script (LTS) (transformed)"
   descriptive_name: "amphtml engine script"
-  satisfies: "amphtml javascript runtime (v0.js)"
+  satisfies_condition: "amphtml javascript runtime (v0.js)"
   unique: true
   mandatory_parent: "HEAD"
   attr_lists: "nonce-attr"
@@ -3435,11 +3435,11 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml module engine script"
   descriptive_name: "amphtml module engine script"
-  satisfies: "amphtml javascript runtime (v0.js)"
+  satisfies_condition: "amphtml javascript runtime (v0.js)"
   unique: true
   mandatory_parent: "HEAD"
-  satisfies: "amphtml module engine script"
-  requires: "amphtml nomodule engine script"
+  satisfies_condition: "amphtml module engine script"
+  requires_condition: "amphtml nomodule engine script"
   attr_lists: "nonce-attr"
   attr_lists: "amphtml-module-engine-attrs"
   attrs: {
@@ -3460,11 +3460,11 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml nomodule engine script"
   descriptive_name: "amphtml nomodule engine script"
-  satisfies: "amphtml javascript runtime (v0.js)"
+  satisfies_condition: "amphtml javascript runtime (v0.js)"
   unique: true
   mandatory_parent: "HEAD"
-  satisfies: "amphtml nomodule engine script"
-  requires: "amphtml module engine script"
+  satisfies_condition: "amphtml nomodule engine script"
+  requires_condition: "amphtml module engine script"
   attr_lists: "nonce-attr"
   attr_lists: "amphtml-nomodule-engine-attrs"
   attrs: {
@@ -3485,11 +3485,11 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml module LTS engine script"
   descriptive_name: "amphtml module LTS engine script"
-  satisfies: "amphtml javascript runtime (v0.js)"
+  satisfies_condition: "amphtml javascript runtime (v0.js)"
   unique: true
   mandatory_parent: "HEAD"
-  satisfies: "amphtml module LTS engine script"
-  requires: "amphtml nomodule LTS engine script"
+  satisfies_condition: "amphtml module LTS engine script"
+  requires_condition: "amphtml nomodule LTS engine script"
   attr_lists: "nonce-attr"
   attr_lists: "amphtml-module-engine-attrs"
   attrs: {
@@ -3510,11 +3510,11 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml nomodule LTS engine script"
   descriptive_name: "amphtml nomdule LTS engine script"
-  satisfies: "amphtml javascript runtime (v0.js)"
+  satisfies_condition: "amphtml javascript runtime (v0.js)"
   unique: true
   mandatory_parent: "HEAD"
-  satisfies: "amphtml nomodule LTS engine script"
-  requires: "amphtml module LTS engine script"
+  satisfies_condition: "amphtml nomodule LTS engine script"
+  requires_condition: "amphtml module LTS engine script"
   attr_lists: "nonce-attr"
   attr_lists: "amphtml-nomodule-engine-attrs"
   attrs: {
@@ -3534,8 +3534,8 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amphtml engine script [AMP4EMAIL]"
   descriptive_name: "amphtml engine script"
-  satisfies: "amphtml javascript runtime (v0.js)"
-  requires: "style[amp-boilerplate]"
+  satisfies_condition: "amphtml javascript runtime (v0.js)"
+  requires_condition: "style[amp-boilerplate]"
   mandatory: true
   unique: true
   mandatory_parent: "HEAD"
@@ -3560,8 +3560,8 @@ tags: {
   tag_name: "SCRIPT"
   spec_name: "amp4ads engine script"
   descriptive_name: "amphtml engine script"
-  satisfies: "amphtml javascript runtime (v0.js)"
-  requires: "style[amp-boilerplate]"
+  satisfies_condition: "amphtml javascript runtime (v0.js)"
+  requires_condition: "style[amp-boilerplate]"
   mandatory: true
   unique: true
   mandatory_parent: "HEAD"
@@ -3911,7 +3911,7 @@ tags: {  # <amp-img>
   tag_name: "AMP-IMG"
   # amp-img does not require a matching extension script, it's built in to v0.
   # js directly, so we explicitly list that dependency here.
-  requires: "amphtml javascript runtime (v0.js)"
+  requires_condition: "amphtml javascript runtime (v0.js)"
   attrs: { name: "alt" }
   attrs: { name: "attribution" }
   attrs: { name: "crossorigin" }
@@ -3953,7 +3953,7 @@ tags: {  # <amp-img i-amphtml-ssr>
   spec_name: "amp-img (transformed)"
   # amp-img does not require a matching extension script, it's built in to v0.
   # js directly, so we explicitly list that dependency here.
-  requires: "amphtml javascript runtime (v0.js)"
+  requires_condition: "amphtml javascript runtime (v0.js)"
   attrs: {
     dispatch_key: NAME_DISPATCH
     name: "i-amphtml-ssr"
@@ -4001,7 +4001,7 @@ tags: {  # <amp-img>
   # js directly, so we explicitly list that dependency here. This is redundant
   # for email since v0.js is still required, but we include to for consistency
   # and to future proof.
-  requires: "amphtml javascript runtime (v0.js)"
+  requires_condition: "amphtml javascript runtime (v0.js)"
   attrs: { name: "alt" }
   attrs: { name: "attribution" }
   attrs: { name: "placeholder" }
@@ -4028,7 +4028,7 @@ tags: {  # <amp-layout>
   tag_name: "AMP-LAYOUT"
   # amp-pixel does not require a matching extension script, it's built in to v0.
   # js directly, so we explicitly list that dependency here.
-  requires: "amphtml javascript runtime (v0.js)"
+  requires_condition: "amphtml javascript runtime (v0.js)"
   attr_lists: "extended-amp-global"
   spec_url: "https://amp.dev/documentation/components/amp-layout/"
   amp_layout: {
@@ -4048,7 +4048,7 @@ tags: {  # <amp-pixel>
   tag_name: "AMP-PIXEL"
   # amp-pixel does not require a matching extension script, it's built in to v0.
   # js directly, so we explicitly list that dependency here.
-  requires: "amphtml javascript runtime (v0.js)"
+  requires_condition: "amphtml javascript runtime (v0.js)"
   attrs: { name: "allow-ssr-img" }
   attrs: {
     name: "referrerpolicy"
@@ -7276,7 +7276,7 @@ tags: {  # `<style amp-boilerplate>`, [AMP]
   tag_name: "STYLE"
   spec_name: "head > style[amp-boilerplate]"
   descriptive_name: "head > style[amp-boilerplate]"
-  satisfies: "style[amp-boilerplate]"
+  satisfies_condition: "style[amp-boilerplate]"
   unique: true
   mandatory_parent: "HEAD"
   attr_lists: "nonce-attr"
@@ -7300,7 +7300,7 @@ tags: {  # `<style amp4ads-boilerplate>`, AMP4ADS
   tag_name: "STYLE"
   spec_name: "head > style[amp4ads-boilerplate]"
   descriptive_name: "head > style[amp4ads-boilerplate]"
-  satisfies: "style[amp-boilerplate]"
+  satisfies_condition: "style[amp-boilerplate]"
   unique: true
   mandatory_parent: "HEAD"
   attr_lists: "nonce-attr"
@@ -7325,7 +7325,7 @@ tags: {  # `<style amp4email-boilerplate>`, AMP4EMAIL
   tag_name: "STYLE"
   spec_name: "head > style[amp4email-boilerplate]"
   descriptive_name: "head > style[amp4email-boilerplate]"
-  satisfies: "style[amp-boilerplate]"
+  satisfies_condition: "style[amp-boilerplate]"
   unique: true
   mandatory_parent: "HEAD"
   attrs: {
@@ -7348,7 +7348,7 @@ tags: {  # `<style amp-boilerplate>`, [AMP]
   tag_name: "STYLE"
   spec_name: "noscript > style[amp-boilerplate]"
   descriptive_name: "noscript > style[amp-boilerplate]"
-  satisfies: "noscript > style[amp-boilerplate]"
+  satisfies_condition: "noscript > style[amp-boilerplate]"
   unique: true
   mandatory_parent: "NOSCRIPT"
   mandatory_ancestor: "HEAD"
@@ -10133,8 +10133,8 @@ tags: {  # <amp-pan-zoom>
 tags: {  # amp-facebook-page
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-facebook-page 0.1"
-  excludes: "amp-facebook 1.0"
+  satisfies_condition: "amp-facebook-page 0.1"
+  excludes_condition: "amp-facebook 1.0"
   extension_spec: {
     name: "amp-facebook-page"
     version: "0.1"
@@ -10146,7 +10146,7 @@ tags: {  # <amp-facebook-page>
   html_format: AMP
   tag_name: "AMP-FACEBOOK-PAGE"
   requires_extension: "amp-facebook-page"
-  requires: "amp-facebook-page 0.1"
+  requires_condition: "amp-facebook-page 0.1"
   # The amp-facebook-strict attr_list is defined in the amp-facebook protoascii
   attr_lists: "amp-facebook-strict"
   attr_lists: "extended-amp-global"
@@ -10443,8 +10443,8 @@ tags: {  # <amp-playbuzz>
 tags: {  # amp-soundcloud 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-soundcloud 1.0"
-  excludes: "amp-soundcloud 0.1"
+  satisfies_condition: "amp-soundcloud 1.0"
+  excludes_condition: "amp-soundcloud 0.1"
   extension_spec: {
     name: "amp-soundcloud"
     version_name: "v1.0"
@@ -10456,8 +10456,8 @@ tags: {  # amp-soundcloud 1.0
 tags: {  # amp-soundcloud 0.1 and latest
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-soundcloud 0.1"
-  excludes: "amp-soundcloud 1.0"
+  satisfies_condition: "amp-soundcloud 0.1"
+  excludes_condition: "amp-soundcloud 1.0"
   extension_spec: {
     name: "amp-soundcloud"
     version_name: "v0.1"
@@ -10767,8 +10767,8 @@ tags: {
 tags: {  # amp-vimeo
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-vimeo 0.1"
-  excludes: "amp-vimeo 1.0"
+  satisfies_condition: "amp-vimeo 0.1"
+  excludes_condition: "amp-vimeo 1.0"
   extension_spec: {
     name: "amp-vimeo"
     version_name: "v0.1"
@@ -10783,8 +10783,8 @@ tags: {  # amp-vimeo
 tags: {  # amp-vimeo 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-vimeo 1.0"
-  excludes: "amp-vimeo 0.1"
+  satisfies_condition: "amp-vimeo 1.0"
+  excludes_condition: "amp-vimeo 0.1"
   extension_spec: {
     name: "amp-vimeo"
     version_name: "v1.0"
@@ -10817,8 +10817,8 @@ tags: {  # <amp-vimeo>
 tags: {  # amp-facebook-like
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-facebook-like 0.1"
-  excludes: "amp-facebook 1.0"
+  satisfies_condition: "amp-facebook-like 0.1"
+  excludes_condition: "amp-facebook 1.0"
   extension_spec: {
     name: "amp-facebook-like"
     version: "0.1"
@@ -10830,7 +10830,7 @@ tags: {  # <amp-facebook-like>
   html_format: AMP
   tag_name: "AMP-FACEBOOK-LIKE"
   requires_extension: "amp-facebook-like"
-  requires: "amp-facebook-like 0.1"
+  requires_condition: "amp-facebook-like 0.1"
   # The amp-facebook-strict attr_list is defined in the amp-facebook protoascii
   attr_lists: "amp-facebook-strict"
   attr_lists: "extended-amp-global"
@@ -11025,7 +11025,7 @@ tags: {  # amp-consent (json)
   requires_extension: "amp-consent"
   mandatory_parent: "AMP-CONSENT"
   unique: true
-  satisfies: "amp-consent extension .json script"
+  satisfies_condition: "amp-consent extension .json script"
   attrs: {
     name: "type"
     mandatory: true
@@ -11045,8 +11045,8 @@ tags: {  # <amp-consent>
   tag_name: "AMP-CONSENT"
   requires_extension: "amp-consent"
   unique: true
-  requires: "amp-consent extension .json script"
-  excludes: "amp-consent [type]"
+  requires_condition: "amp-consent extension .json script"
+  excludes_condition: "amp-consent [type]"
   attr_lists: "extended-amp-global"
   amp_layout: {
     supported_layouts: NODISPLAY
@@ -11059,9 +11059,9 @@ tags: {  # <amp-consent> (type)
   spec_name: "amp-consent [type]"
   requires_extension: "amp-consent"
   unique: true
-  requires: "meta name=amp-consent-blocking"
-  requires: "amp-consent extension .json script"
-  satisfies: "amp-consent [type]"
+  requires_condition: "meta name=amp-consent-blocking"
+  requires_condition: "amp-consent extension .json script"
+  satisfies_condition: "amp-consent [type]"
   attrs: {
     name: "type"
     mandatory: true
@@ -11108,8 +11108,8 @@ tags: {  # <amp-ooyala-player>
 tags: {  # amp-dailymotion 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-dailymotion 1.0"
-  excludes: "amp-dailymotion 0.1"
+  satisfies_condition: "amp-dailymotion 1.0"
+  excludes_condition: "amp-dailymotion 0.1"
   extension_spec: {
     name: "amp-dailymotion"
     version_name: "v1.0"
@@ -11121,8 +11121,8 @@ tags: {  # amp-dailymotion 1.0
 tags: {  # amp-dailymotion 0.1 and latest
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-dailymotion 0.1"
-  excludes: "amp-dailymotion 1.0"
+  satisfies_condition: "amp-dailymotion 0.1"
+  excludes_condition: "amp-dailymotion 1.0"
   extension_spec: {
     name: "amp-dailymotion"
     version_name: "v0.1"
@@ -12582,8 +12582,8 @@ tags: {
 tags: {  # amp-lightbox 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-lightbox 1.0"
-  excludes: "amp-lightbox 0.1"
+  satisfies_condition: "amp-lightbox 1.0"
+  excludes_condition: "amp-lightbox 0.1"
   extension_spec: {
     name: "amp-lightbox"
     version_name: "v1.0"
@@ -12595,8 +12595,8 @@ tags: {  # amp-lightbox 1.0
 tags: {  # amp-lightbox 0.1 and latest
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-lightbox 0.1"
-  excludes: "amp-lightbox 1.0"
+  satisfies_condition: "amp-lightbox 0.1"
+  excludes_condition: "amp-lightbox 1.0"
   extension_spec: {
     name: "amp-lightbox"
     version_name: "v0.1"
@@ -13221,8 +13221,8 @@ tags: {  # <amp-hulu>
 tags: {  # amp-accordion for websites
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-accordion 1.0"
-  excludes: "amp-accordion 0.1"
+  satisfies_condition: "amp-accordion 1.0"
+  excludes_condition: "amp-accordion 0.1"
   extension_spec: {
     name: "amp-accordion"
     version_name: "v1.0"
@@ -13235,8 +13235,8 @@ tags: {  # amp-accordion for ads
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "SCRIPT"
-  satisfies: "amp-accordion 0.1"
-  excludes: "amp-accordion 1.0"
+  satisfies_condition: "amp-accordion 0.1"
+  excludes_condition: "amp-accordion 1.0"
   extension_spec: {
     name: "amp-accordion"
     version_name: "v0.1"
@@ -13323,8 +13323,8 @@ tags: {  # <amp-accordion> > <section>
 tags: {  # amp-selector 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-selector 1.0"
-  excludes: "amp-selector 0.1"
+  satisfies_condition: "amp-selector 1.0"
+  excludes_condition: "amp-selector 0.1"
   extension_spec: {
     name: "amp-selector"
     version_name: "v1.0"
@@ -13337,8 +13337,8 @@ tags: {  # amp-selector 0.1 and latest
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "SCRIPT"
-  satisfies: "amp-selector 0.1"
-  excludes: "amp-selector 1.0"
+  satisfies_condition: "amp-selector 0.1"
+  excludes_condition: "amp-selector 1.0"
   extension_spec: {
     name: "amp-selector"
     version_name: "v0.1"
@@ -13500,8 +13500,8 @@ tags: {  # amp-geo (json)
 tags: {  # amp-video 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-video 1.0"
-  excludes: "amp-video 0.1"
+  satisfies_condition: "amp-video 1.0"
+  excludes_condition: "amp-video 0.1"
   extension_spec: {
     name: "amp-video"
     version_name: "v1.0"
@@ -13515,8 +13515,8 @@ tags: {  # amp-video 0.1
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "SCRIPT"
-  satisfies: "amp-video 0.1"
-  excludes: "amp-video 1.0"
+  satisfies_condition: "amp-video 0.1"
+  excludes_condition: "amp-video 1.0"
   extension_spec: {
     name: "amp-video"
     version: "0.1"
@@ -13702,8 +13702,8 @@ tags: {  # <amp-video> in amp-story
 tags: {  # amp-video-iframe
   html_format: AMP  # Iframes not allowed in ads.
   tag_name: "SCRIPT"
-  satisfies: "amp-video-iframe 1.0"
-  excludes: "amp-video-iframe 0.1"
+  satisfies_condition: "amp-video-iframe 1.0"
+  excludes_condition: "amp-video-iframe 0.1"
   extension_spec: {
     name: "amp-video-iframe"
     version_name: "v1.0"
@@ -13716,8 +13716,8 @@ tags: {  # amp-video-iframe
 tags: {  # amp-video-iframe
   html_format: AMP  # Iframes not allowed in ads.
   tag_name: "SCRIPT"
-  satisfies: "amp-video-iframe 0.1"
-  excludes: "amp-video-iframe 1.0"
+  satisfies_condition: "amp-video-iframe 0.1"
+  excludes_condition: "amp-video-iframe 1.0"
   extension_spec: {
     name: "amp-video-iframe"
     version_name: "v0.1"
@@ -13970,8 +13970,8 @@ tags: {  # <amp-megaphone> for episodes
 tags: {  # amp-brightcove 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-brightcove 1.0"
-  excludes: "amp-brightcove 0.1"
+  satisfies_condition: "amp-brightcove 1.0"
+  excludes_condition: "amp-brightcove 0.1"
   extension_spec: {
     name: "amp-brightcove"
     version_name: "v1.0"
@@ -13983,8 +13983,8 @@ tags: {  # amp-brightcove 1.0
 tags: {  # amp-brightcove 0.1 and latest
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-brightcove 0.1"
-  excludes: "amp-brightcove 1.0"
+  satisfies_condition: "amp-brightcove 0.1"
+  excludes_condition: "amp-brightcove 1.0"
   extension_spec: {
     name: "amp-brightcove"
     version_name: "v0.1"
@@ -14033,8 +14033,8 @@ tags: {  # <amp-brightcove>
 tags: {  # amp-fit-text 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-fit-text 1.0"
-  excludes: "amp-fit-text 0.1"
+  satisfies_condition: "amp-fit-text 1.0"
+  excludes_condition: "amp-fit-text 0.1"
   extension_spec: {
     name: "amp-fit-text"
     version_name: "v1.0"
@@ -14047,8 +14047,8 @@ tags: {  # amp-fit-text 0.1 and latest
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "SCRIPT"
-  satisfies: "amp-fit-text 0.1"
-  excludes: "amp-fit-text 1.0"
+  satisfies_condition: "amp-fit-text 0.1"
+  excludes_condition: "amp-fit-text 1.0"
   extension_spec: {
     name: "amp-fit-text"
     version_name: "v0.1"
@@ -14110,7 +14110,7 @@ tags: {  # <amp-animation> (json)
   spec_name: "amp-animation extension .json script"
   mandatory_parent: "AMP-ANIMATION"
   requires_extension: "amp-animation"
-  satisfies: "amp-animation extension .json script"
+  satisfies_condition: "amp-animation extension .json script"
   attrs: {
     name: "type"
     mandatory: true
@@ -14130,7 +14130,7 @@ tags: {  # <amp-animation>
   html_format: AMP4ADS
   tag_name: "AMP-ANIMATION"
   requires_extension: "amp-animation"
-  requires: "amp-animation extension .json script"
+  requires_condition: "amp-animation extension .json script"
   attrs: {
     name: "trigger"
     value: "visibility"
@@ -14272,8 +14272,8 @@ attr_lists: {
 tags: {  # amp-social-share 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-social-share 1.0"
-  excludes: "amp-social-share 0.1"
+  satisfies_condition: "amp-social-share 1.0"
+  excludes_condition: "amp-social-share 0.1"
   extension_spec: {
     name: "amp-social-share"
     version_name: "v1.0"
@@ -14286,8 +14286,8 @@ tags: {  # amp-social-share 0.1 and latest
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "SCRIPT"
-  satisfies: "amp-social-share 0.1"
-  excludes: "amp-social-share 1.0"
+  satisfies_condition: "amp-social-share 0.1"
+  excludes_condition: "amp-social-share 1.0"
   extension_spec: {
     name: "amp-social-share"
     version_name: "v0.1"
@@ -14394,7 +14394,7 @@ tags: {  # <amp-ad-exit>
   html_format: AMP4ADS
   tag_name: "AMP-AD-EXIT"
   requires_extension: "amp-ad-exit"
-  requires: "amp-ad-exit configuration JSON"
+  requires_condition: "amp-ad-exit configuration JSON"
   attr_lists: "extended-amp-global"
   attr_lists: "mandatory-id-attr"
   child_tags: {
@@ -14411,7 +14411,7 @@ tags: {  # amp-ad-exit config JSON
   html_format: AMP4ADS
   tag_name: "SCRIPT"
   spec_name: "amp-ad-exit configuration JSON"
-  satisfies: "amp-ad-exit configuration JSON"
+  satisfies_condition: "amp-ad-exit configuration JSON"
   requires_extension: "amp-ad-exit"
   mandatory_parent: "AMP-AD-EXIT"
   attrs: {
@@ -14575,7 +14575,7 @@ tags: {  # <amp-story>
   # TODO(gregable): This global requires/satisfies approach only works because
   # there is only one <amp-story standalone> in a document. We really want this
   # requirement to be expressed on the <amp-story> children, however.
-  requires: "amp-story-page"
+  requires_condition: "amp-story-page"
   attrs: {
     name: "background-audio"
     value_url: {
@@ -14668,6 +14668,7 @@ tags: {  # <amp-story>
     child_tag_name_oneof: "AMP-STORY-BOOKEND"
     child_tag_name_oneof: "AMP-STORY-PAGE"
     child_tag_name_oneof: "AMP-STORY-SOCIAL-SHARE"
+    child_tag_name_oneof: "AMP-STORY-SUBSCRIPTIONS"
   }
 }
 tags: {  # <amp-story-page>
@@ -14675,7 +14676,7 @@ tags: {  # <amp-story-page>
   tag_name: "AMP-STORY-PAGE"
   requires_extension: "amp-story"
   mandatory_parent: "AMP-STORY"
-  satisfies: "amp-story-page"
+  satisfies_condition: "amp-story-page"
   attrs: { name: "auto-advance-after" }
   attrs: {
     name: "background-audio"
@@ -15026,7 +15027,7 @@ tags: {  # amp-story-consent (json)
   requires_extension: "amp-story"
   mandatory_parent: "AMP-STORY-CONSENT"
   unique: true
-  satisfies: "amp-story-consent extension .json script"
+  satisfies_condition: "amp-story-consent extension .json script"
   attrs: {
     name: "type"
     mandatory: true
@@ -15047,7 +15048,7 @@ tags: {  # <amp-story-consent>
   requires_extension: "amp-consent"
   requires_extension: "amp-story"
   mandatory_parent: "AMP-CONSENT"
-  requires: "amp-story-consent extension .json script"
+  requires_condition: "amp-story-consent extension .json script"
   attr_lists: "mandatory-id-attr"
   child_tags: {
     mandatory_num_child_tags: 1
@@ -15531,7 +15532,7 @@ tags: {  # <amp-story-animation> <script>
   tag_name: "SCRIPT"
   spec_name: "amp-story-animation json script"
   mandatory_parent: "AMP-STORY-ANIMATION"
-  satisfies: "amp-story-animation json script"
+  satisfies_condition: "amp-story-animation json script"
   attrs: {
     name: "type"
     mandatory: true
@@ -15551,7 +15552,7 @@ tags: {  # <amp-story-animation>
   html_format: AMP
   tag_name: "AMP-STORY-ANIMATION"
   requires_extension: "amp-story"
-  requires: "amp-story-animation json script"
+  requires_condition: "amp-story-animation json script"
   mandatory_parent: "AMP-STORY-PAGE"
   attrs: { name: "animate-in-after" }
   attrs: {
@@ -16076,8 +16077,8 @@ tags: {  # <section subscriptions-section="content" swg_amp_cache_nonce="NONCE">
   html_format: AMP
   tag_name: "SECTION"
   spec_name: "subscriptions-section content swg_amp_cache_nonce"
-  requires: "span swg_amp_cache_nonce"
-  satisfies: "subscriptions-section content swg_amp_cache_nonce"
+  requires_condition: "span swg_amp_cache_nonce"
+  satisfies_condition: "subscriptions-section content swg_amp_cache_nonce"
   mandatory_ancestor: "BODY"
   attrs: {
     name: "encrypted"
@@ -16120,8 +16121,8 @@ tags: {  # <span swg_amp_cache_nonce="NONCE">
   html_format: AMP
   tag_name: "SPAN"
   spec_name: "span swg_amp_cache_nonce"
-  requires: "subscriptions-section content swg_amp_cache_nonce"
-  satisfies: "span swg_amp_cache_nonce"
+  requires_condition: "subscriptions-section content swg_amp_cache_nonce"
+  satisfies_condition: "span swg_amp_cache_nonce"
   mandatory_ancestor: "BODY"
   requires_extension: "amp-subscriptions"
   attrs: {
@@ -16223,6 +16224,23 @@ tags: {  # <amp-story-subscriptions>
   amp_layout: {
     supported_layouts: CONTAINER
   }
+  attrs: {
+    name: "price"
+    mandatory: true
+  }
+  attrs: {
+    name: "description"
+    mandatory: true
+  }
+  attrs: {
+    name: "subscriptions-page-index"
+  }
+  attrs: {
+    name: "headline"
+  }
+  attrs: {
+    name: "additional-description"
+  }
 }
 tags: {  # amp-powr-player
   html_format: AMP
@@ -16279,9 +16297,9 @@ tags: {  # amp-link-rewriter
     version: "latest"
   }
   attr_lists: "common-extension-attrs"
-  satisfies: "amp-link-rewriter"
-  excludes: "amp-skimlinks"
-  excludes: "amp-smartlinks"
+  satisfies_condition: "amp-link-rewriter"
+  excludes_condition: "amp-skimlinks"
+  excludes_condition: "amp-smartlinks"
 }
 tags: {  # amp-link-rewriter (json)
   html_format: AMP
@@ -16399,11 +16417,11 @@ tags: {  # <amp-app-banner>
   tag_name: "AMP-APP-BANNER"
   mandatory_parent: "BODY"
   requires_extension: "amp-app-banner"
-  requires: "amp-app-banner data source"
+  requires_condition: "amp-app-banner data source"
   # The "amp-app-banner button[open-button]" tag is in
   # validator-main.protoascii and in turn has an "AMP-APP-BANNER"
   # mandatory_parent.
-  requires: "amp-app-banner button[open-button]"
+  requires_condition: "amp-app-banner button[open-button]"
   attr_lists: "extended-amp-global"
   attr_lists: "mandatory-id-attr"
   unique: true
@@ -16663,8 +16681,8 @@ tags: {  # <amp-render>
 tags: {  # amp-sidebar
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-sidebar 1.0"
-  excludes: "amp-sidebar 0.1"
+  satisfies_condition: "amp-sidebar 1.0"
+  excludes_condition: "amp-sidebar 0.1"
   extension_spec: {
     name: "amp-sidebar"
     version_name: "v1.0"
@@ -16676,8 +16694,8 @@ tags: {  # amp-sidebar
 tags: {  # amp-sidebar
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-sidebar 0.1"
-  excludes: "amp-sidebar 1.0"
+  satisfies_condition: "amp-sidebar 0.1"
+  excludes_condition: "amp-sidebar 1.0"
   extension_spec: {
     name: "amp-sidebar"
     version_name: "v0.1"
@@ -16782,9 +16800,9 @@ tags: {  # amp-smartlinks
     version: "latest"
   }
   attr_lists: "common-extension-attrs"
-  satisfies: "amp-smartlinks"
-  excludes: "amp-link-rewriter"
-  excludes: "amp-skimlinks"
+  satisfies_condition: "amp-smartlinks"
+  excludes_condition: "amp-link-rewriter"
+  excludes_condition: "amp-skimlinks"
 }
 
 tags: {  # <amp-smartlinks>
@@ -17608,8 +17626,8 @@ tags: {  # <amp-yotpo>
 tags: {  # amp-twitter 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-twitter 1.0"
-  excludes: "amp-twitter 0.1"
+  satisfies_condition: "amp-twitter 1.0"
+  excludes_condition: "amp-twitter 0.1"
   extension_spec: {
     name: "amp-twitter"
     version_name: "v1.0"
@@ -17621,8 +17639,8 @@ tags: {  # amp-twitter 1.0
 tags: {  # amp-twitter 0.1 and latest
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-twitter 0.1"
-  excludes: "amp-twitter 1.0"
+  satisfies_condition: "amp-twitter 0.1"
+  excludes_condition: "amp-twitter 1.0"
   extension_spec: {
     name: "amp-twitter"
     version_name: "v0.1"
@@ -18031,8 +18049,8 @@ tags: {  # <amp-auto-ads>
 tags: {  # amp-iframe 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-iframe 1.0"
-  excludes: "amp-iframe 0.1"
+  satisfies_condition: "amp-iframe 1.0"
+  excludes_condition: "amp-iframe 0.1"
   extension_spec: {
     name: "amp-iframe"
     version_name: "v1.0"
@@ -18045,8 +18063,8 @@ tags: {  # amp-iframe 1.0
 tags: {  # amp-iframe 0.1 and latest
   html_format: AMP  # Iframes not allowed in ads.
   tag_name: "SCRIPT"
-  satisfies: "amp-iframe 0.1"
-  excludes: "amp-iframe 1.0"
+  satisfies_condition: "amp-iframe 0.1"
+  excludes_condition: "amp-iframe 1.0"
   extension_spec: {
     name: "amp-iframe"
     version_name: "v0.1"
@@ -18165,11 +18183,11 @@ tags: {  # amp-facebook 1.0
   # The 1.0 amp-facebook script registers all amp-facebook-* components.
   # See https://github.com/ampproject/amphtml/pull/35395 for context.
   spec_name: "amp-facebook 1.0"
-  satisfies: "amp-facebook 1.0"
-  excludes: "amp-facebook 0.1"
-  excludes: "amp-facebook-comments 0.1"
-  excludes: "amp-facebook-like 0.1"
-  excludes: "amp-facebook-page 0.1"
+  satisfies_condition: "amp-facebook 1.0"
+  excludes_condition: "amp-facebook 0.1"
+  excludes_condition: "amp-facebook-comments 0.1"
+  excludes_condition: "amp-facebook-like 0.1"
+  excludes_condition: "amp-facebook-page 0.1"
   extension_spec: {
     name: "amp-facebook"
     version_name: "v1.0"
@@ -18181,8 +18199,8 @@ tags: {  # amp-facebook 1.0
 tags: {  # amp-facebook 0.1 and latest
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-facebook 0.1"
-  excludes: "amp-facebook 1.0"
+  satisfies_condition: "amp-facebook 0.1"
+  excludes_condition: "amp-facebook 1.0"
   extension_spec: {
     name: "amp-facebook"
     version_name: "v0.1"
@@ -18213,7 +18231,7 @@ tags: {  # <amp-facebook-comments> via amp-facebook script
   spec_name: "amp-facebook-comments 1.0"
   tag_name: "AMP-FACEBOOK-COMMENTS"
   requires_extension: "amp-facebook"
-  requires: "amp-facebook 1.0"
+  requires_condition: "amp-facebook 1.0"
   attr_lists: "amp-facebook"
   attr_lists: "extended-amp-global"
   amp_layout: {
@@ -18230,7 +18248,7 @@ tags: {  # <amp-facebook-like> via amp-facebook script
   spec_name: "amp-facebook-like 1.0"
   tag_name: "AMP-FACEBOOK-LIKE"
   requires_extension: "amp-facebook"
-  requires: "amp-facebook 1.0"
+  requires_condition: "amp-facebook 1.0"
   attr_lists: "amp-facebook-strict"
   attr_lists: "extended-amp-global"
   amp_layout: {
@@ -18247,7 +18265,7 @@ tags: {  # <amp-facebook-page> via amp-facebook script
   spec_name: "amp-facebook-page 1.0"
   tag_name: "AMP-FACEBOOK-PAGE"
   requires_extension: "amp-facebook"
-  requires: "amp-facebook 1.0"
+  requires_condition: "amp-facebook 1.0"
   attr_lists: "amp-facebook-strict"
   attr_lists: "extended-amp-global"
   amp_layout: {
@@ -18334,8 +18352,8 @@ tags: {  # <amp-timeago>
 tags: {  # amp-youtube 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-youtube 1.0"
-  excludes: "amp-youtube 0.1"
+  satisfies_condition: "amp-youtube 1.0"
+  excludes_condition: "amp-youtube 0.1"
   extension_spec: {
     name: "amp-youtube"
     version_name: "v1.0"
@@ -18348,8 +18366,8 @@ tags: {  # amp-youtube 1.0
 tags: {  # amp-youtube 0.1 and latest
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-youtube 0.1"
-  excludes: "amp-youtube 1.0"
+  satisfies_condition: "amp-youtube 0.1"
+  excludes_condition: "amp-youtube 1.0"
   extension_spec: {
     name: "amp-youtube"
     version_name: "v0.1"
@@ -18670,8 +18688,8 @@ tags: {  # <amp-bodymovin-animation>
 tags: {  # amp-facebook-comments
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-facebook-comments 0.1"
-  excludes: "amp-facebook 1.0"
+  satisfies_condition: "amp-facebook-comments 0.1"
+  excludes_condition: "amp-facebook 1.0"
   extension_spec: {
     name: "amp-facebook-comments"
     version: "0.1"
@@ -18683,7 +18701,7 @@ tags: {  # <amp-facebook-comments>
   html_format: AMP
   tag_name: "AMP-FACEBOOK-COMMENTS"
   requires_extension: "amp-facebook-comments"
-  requires: "amp-facebook-comments 0.1"
+  requires_condition: "amp-facebook-comments 0.1"
   # The amp-facebook attr_list is defined in the amp-facebook protoascii
   attr_lists: "amp-facebook"
   attr_lists: "extended-amp-global"
@@ -18699,8 +18717,8 @@ tags: {  # <amp-facebook-comments>
 tags: {  # amp-audio 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-audio 1.0"
-  excludes: "amp-audio 0.1"
+  satisfies_condition: "amp-audio 1.0"
+  excludes_condition: "amp-audio 0.1"
   extension_spec: {
     name: "amp-audio"
     version_name: "v1.0"
@@ -18713,8 +18731,8 @@ tags: {  # amp-audio 0.1
   html_format: AMP
   html_format: AMP4ADS
   tag_name: "SCRIPT"
-  satisfies: "amp-audio 0.1"
-  excludes: "amp-audio 1.0"
+  satisfies_condition: "amp-audio 0.1"
+  excludes_condition: "amp-audio 1.0"
   extension_spec: {
     name: "amp-audio"
     version_name: "v0.1"
@@ -18866,8 +18884,8 @@ tags: {  # <amp-gfycat>
 tags: {  # amp-mathml 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-mathml 1.0"
-  excludes: "amp-mathml 0.1"
+  satisfies_condition: "amp-mathml 1.0"
+  excludes_condition: "amp-mathml 0.1"
   extension_spec: {
     name: "amp-mathml"
     version_name: "v1.0"
@@ -18880,8 +18898,8 @@ tags: {  # amp-mathml 1.0
 tags: {  # amp-mathml 0.1
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-mathml 0.1"
-  excludes: "amp-mathml 1.0"
+  satisfies_condition: "amp-mathml 0.1"
+  excludes_condition: "amp-mathml 1.0"
   extension_spec: {
     name: "amp-mathml"
     version: "0.1"
@@ -19086,8 +19104,8 @@ tags: {  # <amp-google-read-aloud-player>
 tags: {  # amp-instagram 1.0
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-instagram 1.0"
-  excludes: "amp-instagram 0.1"
+  satisfies_condition: "amp-instagram 1.0"
+  excludes_condition: "amp-instagram 0.1"
   extension_spec: {
     name: "amp-instagram"
     version_name: "v1.0"
@@ -19099,8 +19117,8 @@ tags: {  # amp-instagram 1.0
 tags: {  # amp-instagram 0.1 and latest
   html_format: AMP
   tag_name: "SCRIPT"
-  satisfies: "amp-instagram 0.1"
-  excludes: "amp-instagram 1.0"
+  satisfies_condition: "amp-instagram 0.1"
+  excludes_condition: "amp-instagram 1.0"
   extension_spec: {
     name: "amp-instagram"
     version_name: "v0.1"
@@ -19139,9 +19157,9 @@ tags: {  # amp-skimlinks
     version: "latest"
   }
   attr_lists: "common-extension-attrs"
-  satisfies: "amp-skimlinks"
-  excludes: "amp-link-rewriter"
-  excludes: "amp-smartlinks"
+  satisfies_condition: "amp-skimlinks"
+  excludes_condition: "amp-link-rewriter"
+  excludes_condition: "amp-smartlinks"
 }
 
 tags: {  # <amp-skimlinks>

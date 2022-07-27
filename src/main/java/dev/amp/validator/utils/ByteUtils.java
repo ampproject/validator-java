@@ -16,13 +16,13 @@
  */
 
 /*
- * Changes to the original project are Copyright 2019, Verizon Media Inc..
+ * Changes to the original project are Copyright 2019, Yahoo Inc..
  */
 
 package dev.amp.validator.utils;
 
 import javax.annotation.Nonnull;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Byte utility methods.
@@ -49,9 +49,9 @@ public final class ByteUtils {
         // To figure out which characters are multi-byte we can abuse
         // encodeURIComponent which will escape those specific characters.
         try {
-            final int multiByteLength = utf8Str.getBytes("UTF-8").length;
+            final int multiByteLength = utf8Str.getBytes(StandardCharsets.UTF_8).length;
             return multiByteLength;
-        } catch (UnsupportedEncodingException uee) {
+        } catch (Exception e) {
             return utf8Str.length();
         }
     }

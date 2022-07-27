@@ -16,7 +16,7 @@
  */
 
 /*
- * Changes to the original project are Copyright 2019, Verizon Media Inc..
+ * Changes to the original project are Copyright 2019, Yahoo Inc..
  */
 
 package dev.amp.validator;
@@ -198,8 +198,8 @@ public class ParsedTagSpec {
      * tag is present. This accessor returns the list of those conditions.
      * @return returns requires list.
      */
-    public List<String> requires() {
-        return this.spec.getRequiresList();
+    public List<String> requiresCondition() {
+        return this.spec.getRequiresConditionList();
     }
 
     /**
@@ -207,8 +207,8 @@ public class ParsedTagSpec {
      * the list of those tags.
      * @return returns excludes list.
      */
-    public List<String> excludes() {
-        return this.spec.getExcludesList();
+    public List<String> excludesCondition() {
+        return this.spec.getExcludesConditionList();
     }
 
     /**

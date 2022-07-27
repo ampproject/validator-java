@@ -16,7 +16,7 @@ AMP HTML Validator takes input of HTML text and parses the text tag by tag, runn
 
 ## Background
 
-@nhant01 and @GeorgeLuo own development and maintenance responsibility of the project. As such they will serve as the points of contact surrounding changes and modifications. The team will allocate resources to align the business with the implementations provided under the amphtml repo. With that in mind, should supporting this project become infeasible, we will publish a version of the codebase marked for deprecation and prepare for its removal from public repositories (every effort will be made to not have this happen).
+@nhant01, @GeorgeLuo, and @randymo own development and maintenance responsibility of the project. As such they will serve as the points of contact surrounding changes and modifications. The team will allocate resources to align the business with the implementations provided under the amphtml repo. With that in mind, should supporting this project become infeasible, we will publish a version of the codebase marked for deprecation and prepare for its removal from public repositories (every effort will be made to not have this happen).
 
 ### Install
 

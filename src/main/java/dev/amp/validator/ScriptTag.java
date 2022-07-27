@@ -17,7 +17,7 @@ package dev.amp.validator;
  */
 
 /*
- * Changes to the original project are Copyright 2019, Verizon Media Inc..
+ * Changes to the original project are Copyright 2019, Yahoo Inc..
  */
 
 import dev.amp.validator.utils.ExtensionsUtils;

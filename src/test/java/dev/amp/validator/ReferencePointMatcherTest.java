@@ -82,7 +82,7 @@ public class ReferencePointMatcherTest {
         final ParsedTagSpec mockTagSpec = Mockito.mock(ParsedTagSpec.class);
         Mockito.when(mockTagSpec.getSpec()).thenReturn(ValidatorProtos.TagSpec.newBuilder().build());
 
-        Mockito.when(mockTagSpec.isUsedForTypeIdentifiers(Mockito.anyListOf(String.class))).thenReturn(true);
+        Mockito.when(mockTagSpec.isUsedForTypeIdentifiers(Mockito.anyList())).thenReturn(true);
 
         final ParsedReferencePoints mockPoints = Mockito.mock(ParsedReferencePoints.class);
 
@@ -141,7 +141,7 @@ public class ReferencePointMatcherTest {
         final ParsedTagSpec mockTagSpec = Mockito.mock(ParsedTagSpec.class);
         Mockito.when(mockTagSpec.getSpec()).thenReturn(ValidatorProtos.TagSpec.newBuilder().build());
 
-        Mockito.when(mockTagSpec.isUsedForTypeIdentifiers(Mockito.anyListOf(String.class))).thenReturn(true);
+        Mockito.when(mockTagSpec.isUsedForTypeIdentifiers(Mockito.anyList())).thenReturn(true);
 
         final ParsedReferencePoints mockPoints = Mockito.mock(ParsedReferencePoints.class);
 
@@ -207,7 +207,7 @@ public class ReferencePointMatcherTest {
         final ParsedTagSpec mockTagSpec = Mockito.mock(ParsedTagSpec.class);
         Mockito.when(mockTagSpec.getSpec()).thenReturn(ValidatorProtos.TagSpec.newBuilder().setMandatoryParent("HEAD").build());
 
-        Mockito.when(mockTagSpec.isUsedForTypeIdentifiers(Mockito.anyListOf(String.class))).thenReturn(true);
+        Mockito.when(mockTagSpec.isUsedForTypeIdentifiers(Mockito.anyList())).thenReturn(true);
 
         final ParsedReferencePoints mockPoints = Mockito.mock(ParsedReferencePoints.class);
 
@@ -252,7 +252,7 @@ public class ReferencePointMatcherTest {
             }
         }).when(mockContext).addError(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                                     Mockito.any(Locator.class),
-                                    Mockito.anyListOf(String.class),
+                                    Mockito.anyList(),
                                     Mockito.anyString(),
                                     Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 
@@ -281,7 +281,7 @@ public class ReferencePointMatcherTest {
 
         Mockito.verify(mockContext, Mockito.times(2)).addError(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                 Mockito.any(Locator.class),
-                Mockito.anyListOf(String.class),
+                Mockito.anyList(),
                 Mockito.anyString(),
                 Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 
@@ -295,7 +295,7 @@ public class ReferencePointMatcherTest {
         final ParsedTagSpec mockTagSpec = Mockito.mock(ParsedTagSpec.class);
         Mockito.when(mockTagSpec.getSpec()).thenReturn(ValidatorProtos.TagSpec.newBuilder().setMandatoryParent("HEAD").build());
 
-        Mockito.when(mockTagSpec.isUsedForTypeIdentifiers(Mockito.anyListOf(String.class))).thenReturn(true);
+        Mockito.when(mockTagSpec.isUsedForTypeIdentifiers(Mockito.anyList())).thenReturn(true);
 
         final ParsedReferencePoints mockPoints = Mockito.mock(ParsedReferencePoints.class);
 
@@ -340,7 +340,7 @@ public class ReferencePointMatcherTest {
             }
         }).when(mockContext).addError(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                 Mockito.any(Locator.class),
-                Mockito.anyListOf(String.class),
+                Mockito.anyList(),
                 Mockito.anyString(),
                 Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 
@@ -375,7 +375,7 @@ public class ReferencePointMatcherTest {
 
         Mockito.verify(mockContext, Mockito.times(3)).addError(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                 Mockito.any(Locator.class),
-                Mockito.anyListOf(String.class),
+                Mockito.anyList(),
                 Mockito.anyString(),
                 Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 
@@ -392,7 +392,7 @@ public class ReferencePointMatcherTest {
         final ParsedTagSpec mockTagSpec = Mockito.mock(ParsedTagSpec.class);
         Mockito.when(mockTagSpec.getSpec()).thenReturn(ValidatorProtos.TagSpec.newBuilder().setMandatoryParent("HEAD").build());
 
-        Mockito.when(mockTagSpec.isUsedForTypeIdentifiers(Mockito.anyListOf(String.class))).thenReturn(false);
+        Mockito.when(mockTagSpec.isUsedForTypeIdentifiers(Mockito.anyList())).thenReturn(false);
 
         final ParsedReferencePoints mockPoints = Mockito.mock(ParsedReferencePoints.class);
 
@@ -437,7 +437,7 @@ public class ReferencePointMatcherTest {
             }
         }).when(mockContext).addError(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                 Mockito.any(Locator.class),
-                Mockito.anyListOf(String.class),
+                Mockito.anyList(),
                 Mockito.anyString(),
                 Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 
@@ -720,7 +720,7 @@ public class ReferencePointMatcherTest {
 
         Mockito.verify(mockContext, Mockito.times(2)).addError(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                 Mockito.any(Locator.class),
-                Mockito.anyListOf(String.class),
+                Mockito.anyList(),
                 Mockito.anyString(),
                 Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 
@@ -805,7 +805,7 @@ public class ReferencePointMatcherTest {
 
         Mockito.verify(mockContext, Mockito.times(0)).addError(Mockito.any(ValidatorProtos.ValidationError.Code.class),
                 Mockito.any(Locator.class),
-                Mockito.anyListOf(String.class),
+                Mockito.anyList(),
                 Mockito.anyString(),
                 Mockito.any(ValidatorProtos.ValidationResult.Builder.class));
 

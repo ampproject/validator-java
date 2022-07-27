@@ -16,7 +16,7 @@
  */
 
 /*
- * Changes to the original project are Copyright 2019, Verizon Media Inc..
+ * Changes to the original project are Copyright 2019, Yahoo Inc..
  */
 
 package dev.amp.validator.css;
@@ -30,8 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static dev.amp.validator.utils.CssSpecUtils.BlockType.PARSE_AS_DECLARATIONS;
-import static dev.amp.validator.utils.CssSpecUtils.BlockType.PARSE_AS_RULES;
 import static dev.amp.validator.utils.CssSpecUtils.asciiMatch;
 import static dev.amp.validator.utils.CssSpecUtils.stripVendorPrefix;
 
