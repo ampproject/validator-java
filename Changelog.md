@@ -2,6 +2,7 @@
 
 ## AMP HTML Validator 1.0.33
 - upgrade exec-maven-plugin from 3.0.0 to 3.1.0
+- update junit-jupiter-api from 5.8.2 to 5.9.0
 - upgrade protobuf-java from 3.21.1 to 3.21.2
 - upgrade puppycrawl.tools.checkstyle from 10.3 to 10.3.1
 - upgrade maven-assembly-plugin from 3.3.0 to 3.4.1
