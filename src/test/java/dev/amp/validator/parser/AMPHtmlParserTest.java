@@ -976,6 +976,21 @@ public class AMPHtmlParserTest {
         }
     }
 
+    @Test
+    public void testCSSBlankBoilerplate() {
+        try {
+            String inputHtml =
+                    readFile(
+                            "test-cases/css/testCSSBlankBoilerplate.html");
+            final int maxNode = 10000;
+            ValidatorProtos.ValidationResult result =
+                    ampHtmlParser.parse(inputHtml, ValidatorProtos.HtmlFormat.Code.AMP4EMAIL, ExitCondition.FULL_PARSING, maxNode);
+            Assert.assertEquals(result.getErrorsCount(), 0, "Expecting to have 0 error");
+        } catch (final IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     // TODO: debugging indicates the CSS is tokenized before the length check. Should validate length before.
     @Test
     public void testStylesheetTooLong() {

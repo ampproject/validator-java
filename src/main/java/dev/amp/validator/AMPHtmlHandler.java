@@ -196,8 +196,6 @@ public class AMPHtmlHandler extends DefaultHandler {
             try {
                 if (charactersBuilder != null) {
                     cdata(charactersBuilder.toString());
-                } else {
-                    cdata("");
                 }
             } catch (TagValidationException | CssValidationException | IOException e) {
                 /** ignore */
