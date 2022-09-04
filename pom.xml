@@ -76,7 +76,7 @@
 
         <com.puppycrawl.checkstyle.version>10.3.1</com.puppycrawl.checkstyle.version>
         <fasterxml.jackson.version>2.13.3</fasterxml.jackson.version>
-        <fasterxml.jackson.databind.version>2.13.3</fasterxml.jackson.databind.version>
+        <fasterxml.jackson.databind.version>2.13.4</fasterxml.jackson.databind.version>
     </properties>
 
     <repositories>
