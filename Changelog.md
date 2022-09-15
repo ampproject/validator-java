@@ -1,5 +1,18 @@
 # Changelog
 
+## AMP HTML Validator 1.0.35
+- upgrade com.fasterxml.jackson from 2.13.3 to 2.13.4
+- upgrade javacc-maven-plugin from 2.6 to 3.0.0
+- upgrade maven-checkstyle-plugin  from 3.1.2 to 3.2.0
+- upgrade maven-javadoc-plugin from 3.4.0 to 3.4.1
+- upgrade maven-pmd-plugin from 3.17.0 to 3.19.0
+- upgrade mockito-core from 4.6.1 to 4.8.0
+- upgrade protobuf from 3.21.4 to 3.21.6
+- upgrade puppycrawl.tools.checkstyle from 10.3.1 to 10.3.3
+- upgrade spotbugs-maven-plugin from 4.7.1.1 to 4.7.2.0
+- upgrade spotbugs from 4.7.1 to 4.7.2
+- upgrade spotbugs-annotations from 4.7.1 to 4.7.2
+
 ## AMP HTML Validator 1.0.34
 - fix bug that failed to parse with blank amp4email-boilerplate
 - upgrade maven-assembly-plugin from 3.4.1 to 3.4.2
