@@ -7,7 +7,7 @@
     <groupId>dev.amp</groupId>
     <artifactId>validator-java</artifactId>
     <name>AMP validator Java API</name>
-    <version>1.0.34</version>
+    <version>1.0.35</version>
     <description>A Java validator for the AMP Html format.</description>
     <packaging>jar</packaging>
     <url>https://github.com/ampproject/validator-java</url>
@@ -62,11 +62,11 @@
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
         <maven-shade-plugin.version>2.4.2</maven-shade-plugin.version>
-        <maven-javadoc-plugin.version>3.4.0</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.4.1</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
 
         <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
-        <protobuf.version>3.21.4</protobuf.version>
+        <protobuf.version>3.21.6</protobuf.version>
         <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
         <jdk.version>11</jdk.version>
         <encoding>UTF-8</encoding>
@@ -74,9 +74,8 @@
 
         <checkstyle.maxAllowedViolations>10</checkstyle.maxAllowedViolations>
 
-        <com.puppycrawl.checkstyle.version>10.3.1</com.puppycrawl.checkstyle.version>
-        <fasterxml.jackson.version>2.13.3</fasterxml.jackson.version>
-        <fasterxml.jackson.databind.version>2.13.3</fasterxml.jackson.databind.version>
+        <com.puppycrawl.checkstyle.version>10.3.3</com.puppycrawl.checkstyle.version>
+        <fasterxml.jackson.version>2.13.4</fasterxml.jackson.version>
     </properties>
 
     <repositories>
@@ -252,7 +251,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>javacc-maven-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.0.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -326,17 +325,17 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.7.1.1</version>
+                <version>4.7.2.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs</artifactId>
-                        <version>4.7.1</version>
+                        <version>4.7.2</version>
                     </dependency>
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs-annotations</artifactId>
-                        <version>4.7.1</version>
+                        <version>4.7.2</version>
                     </dependency>
                     <dependency>
                         <groupId>org.dom4j</groupId>
@@ -379,7 +378,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.17.0</version>
+                <version>3.19.0</version>
                 <configuration>
                     <skip>false</skip>
                     <failOnViolation>true</failOnViolation>
@@ -424,7 +423,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.2.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
@@ -616,6 +615,16 @@
             <version>${fasterxml.jackson.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${fasterxml.jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${fasterxml.jackson.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
             <artifactId>jackson-jaxrs-base</artifactId>
             <version>${fasterxml.jackson.version}</version>
@@ -626,37 +635,9 @@
             <version>${fasterxml.jackson.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${fasterxml.jackson.databind.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${fasterxml.jackson.version}</version>
-        </dependency>
-        <dependency>
             <groupId>net.sourceforge.cssparser</groupId>
             <artifactId>cssparser</artifactId>
             <version>0.9.29</version>
-        </dependency>
-        <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>${com.puppycrawl.checkstyle.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.6.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.9.0</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
@@ -683,10 +664,30 @@
             <artifactId>commons-text</artifactId>
             <version>1.9</version>
         </dependency>
+
+        <!-- test -->
+        <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>${com.puppycrawl.checkstyle.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.6.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.6.1</version>
+            <version>4.8.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
