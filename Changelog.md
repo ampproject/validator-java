@@ -1,5 +1,16 @@
 # Changelog
 
+## AMP HTML Validator 1.0.36
+- upgrade commons-text from 1.9 to 1.10.0
+- upgrade jackson-databind from 2.13.4 to 2.13.4.2
+- upgrade javacc-maven-plugin from 3.0.0 to 3.0.1
+- upgrade junit-jupiter-api from 5.9.0 to 5.9.1
+- upgrade mockito-core from 4.8.0 to 4.8.1
+- upgrade protobuf-java from 3.21.6 to 3.21.8
+- upgrade puppycrawl.tools.checkstyle from 10.3.3 to 10.3.4
+- upgrade spotbugs-maven-plugin from 4.7.2.0 to 4.7.2.1
+- upgrade spotbugs from 4.7.2 to 4.7.3
+
 ## AMP HTML Validator 1.0.35
 - upgrade com.fasterxml.jackson from 2.13.3 to 2.13.4
 - upgrade javacc-maven-plugin from 2.6 to 3.0.0
@@ -21,7 +32,7 @@
 
 ## AMP HTML Validator 1.0.33
 - upgrade exec-maven-plugin from 3.0.0 to 3.1.0
-- update junit-jupiter-api from 5.8.2 to 5.9.0
+- upgrade junit-jupiter-api from 5.8.2 to 5.9.0
 - upgrade protobuf-java from 3.21.1 to 3.21.2
 - upgrade puppycrawl.tools.checkstyle from 10.3 to 10.3.1
 - upgrade maven-assembly-plugin from 3.3.0 to 3.4.1

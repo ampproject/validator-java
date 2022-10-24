@@ -7,7 +7,7 @@
     <groupId>dev.amp</groupId>
     <artifactId>validator-java</artifactId>
     <name>AMP validator Java API</name>
-    <version>1.0.35</version>
+    <version>1.0.36</version>
     <description>A Java validator for the AMP Html format.</description>
     <packaging>jar</packaging>
     <url>https://github.com/ampproject/validator-java</url>
@@ -64,9 +64,11 @@
         <maven-shade-plugin.version>2.4.2</maven-shade-plugin.version>
         <maven-javadoc-plugin.version>3.4.1</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <spotbugs-maven-plugin.version>4.7.2.1</spotbugs-maven-plugin.version>
+        <com.github.spotbugs.version>4.7.3</com.github.spotbugs.version>
 
         <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
-        <protobuf.version>3.21.6</protobuf.version>
+        <protobuf.version>3.21.8</protobuf.version>
         <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
         <jdk.version>11</jdk.version>
         <encoding>UTF-8</encoding>
@@ -74,8 +76,9 @@
 
         <checkstyle.maxAllowedViolations>10</checkstyle.maxAllowedViolations>
 
-        <com.puppycrawl.checkstyle.version>10.3.3</com.puppycrawl.checkstyle.version>
+        <com.puppycrawl.checkstyle.version>10.3.4</com.puppycrawl.checkstyle.version>
         <fasterxml.jackson.version>2.13.4</fasterxml.jackson.version>
+        <fasterxml.jackson.databind.version>2.13.4.2</fasterxml.jackson.databind.version>
     </properties>
 
     <repositories>
@@ -251,7 +254,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>javacc-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -325,17 +328,17 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.7.2.0</version>
+                <version>${spotbugs-maven-plugin.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs</artifactId>
-                        <version>4.7.2</version>
+                        <version>${com.github.spotbugs.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs-annotations</artifactId>
-                        <version>4.7.2</version>
+                        <version>${com.github.spotbugs.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.dom4j</groupId>
@@ -622,7 +625,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${fasterxml.jackson.version}</version>
+            <version>${fasterxml.jackson.databind.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
@@ -662,7 +665,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.9</version>
+            <version>1.10.0</version>
         </dependency>
 
         <!-- test -->
@@ -681,13 +684,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.9.0</version>
+            <version>5.9.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.8.0</version>
+            <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
