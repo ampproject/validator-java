@@ -1,5 +1,17 @@
 # Changelog
 
+## AMP HTML Validator 1.0.37
+- upgrade fasterxml.jackson from 2.13.4 to 2.14.1
+- upgrade jackson-databind from 2.13.4.2 to 2.14.1
+- upgrade maven-dependency-plugin from 3.3.0 to 3.4.0
+- upgrade mockito-core from 4.8.1 to 4.11.0
+- upgrade os-maven-plugin from 1.7.0 to 1.7.1
+- upgrade protobuf-java from 3.21.8 to 3.21.12
+- upgrade puppycrawl.tools.checkstyle from 10.3.4 to 10.5.0
+- upgrade spotbugs-maven-plugin from 4.7.2.1 to 4.7.3.0
+- upgrade tagchowder from 2.0.23 to 2.0.24
+- upgrade testng from 7.6.1 to 7.7.1
+
 ## AMP HTML Validator 1.0.36
 - upgrade commons-text from 1.9 to 1.10.0
 - upgrade jackson-databind from 2.13.4 to 2.13.4.2
