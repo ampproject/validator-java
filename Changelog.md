@@ -10,6 +10,7 @@
 - upgrade puppycrawl.tools.checkstyle from 10.5.0 to 10.9.2
 - upgrade spotbugs-maven-plugin from 4.7.3.0 to 4.7.3.3
 - upgrade tagchowder from 2.0.24 to 2.0.25
+- sync validator-all.protoascii with amphtml (2023.03.24)
 
 ## AMP HTML Validator 1.0.37
 - upgrade fasterxml.jackson from 2.13.4 to 2.14.1
