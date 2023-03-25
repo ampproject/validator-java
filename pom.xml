@@ -76,7 +76,7 @@
 
         <checkstyle.maxAllowedViolations>10</checkstyle.maxAllowedViolations>
 
-        <com.puppycrawl.checkstyle.version>10.5.0</com.puppycrawl.checkstyle.version>
+        <com.puppycrawl.checkstyle.version>10.9.3</com.puppycrawl.checkstyle.version>
         <fasterxml.jackson.version>2.14.1</fasterxml.jackson.version>
         <fasterxml.jackson.databind.version>2.14.1</fasterxml.jackson.databind.version>
     </properties>
