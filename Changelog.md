@@ -1,5 +1,17 @@
 # Changelog
 
+## AMP HTML Validator 1.0.38
+- upgrade cssparser from 0.9.29 to 0.9.30
+- upgrade com.fasterxml.jackson from 2.14.1 to 2.14.2
+- upgrade maven-checkstyle-plugin  from 3.2.0 to 3.2.1
+- upgrade maven-dependency-plugin from 3.4.0 to 3.5.0
+- upgrade maven-surefire-plugin from 3.0.0-M7 to 3.0.0
+- upgrade protobuf from 3.21.12 to 3.22.2
+- upgrade puppycrawl.tools.checkstyle from 10.5.0 to 10.9.3
+- upgrade spotbugs-maven-plugin from 4.7.3.0 to 4.7.3.3
+- upgrade tagchowder from 2.0.24 to 2.0.25
+- sync validator-all.protoascii with amphtml (2023.03.24)
+
 ## AMP HTML Validator 1.0.37
 - upgrade fasterxml.jackson from 2.13.4 to 2.14.1
 - upgrade jackson-databind from 2.13.4.2 to 2.14.1

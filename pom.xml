@@ -7,7 +7,7 @@
     <groupId>dev.amp</groupId>
     <artifactId>validator-java</artifactId>
     <name>AMP validator Java API</name>
-    <version>1.0.37</version>
+    <version>1.0.38</version>
     <description>A Java validator for the AMP Html format.</description>
     <packaging>jar</packaging>
     <url>https://github.com/ampproject/validator-java</url>
@@ -60,25 +60,24 @@
         <!-- library versions -->
         <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
-        <maven-dependency-plugin.version>3.4.0</maven-dependency-plugin.version>
+        <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
         <maven-shade-plugin.version>2.4.2</maven-shade-plugin.version>
         <maven-javadoc-plugin.version>3.4.1</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-        <spotbugs-maven-plugin.version>4.7.3.0</spotbugs-maven-plugin.version>
+        <spotbugs-maven-plugin.version>4.7.3.3</spotbugs-maven-plugin.version>
         <com.github.spotbugs.version>4.7.3</com.github.spotbugs.version>
 
         <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
-        <protobuf.version>3.21.12</protobuf.version>
-        <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
+        <protobuf.version>3.22.2</protobuf.version>
+        <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
         <jdk.version>11</jdk.version>
         <encoding>UTF-8</encoding>
         <main.basedir>${project.basedir}</main.basedir>
 
         <checkstyle.maxAllowedViolations>10</checkstyle.maxAllowedViolations>
 
-        <com.puppycrawl.checkstyle.version>10.5.0</com.puppycrawl.checkstyle.version>
-        <fasterxml.jackson.version>2.14.1</fasterxml.jackson.version>
-        <fasterxml.jackson.databind.version>2.14.1</fasterxml.jackson.databind.version>
+        <com.puppycrawl.checkstyle.version>10.9.3</com.puppycrawl.checkstyle.version>
+        <fasterxml.jackson.version>2.14.2</fasterxml.jackson.version>
     </properties>
 
     <repositories>
@@ -426,7 +425,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.2.1</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
@@ -625,7 +624,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${fasterxml.jackson.databind.version}</version>
+            <version>${fasterxml.jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
@@ -640,7 +639,7 @@
         <dependency>
             <groupId>net.sourceforge.cssparser</groupId>
             <artifactId>cssparser</artifactId>
-            <version>0.9.29</version>
+            <version>0.9.30</version>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
@@ -650,7 +649,7 @@
         <dependency>
             <groupId>com.yahoo.tagchowder</groupId>
             <artifactId>tagchowder.core</artifactId>
-            <version>2.0.24</version>
+            <version>2.0.25</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
