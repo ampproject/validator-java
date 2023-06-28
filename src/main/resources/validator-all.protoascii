@@ -330,6 +330,8 @@ tags: {
     mandatory: true
     value: "https://cdn.ampproject.org/v0/amp-story-1.0.css"
     value: "https://cdn.ampproject.org/lts/v0/amp-story-1.0.css"
+    value: "https://ampjs.org/v0/amp-story-1.0.css"
+    value: "https://ampjs.org/lts/v0/amp-story-1.0.css"
   }
   attrs: { name: "integrity" }  # SRI attribute (https://www.w3.org/TR/SRI/)
   attrs: { name: "media" }
@@ -3345,7 +3347,7 @@ tags: {
     name: "src"
     mandatory: true
     value: "https://cdn.ampproject.org/v0.js"
-    dispatch_key: NAME_VALUE_DISPATCH
+    value: "https://ampjs.org/v0.js"
   }
   cdata: {
     disallowed_cdata_regex: {
@@ -3372,6 +3374,7 @@ tags: {
     name: "src"
     mandatory: true
     value: "https://cdn.ampproject.org/v0.js"
+    value: "https://ampjs.org/v0.js"
     dispatch_key: NAME_VALUE_DISPATCH
   }
   cdata: {
@@ -3399,6 +3402,7 @@ tags: {
     name: "src"
     mandatory: true
     value: "https://cdn.ampproject.org/lts/v0.js"
+    value: "https://ampjs.org/lts/v0.js"
     dispatch_key: NAME_VALUE_DISPATCH
   }
   cdata: {
@@ -3426,6 +3430,7 @@ tags: {
     name: "src"
     mandatory: true
     value: "https://cdn.ampproject.org/lts/v0.js"
+    value: "https://ampjs.org/lts/v0.js"
     dispatch_key: NAME_VALUE_DISPATCH
   }
   cdata: {
@@ -3503,6 +3508,7 @@ tags: {
     name: "src"
     mandatory: true
     value: "https://cdn.ampproject.org/lts/v0.mjs"
+    value: "https://ampjs.org/lts/v0.mjs"
     dispatch_key: NAME_VALUE_DISPATCH
   }
   cdata: {
@@ -3528,6 +3534,7 @@ tags: {
     name: "src"
     mandatory: true
     value: "https://cdn.ampproject.org/lts/v0.js"
+    value: "https://ampjs.org/lts/v0.js"
     dispatch_key: NAME_VALUE_DISPATCH
   }
   cdata: {
@@ -6815,7 +6822,7 @@ css {
 css {
   html_format: AMP4EMAIL
   disabled_by: "data-css-strict"
-  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/email-spec/amp-email-css"
+  spec_url: "https://amp.dev/documentation/guides-and-tutorials/email/learn/email-spec/amp-email-css"
 
   # Due to a bug, we allowed unlimited doc-level bytes for CSS in AMP4EMAIL
   # formats. To avoid breaking emails, this is temporarily set to a warning but
@@ -6825,7 +6832,7 @@ css {
   max_bytes_per_inline_style: 1000
 
   max_bytes_spec_url:
-  "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#maximum-size"
+  "https://amp.dev/documentation/guides-and-tutorials/email/learn/spec/amphtml#maximum-size"
   url_bytes_included: true
 
   allow_all_declaration_in_style: true
@@ -6842,15 +6849,14 @@ css {
 css {
   html_format: AMP4EMAIL
   enabled_by: "data-css-strict"
-  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/email-spec/amp-email-css"
+  spec_url: "https://amp.dev/documentation/guides-and-tutorials/email/learn/email-spec/amp-email-css"
 
   max_bytes_is_warning: false
   max_bytes: 75000
   max_bytes_per_inline_style: 1000
 
-  # TODO(b/162314127): add maximum size documentation to the email spec
   max_bytes_spec_url:
-  "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#maximum-size"
+  "https://amp.dev/documentation/guides-and-tutorials/email/learn/spec/amphtml#maximum-size"
   url_bytes_included: true
 
   allow_all_declaration_in_style: false
@@ -7113,7 +7119,7 @@ tags: {  # <style amp-custom>, AMP4EMAIL, not data-css-strict
     doc_css_bytes: true
     max_bytes: 75000
     max_bytes_spec_url:
-    "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#maximum-size"
+    "https://amp.dev/documentation/guides-and-tutorials/email/learn/spec/amphtml#maximum-size"
 
     css_spec: {
       at_rule_spec: {
@@ -7149,7 +7155,7 @@ tags: {  # <style amp-custom>, AMP4EMAIL, not data-css-strict
       error_message: "CSS i-amphtml- name prefix"
     }
   }
-  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/email-spec/amp-email-css"
+  spec_url: "https://amp.dev/documentation/guides-and-tutorials/email/learn/email-spec/amp-email-css"
 }
 
 tags: {  # <style amp-custom>, AMP4EMAIL, data-css-strict
@@ -7178,7 +7184,7 @@ tags: {  # <style amp-custom>, AMP4EMAIL, data-css-strict
     doc_css_bytes: true
     max_bytes: 75000
     max_bytes_spec_url:
-    "https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/#maximum-size"
+    "https://amp.dev/documentation/guides-and-tutorials/email/learn/spec/amphtml#maximum-size"
 
     css_spec: {
       at_rule_spec: {
@@ -7282,7 +7288,7 @@ tags: {  # <style amp-custom>, AMP4EMAIL, data-css-strict
       error_message: "CSS i-amphtml- name prefix"
     }
   }
-  spec_url: "https://amp.dev/documentation/guides-and-tutorials/learn/email-spec/amp-email-css"
+  spec_url: "https://amp.dev/documentation/guides-and-tutorials/email/learn/email-spec/amp-email-css"
 }
 
 tags: {  # `<style amp-boilerplate>`, [AMP]
