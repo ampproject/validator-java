@@ -1,5 +1,19 @@
 # Changelog
 
+## AMP HTML Validator 1.0.39
+- upgrade com.fasterxml.jackson from 2.14.2 to 2.15.2
+- upgrade dom4j from 2.1.3 to 2.1.4
+- upgrade junit-jupiter-api from 5.9.1 to 5.9.3
+- upgrade maven-assembly-plugin from 3.4.2 to 3.6.0
+- upgrade maven-compiler-plugin from 3.10.1 to 3.11.0
+- upgrade maven-enforcer-plugin from 3.1.0 to 3.3.0
+- upgrade maven-javadoc-plugin from 3.4.1 to 3.5.0
+- upgrade maven-pmd-plugin from 3.19.0 to 3.21.0
+- upgrade maven-resources-plugin from 3.3.0 to 3.3.1
+- upgrade maven-scm-plugin from 1.13.0 to 2.0.1
+- upgrade mockito-core from 4.11.0 to 5.4.0
+- sync validator-all.protoascii with amphtml (2023.06.28)
+
 ## AMP HTML Validator 1.0.38
 - upgrade cssparser from 0.9.29 to 0.9.30
 - upgrade com.fasterxml.jackson from 2.14.1 to 2.14.2
