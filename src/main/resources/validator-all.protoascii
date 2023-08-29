@@ -9083,11 +9083,14 @@ descendant_tag_list {
   tag: "H5"
   tag: "H6"
   tag: "I"
+  tag: "I-AMPHTML-SIZER" # For transformed documents.
+  tag: "IMG" # For SSR'ed hero images on transformed documents and native images.
   tag: "INPUT"
   tag: "LABEL"
   tag: "LI"
   tag: "MARK"
   tag: "NAV"
+  tag: "NOSCRIPT" # For amp-img fallbacks.
   tag: "OL"
   tag: "OPTION"
   tag: "P"
@@ -9485,7 +9488,71 @@ tags: {
     value_regex_casei: "^[a-z][a-z\\d_-]*"
   }
 }
-tags: {  # amp-mowplayer
+tags: {  # amp-story-audio-sticker
+  html_format: AMP
+  tag_name: "SCRIPT"
+  extension_spec: {
+    name: "amp-story-audio-sticker"
+    version: "0.1"
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # <amp-story-audio-sticker>
+  html_format: AMP
+  tag_name: "AMP-STORY-AUDIO-STICKER"
+  requires_extension: "amp-story-audio-sticker"
+  mandatory_parent: "AMP-STORY-GRID-LAYER"
+  attr_lists: "extended-amp-global"
+  amp_layout: {
+    supported_layouts: CONTAINER
+  }
+  attrs: {
+    name: "size"
+    value: "small"
+    value: "large"
+  }
+  attrs: {
+    name: "sticker"
+    value: "headphone-cat"
+    value: "tape-player"
+    value: "loud-speaker"
+    value: "audio-cloud"
+  }
+  attrs: {
+    name: "sticker-style"
+    value: "outline"
+    value: "dropshadow"
+  }
+}
+
+tags: {  # <amp-story-audio-sticker-pretap>
+  html_format: AMP
+  tag_name: "AMP-STORY-AUDIO-STICKER-PRETAP"
+  requires_extension: "amp-story-audio-sticker"
+  mandatory_parent: "AMP-STORY-AUDIO-STICKER"
+  descendant_tag_list: "amp-story-audio-sticker-allowed-descendants"
+  amp_layout: {
+    supported_layouts: CONTAINER
+  }
+}
+
+tags: {  # <amp-story-audio-sticker-posttap>
+  html_format: AMP
+  tag_name: "AMP-STORY-AUDIO-STICKER-POSTTAP"
+  requires_extension: "amp-story-audio-sticker"
+  mandatory_parent: "AMP-STORY-AUDIO-STICKER"
+  descendant_tag_list: "amp-story-audio-sticker-allowed-descendants"
+  amp_layout: {
+    supported_layouts: CONTAINER
+  }
+}
+
+descendant_tag_list: {
+  name: "amp-story-audio-sticker-allowed-descendants"
+  tag: "AMP-IMG"
+  tag: "DIV"
+  tag: "SPAN"
+}tags: {  # amp-mowplayer
   html_format: AMP
   tag_name: "SCRIPT"
   extension_spec: {
@@ -11688,35 +11755,6 @@ tags: {  # <amp-brid-player>
     supported_layouts: FLEX_ITEM
     supported_layouts: NODISPLAY
     supported_layouts: RESPONSIVE
-  }
-}
-tags: {  # amp-redbull-player
-  html_format: AMP
-  tag_name: "SCRIPT"
-  extension_spec: {
-    name: "amp-redbull-player"
-    version: "0.1"
-    version: "latest"
-  }
-  attr_lists: "common-extension-attrs"
-}
-tags: {  # <amp-redbull-player>
-  html_format: AMP
-  tag_name: "AMP-REDBULL-PLAYER"
-  requires_extension: "amp-redbull-player"
-  attrs: {
-    name: "data-param-videoid"
-    mandatory: true
-  }
-  attr_lists: "extended-amp-global"
-  amp_layout: {
-    supported_layouts: FIXED
-    supported_layouts: FIXED_HEIGHT
-    supported_layouts: RESPONSIVE
-    supported_layouts: FILL
-    supported_layouts: FLEX_ITEM
-    supported_layouts: FLUID
-    supported_layouts: INTRINSIC
   }
 }
 tags: {  # amp-list
@@ -15330,6 +15368,9 @@ descendant_tag_list: {
   tag: "AMP-RENDER"
   tag: "AMP-STATE"
   tag: "AMP-STORY-360"
+  tag: "AMP-STORY-AUDIO-STICKER"
+  tag: "AMP-STORY-AUDIO-STICKER-PRETAP"
+  tag: "AMP-STORY-AUDIO-STICKER-POSTTAP"
   tag: "AMP-STORY-AUTO-ANALYTICS"
   tag: "AMP-STORY-CAPTIONS"
   tag: "AMP-STORY-INTERACTIVE-BINARY-POLL"
@@ -19457,6 +19498,39 @@ tags: {
     mandatory: true
   }
   spec_url: "https://amp.dev/documentation/components/amp-image-slider/"
+}
+tags: {  # amp-slikeplayer
+  html_format: AMP
+  tag_name: "SCRIPT"
+  extension_spec: {
+    name: "amp-slikeplayer"
+    version: "0.1"
+    version: "latest"
+    requires_usage: EXEMPTED
+    deprecated_allow_duplicates: true
+  }
+  attr_lists: "common-extension-attrs"
+}
+tags: {  # <amp-slikeplayer>
+  html_format: AMP
+  tag_name: "AMP-SLIKEPLAYER"
+  requires_extension: "amp-slikeplayer"
+   attrs: {
+    name: "data-apikey"
+    mandatory: true
+  }
+  attrs: {
+    name: "data-videoid"
+    mandatory: true
+  }
+  spec_url: "https://developers.slike.in/html5/"
+  amp_layout: {
+    supported_layouts: CONTAINER
+    supported_layouts: FILL
+    supported_layouts: FIXED
+    supported_layouts: FIXED_HEIGHT
+    supported_layouts: RESPONSIVE
+  }
 }
 tags: {  # amp-3d-gltf
   html_format: AMP
