@@ -7,7 +7,7 @@
     <groupId>dev.amp</groupId>
     <artifactId>validator-java</artifactId>
     <name>AMP validator Java API</name>
-    <version>1.0.39</version>
+    <version>1.0.40</version>
     <description>A Java validator for the AMP Html format.</description>
     <packaging>jar</packaging>
     <url>https://github.com/ampproject/validator-java</url>
@@ -58,13 +58,17 @@
         <validator.proto.directory>${project.basedir}/src/main/proto</validator.proto.directory>
 
         <!-- library versions -->
-        <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
+        <build-helper-maven-plugin.version>3.4.0</build-helper-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
-        <maven-dependency-plugin.version>3.5.0</maven-dependency-plugin.version>
-        <maven-shade-plugin.version>2.4.2</maven-shade-plugin.version>
+        <maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>
+        <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
+        <maven-dependency-plugin.version>3.6.0</maven-dependency-plugin.version>
+        <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
         <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
-        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-        <spotbugs-maven-plugin.version>4.7.3.3</spotbugs-maven-plugin.version>
+        <maven-shade-plugin.version>2.4.2</maven-shade-plugin.version>
+        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+        <spotbugs-maven-plugin.version>4.7.3.5</spotbugs-maven-plugin.version>
         <com.github.spotbugs.version>4.7.3</com.github.spotbugs.version>
 
         <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
@@ -76,8 +80,9 @@
 
         <checkstyle.maxAllowedViolations>10</checkstyle.maxAllowedViolations>
 
-        <com.puppycrawl.checkstyle.version>10.9.3</com.puppycrawl.checkstyle.version>
+        <com.puppycrawl.checkstyle.version>10.12.3</com.puppycrawl.checkstyle.version>
         <fasterxml.jackson.version>2.15.2</fasterxml.jackson.version>
+        <tagchowder.version>2.0.27</tagchowder.version>
     </properties>
 
     <repositories>
@@ -111,7 +116,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>${maven-clean-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>Deleting generated Validator class</id>
@@ -304,7 +309,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <id>enforce</id>
@@ -425,7 +430,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>${maven-checkstyle-plugin.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
@@ -456,7 +461,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
+                <version>${jacoco-maven-plugin.version}</version>
                 <configuration>
                     <includes>
                         <include>**/amp/validator/**</include>
@@ -529,7 +534,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.2.1</version>
+                        <version>${maven-source-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -562,7 +567,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>${maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -649,7 +654,7 @@
         <dependency>
             <groupId>com.yahoo.tagchowder</groupId>
             <artifactId>tagchowder.core</artifactId>
-            <version>2.0.25</version>
+            <version>${tagchowder.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -659,7 +664,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
+            <version>3.13.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

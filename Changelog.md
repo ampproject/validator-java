@@ -1,5 +1,20 @@
 # Changelog
 
+## AMP HTML Validator 1.0.40
+- upgrade build-helper-maven-plugin from 3.3.0 to 3.4.0
+- upgrade commons-lang3 from 3.12.0 to 3.13.0
+- upgrade jacoco-maven-plugin from 0.8.8 to 0.8.10
+- upgrade maven-checkstyle-plugin from 3.2.1 to 3.3.0
+- upgrade maven-clean-plugin from 3.2.0 to 3.3.1
+- upgrade maven-dependency-plugin from 3.5.0 to 3.6.0
+- upgrade maven-enforcer-plugin from 3.3.0 to 3.4.0
+- upgrade maven-gpg-plugin from 3.0.1 to 3.1.0
+- upgrade maven-source-plugin from 3.2.1 to 3.3.0
+- upgrade puppycrawl.tools.checkstyle from 10.9.3 to 10.12.3
+- upgrade spotbugs-maven-plugin from 4.7.3.3 to 4.7.3.5
+- upgrade tagchowder from 2.0.25 to 2.0.27
+- sync validator-all.protoascii with amphtml (2023.08.30)
+
 ## AMP HTML Validator 1.0.39
 - upgrade com.fasterxml.jackson from 2.14.2 to 2.15.2
 - upgrade dom4j from 2.1.3 to 2.1.4
