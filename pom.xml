@@ -80,7 +80,7 @@
 
         <checkstyle.maxAllowedViolations>10</checkstyle.maxAllowedViolations>
 
-        <com.puppycrawl.checkstyle.version>10.12.3</com.puppycrawl.checkstyle.version>
+        <com.puppycrawl.checkstyle.version>10.12.5</com.puppycrawl.checkstyle.version>
         <fasterxml.jackson.version>2.15.2</fasterxml.jackson.version>
         <tagchowder.version>2.0.27</tagchowder.version>
     </properties>
