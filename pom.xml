@@ -72,11 +72,6 @@
         <spotbugs-maven-plugin.version>4.8.1.0</spotbugs-maven-plugin.version>
         <com.github.spotbugs.version>4.8.1</com.github.spotbugs.version>
 
-        <!-- test dependencies -->
-        <org.junit.version>5.10.1</org.junit.version>
-        <org.mockito.version>5.7.0</org.mockito.version>
-        <org.testng.version>7.8.0</org.testng.version>
-
         <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
         <protobuf.version>3.25.1</protobuf.version>
         <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
@@ -89,6 +84,11 @@
         <com.puppycrawl.checkstyle.version>10.12.5</com.puppycrawl.checkstyle.version>
         <fasterxml.jackson.version>2.15.3</fasterxml.jackson.version>
         <tagchowder.version>2.0.27</tagchowder.version>
+
+        <!-- test dependencies -->
+        <org.junit.version>5.10.1</org.junit.version>
+        <org.mockito.version>5.7.0</org.mockito.version>
+        <org.testng.version>7.8.0</org.testng.version>
     </properties>
 
     <repositories>
