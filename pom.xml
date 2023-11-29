@@ -7,7 +7,7 @@
     <groupId>dev.amp</groupId>
     <artifactId>validator-java</artifactId>
     <name>AMP validator Java API</name>
-    <version>1.0.40</version>
+    <version>1.0.41</version>
     <description>A Java validator for the AMP Html format.</description>
     <packaging>jar</packaging>
     <url>https://github.com/ampproject/validator-java</url>
@@ -59,30 +59,36 @@
 
         <!-- library versions -->
         <build-helper-maven-plugin.version>3.4.0</build-helper-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
         <maven-dependency-plugin.version>3.6.0</maven-dependency-plugin.version>
+        <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
-        <maven-javadoc-plugin.version>3.5.0</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.6.2</maven-javadoc-plugin.version>
         <maven-shade-plugin.version>2.4.2</maven-shade-plugin.version>
         <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-        <spotbugs-maven-plugin.version>4.7.3.5</spotbugs-maven-plugin.version>
-        <com.github.spotbugs.version>4.7.3</com.github.spotbugs.version>
+        <spotbugs-maven-plugin.version>4.8.1.0</spotbugs-maven-plugin.version>
+        <com.github.spotbugs.version>4.8.1</com.github.spotbugs.version>
 
         <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
-        <protobuf.version>3.22.2</protobuf.version>
-        <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
+        <protobuf.version>3.25.1</protobuf.version>
+        <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
         <jdk.version>11</jdk.version>
         <encoding>UTF-8</encoding>
         <main.basedir>${project.basedir}</main.basedir>
 
         <checkstyle.maxAllowedViolations>10</checkstyle.maxAllowedViolations>
 
-        <com.puppycrawl.checkstyle.version>10.12.3</com.puppycrawl.checkstyle.version>
-        <fasterxml.jackson.version>2.15.2</fasterxml.jackson.version>
+        <com.puppycrawl.checkstyle.version>10.12.5</com.puppycrawl.checkstyle.version>
+        <fasterxml.jackson.version>2.15.3</fasterxml.jackson.version>
         <tagchowder.version>2.0.27</tagchowder.version>
+
+        <!-- test dependencies -->
+        <org.junit.version>5.10.1</org.junit.version>
+        <org.mockito.version>5.7.0</org.mockito.version>
+        <org.testng.version>7.8.0</org.testng.version>
     </properties>
 
     <repositories>
@@ -309,7 +315,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>${maven-enforcer-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>enforce</id>
@@ -682,19 +688,19 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.7.1</version>
+            <version>${org.testng.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.9.3</version>
+            <version>${org.junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.4.0</version>
+            <version>${org.mockito.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

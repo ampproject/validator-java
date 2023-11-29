@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: deploy
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Maven Central Respository
         uses: actions/setup-java@v3
         with:

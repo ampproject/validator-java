@@ -1,5 +1,22 @@
 # Changelog
 
+## AMP HTML Validator 1.0.41
+- update actions/checkout action from v3 to v4
+- upgrade com.fasterxml.jackson from 2.15.2 to 2.15.3
+- upgrade jacoco-maven-plugin from 0.8.10 to 0.8.11
+- upgrade junit-jupiter-api from 5.9.3 to 5.10.1
+- upgrade maven-enforcer-plugin from 3.4.0 to 3.4.1
+- upgrade maven-javadoc-plugin from 3.5.0 to 3.6.2
+- upgrade maven-surefire-plugin from 3.0.0 to 3.2.2
+- upgrade mockito-core from 5.4.0 to 5.7.0
+- upgrade protobuf-java from 3.22.2 to 3.25.1
+- upgrade puppycrawl.tools.checkstyle from 10.12.3 to 10.12.5
+- upgrade spotbugs-maven-plugin from 4.7.3.5 to 4.8.1.0
+- upgrade spotbugs from 4.7.3 to 4.8.1
+- upgrade testng from 7.7.1 to 7.8.0
+- sync validator.proto with amphtml (2023.11.29)
+- sync validator-all.protoascii with amphtml (2023.11.29)
+
 ## AMP HTML Validator 1.0.40
 - upgrade build-helper-maven-plugin from 3.3.0 to 3.4.0
 - upgrade commons-lang3 from 3.12.0 to 3.13.0
