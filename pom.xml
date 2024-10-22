@@ -85,7 +85,7 @@
         <tagchowder.version>2.0.27</tagchowder.version>
 
         <!-- test dependencies -->
-        <org.junit.version>5.10.1</org.junit.version>
+        <org.junit.version>5.11.3</org.junit.version>
         <org.mockito.version>5.10.0</org.mockito.version>
         <org.testng.version>7.9.0</org.testng.version>
     </properties>
