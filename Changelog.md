@@ -1,5 +1,35 @@
 # Changelog
 
+## AMP HTML Validator 1.0.43
+- update actions/setup-java action from v3 to v4
+- upgrade build-helper-maven-plugin from 3.5.0 to 3.6.0
+- upgrade com.fasterxml.jackson from 2.16.1 to 2.18.1
+- upgrade commons-lang3 from 3.14.0 to 3.17.0
+- upgrade commons-text from 3.11.0 to 3.12.0
+- upgrade exec-maven-plugin from 3.1.1 to 3.5.0
+- upgrade jacoco-maven-plugin from 0.8.11 to 0.8.12
+- upgrade javacc-maven-plugin from 3.0.1 to 3.1.0
+- upgrade junit-jupiter-api from 5.10.1 to 5.11.3
+- upgrade maven-assembly-plugin from 3.6.0 to 3.7.1
+- upgrade maven-checkstyle-plugin from 3.3.1 to 3.6.0
+- upgrade maven-clean-plugin from 3.3.2 to 3.4.0
+- upgrade maven-compiler-plugin from 3.11.0 to 3.13.0
+- upgrade maven-dependency-plugin from 3.6.1 to 3.8.1
+- upgrade maven-enforcer-plugin from 3.4.1 to 3.5.0
+- upgrade maven-gpg-plugin from 3.1.0 to 3.2.7
+- upgrade maven-javadoc-plugin from 3.6.3 to 3.11.1
+- upgrade maven-scm-plugin from 2.0.1 to 2.1.0
+- upgrade maven-source-plugin from 3.3.0 to 3.3.1
+- upgrade maven-surefire-plugin from 3.2.5 to 3.5.2
+- upgrade mockito-core from 5.10.0 to 5.14.2
+- upgrade nexus-staging-maven-plugin from 1.6.13 to 1.7.0
+- upgrade protobuf-java from 3.25.2 to 3.25.5
+- upgrade puppycrawl.tools.checkstyle from 10.12.7 to 10.20.1
+- upgrade spotbugs-maven-plugin from 4.8.3.0 to 4.8.6.6
+- upgrade spotbugs from 4.8.3 to 4.8.6
+- upgrade tagchowder from 2.0.27 to 2.0.29
+- upgrade testng from 7.9.0 to 7.10.2
+
 ## AMP HTML Validator 1.0.42
 - upgrade build-helper-maven-plugin from 3.4.0 to 3.5.0
 - upgrade commons-text from 1.10.0 to 1.11.0
@@ -11,10 +41,10 @@
 - upgrade maven-dependency-plugin from 3.6.0 to 3.6.1
 - upgrade maven-javadoc-plugin from 3.6.2 to 3.6.3
 - upgrade maven-pmd-plugin from 3.21.0 to 3.21.2
-- upgrade maven-surefire-plugin from 3.2.2 to 3.2.5 
+- upgrade maven-surefire-plugin from 3.2.2 to 3.2.5
 - upgrade mockito-core from 5.7.0 to 5.10.0
 - upgrade protobuf-java from 3.25.1 to 3.25.2
-- upgrade puppycrawl.tools.checkstyle from 10.12.5 to 10.12.7 
+- upgrade puppycrawl.tools.checkstyle from 10.12.5 to 10.12.7
 - upgrade spotbugs-maven-plugin from 4.8.1.0 to 4.8.3.0
 - upgrade spotbugs from 4.8.1 to 4.8.3
 - upgrade testng from 7.8.0 to 7.9.0
