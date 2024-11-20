@@ -32,6 +32,15 @@ jobs:
     environment: release
     steps:
       - uses: actions/checkout@v4
+      - uses: s4u/maven-settings-action@v3.1.0
+        with:
+          servers: |
+            [{
+              "id": "central",
+              "username": "${{ secrets.CENTRAL_TOKEN_USERNAME }}",
+              "password": "${{ secrets.CENTRAL_TOKEN_PASSWORD }}",
+              }
+            }]
       - name: Set up Maven Central Respository
         uses: actions/setup-java@v4
         with:
