@@ -7,7 +7,7 @@
     <groupId>dev.amp</groupId>
     <artifactId>validator-java</artifactId>
     <name>AMP validator Java API</name>
-    <version>1.0.42</version>
+    <version>1.0.43</version>
     <description>A Java validator for the AMP Html format.</description>
     <packaging>jar</packaging>
     <url>https://github.com/ampproject/validator-java</url>
@@ -58,36 +58,36 @@
         <validator.proto.directory>${project.basedir}/src/main/proto</validator.proto.directory>
 
         <!-- library versions -->
-        <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
+        <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
-        <maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
-        <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
-        <maven-dependency-plugin.version>3.6.1</maven-dependency-plugin.version>
-        <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
-        <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
-        <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
-        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-        <spotbugs-maven-plugin.version>4.8.3.0</spotbugs-maven-plugin.version>
-        <com.github.spotbugs.version>4.8.3</com.github.spotbugs.version>
+        <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
+        <maven-clean-plugin.version>3.4.0</maven-clean-plugin.version>
+        <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
+        <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
+        <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
+        <maven-javadoc-plugin.version>3.11.1</maven-javadoc-plugin.version>
+        <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+        <spotbugs-maven-plugin.version>4.8.6.6</spotbugs-maven-plugin.version>
+        <com.github.spotbugs.version>4.8.6</com.github.spotbugs.version>
 
         <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
-        <protobuf.version>3.25.2</protobuf.version>
-        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <protobuf.version>3.25.5</protobuf.version>
+        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <jdk.version>11</jdk.version>
         <encoding>UTF-8</encoding>
         <main.basedir>${project.basedir}</main.basedir>
 
         <checkstyle.maxAllowedViolations>10</checkstyle.maxAllowedViolations>
 
-        <com.puppycrawl.checkstyle.version>10.12.7</com.puppycrawl.checkstyle.version>
-        <fasterxml.jackson.version>2.16.1</fasterxml.jackson.version>
-        <tagchowder.version>2.0.27</tagchowder.version>
+        <com.puppycrawl.checkstyle.version>10.20.1</com.puppycrawl.checkstyle.version>
+        <fasterxml.jackson.version>2.18.1</fasterxml.jackson.version>
+        <tagchowder.version>2.0.29</tagchowder.version>
 
         <!-- test dependencies -->
-        <org.junit.version>5.10.1</org.junit.version>
-        <org.mockito.version>5.10.0</org.mockito.version>
-        <org.testng.version>7.9.0</org.testng.version>
+        <org.junit.version>5.11.3</org.junit.version>
+        <org.mockito.version>5.14.2</org.mockito.version>
+        <org.testng.version>7.10.2</org.testng.version>
     </properties>
 
     <repositories>
@@ -152,7 +152,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <id>Fetching AMP resources</id>
@@ -263,7 +263,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>javacc-maven-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.1.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -273,12 +273,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.7.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-scm-plugin</artifactId>
-                <version>2.0.1</version>
+                <version>2.1.0</version>
                 <inherited>false</inherited>
             </plugin>
             <plugin>
@@ -502,7 +502,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.13.0</version>
                 <configuration>
                     <fork>true</fork>
                     <meminitial>128m</meminitial>
@@ -595,7 +595,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.13</version>
+                        <version>1.7.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
@@ -669,12 +669,12 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.14.0</version>
+            <version>3.17.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.11.0</version>
+            <version>1.12.0</version>
         </dependency>
 
         <!-- test -->
