@@ -1,6 +1,8 @@
 # Changelog
 
 ## AMP HTML Validator 1.0.43
+- migrate to central-publishing-maven-plugin for publishing to maven central
+  - switch to token auth
 - update actions/setup-java action from v3 to v4
 - upgrade build-helper-maven-plugin from 3.5.0 to 3.6.0
 - upgrade com.fasterxml.jackson from 2.16.1 to 2.18.1
@@ -22,7 +24,6 @@
 - upgrade maven-source-plugin from 3.3.0 to 3.3.1
 - upgrade maven-surefire-plugin from 3.2.5 to 3.5.2
 - upgrade mockito-core from 5.10.0 to 5.14.2
-- upgrade nexus-staging-maven-plugin from 1.6.13 to 1.7.0
 - upgrade protobuf-java from 3.25.2 to 3.25.5
 - upgrade puppycrawl.tools.checkstyle from 10.12.7 to 10.20.1
 - upgrade spotbugs-maven-plugin from 4.8.3.0 to 4.8.6.6
