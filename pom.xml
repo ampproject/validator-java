@@ -86,7 +86,7 @@
 
         <!-- test dependencies -->
         <org.junit.version>5.11.3</org.junit.version>
-        <org.mockito.version>5.14.2</org.mockito.version>
+        <org.mockito.version>5.23.0</org.mockito.version>
         <org.testng.version>7.10.2</org.testng.version>
     </properties>
 
